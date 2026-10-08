@@ -85,11 +85,11 @@ p + p { margin-top: 1em; }
 
 /* ---------- nav ---------- */
 .nav {
-  position: relative; z-index: 50;
+  position: sticky; top: 0; z-index: 50;
   background: var(--ink); color: var(--paper);
 }
 .nav .in {
-  display: flex; align-items: center; gap: 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
   min-height: var(--nav-h); padding-block: .5rem;
 }
 .nav__logo img { height: 34px; width: auto; }
@@ -146,7 +146,6 @@ p + p { margin-top: 1em; }
 .nav__links a:last-child { border-bottom: 0; }
 
 @media (min-width: 900px) {
-  .nav { position: sticky; top: 0; }
   .nav__toggle { display: none; }
   .nav__links {
     position: static; display: flex; gap: 1.5rem; margin-left: auto; padding: 0; border: 0;
@@ -467,13 +466,17 @@ p + p { margin-top: 1em; }
 .hero__wa .wa { width: 1.6rem; height: 1.6rem; }
 
 /* ---------- header CTA on phones ---------- */
-.nav__cta { display: inline-flex; margin-left: auto; }
-.nav__cta-long { display: none; }
+/* phones: full label fits at 390px with tighter padding; very narrow phones fall back to "Book" */
+.nav__cta { display: inline-flex; margin-left: auto; padding-inline: .9rem; white-space: nowrap; }
+.nav__cta-short { display: none; }
 .nav__toggle { margin-left: 0; }
+@media (max-width: 359px) {
+  .nav__cta-long { display: none; }
+  .nav__cta-short { display: inline; }
+}
 @media (min-width: 900px) {
-  .nav__cta { margin-left: 0; }
-  .nav__cta-long { display: inline; }
-  .nav__cta-short { display: none; }
+  .nav .in { gap: 1.5rem; }
+  .nav__cta { margin-left: 0; padding-inline: 1.1rem; }
 }
 
 /* ---------- booking overlay ---------- */
