@@ -26,7 +26,11 @@ Timetable links point at the matching `classes-week-view`.
 
 ## Deploy
 
-Target: `bo7.thedowlings.co` (Cloudflare DNS). Any static host works; Cloudflare Pages is the simplest given the DNS is already there. Go live on bo7.ie by pointing its DNS at the same deployment.
+GitHub Pages, from the `dowling-home/bo7-site` repo. Every push to `main` runs `.github/workflows/pages.yml`, which publishes this `site/` folder.
+
+- Live: https://dowling-home.github.io/bo7-site/
+- Custom domain `bo7.thedowlings.co`: add a CNAME record `bo7 -> dowling-home.github.io` in the thedowlings.co zone (Cloudflare, DNS-only), then set the domain in the repo's Pages settings (`gh api -X PUT repos/dowling-home/bo7-site/pages -f cname=bo7.thedowlings.co`).
+- Going live on bo7.ie later: point its DNS at the same deployment and change the Pages custom domain.
 
 ## Still placeholder / needs Ryan
 

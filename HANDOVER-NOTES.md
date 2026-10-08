@@ -36,7 +36,7 @@ Running list of things found while rebuilding bo7.ie, to go through with Ryan at
 | Mobile | Standard Squarespace stack | Static header with Book + menu, sticky bottom bar (Book + WhatsApp), bottom-sheet overlay |
 | Pages | 13 (many near-empty) | 1 so far (homepage); Blackrock, Killiney, Results, Coaches, Pricing, Thank-you planned |
 | Tracking | GTM-NJRHF7LZ, GA4 G-Z20JQXCC3R | Not added yet; add GTM before launch |
-| Hosting | Squarespace, bo7.ie | bo7.thedowlings.co for review, then bo7.ie |
+| Hosting | Squarespace, bo7.ie | GitHub Pages (dowling-home/bo7-site) at dowling-home.github.io/bo7-site, then bo7.thedowlings.co, then bo7.ie |
 
 ## Still needed from Ryan
 
