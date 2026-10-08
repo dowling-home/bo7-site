@@ -14,6 +14,7 @@ Running list of things found while rebuilding bo7.ie, to go through with Ryan at
 - **No meta descriptions on any inner page**, and titles like "Contact 1" and "First-Timers (Copy)" are indexed.
 - **Blackrock has no map pin or footer address** on the current site.
 - **Google Business Profile and map cookies.** Both locations appear to have Google Business Profile listings: the embedded maps (Locations section) show the business pin, name and reviews for "Bo7 Gym" at Blackrock Village Shopping Centre (5.0 stars, 15 reviews) and "Bo7" at 4 Military Road (4.9 stars, 99 reviews). Ryan should confirm he owns and manages both listings (hours, photos, correct category). Separately, the embedded Google Maps set Google cookies, so a cookie notice or click-to-load map may be needed before launch.
+- **Google rating badge is hard-coded.** The Results section shows 4.9 (99 reviews) for Killiney and 5.0 (15) for Blackrock, as checked on 8 Oct 2026, plus three quoted Google reviews (John, Orla, Jay). To keep the numbers live we need a Google Places API key from Ryan's Google Cloud account (or a monthly manual edit). Ryan should also confirm he's happy to show those reviewers' first names.
 
 ## What we built versus what they have
 

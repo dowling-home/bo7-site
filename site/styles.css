@@ -336,6 +336,12 @@ p + p { margin-top: 1em; }
 .results { background: var(--ink); color: var(--paper); }
 .results .in { padding-block: clamp(4rem, 9vw, 8rem) 0; }
 .results__head { max-width: 40rem; }
+.rating { display: flex; flex-wrap: wrap; gap: .75rem 2rem; margin-top: 1.25rem; font-size: .95rem; color: oklch(80% 0.012 85); }
+.rating__item { display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; }
+.rating__item:hover { color: var(--paper); }
+.rating__stars { color: var(--gold); letter-spacing: .05em; font-size: 1rem; }
+.rating__item strong { color: var(--paper); font-family: var(--display); font-weight: 400; font-size: 1.25rem; }
+.rating__loc { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-left: .25rem; }
 /* The member stories are vertical (Shorts), so the tiles are portrait. */
 .videos { display: grid; gap: .75rem; padding-top: 2.5rem; grid-template-columns: repeat(3, 1fr); }
 .video {
@@ -360,6 +366,12 @@ p + p { margin-top: 1em; }
   font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--paper);
   background: color-mix(in oklch, var(--ink) 70%, transparent); padding: .35rem .7rem;
 }
+.reviews { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 3rem 0 0; }
+.reviews li { border-top: 1px solid oklch(32% 0.014 80); padding-top: 1.25rem; }
+.reviews__stars { color: var(--gold); letter-spacing: .05em; margin: 0 0 .6rem; }
+.reviews blockquote { margin: 0; color: oklch(86% 0.012 85); font-size: 1rem; line-height: 1.55; }
+.reviews footer { margin-top: .75rem; font-size: .85rem; color: oklch(70% 0.012 85); }
+@media (min-width: 900px) { .reviews { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 900px) { .videos { grid-template-columns: repeat(6, 1fr); gap: 1rem; } }
 
 /* ---------- locations ---------- */
