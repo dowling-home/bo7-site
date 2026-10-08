@@ -74,38 +74,27 @@
     img.addEventListener('error', () => { img.src = img.src.replace('maxresdefault', 'hqdefault'); }, { once: true });
   });
 
-  // Click-to-load YouTube (keeps the page light until someone wants a video).
-  document.querySelectorAll('.video[data-id]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.id;
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
-      iframe.title = btn.getAttribute('aria-label') || 'Member story';
-      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-      iframe.allowFullscreen = true;
-      btn.replaceWith(iframe);
-      iframe.className = 'video';
-      iframe.style.position = 'relative';
+  // Member stories: open the vertical YouTube video in a lightbox (the tiles are too small to watch in place).
+  const yt = document.getElementById('yt');
+  const ytFrame = yt && yt.querySelector('.yt__frame');
+  if (yt && ytFrame && typeof yt.showModal === 'function') {
+    let ytLast = null;
+    const closeYt = () => { ytFrame.innerHTML = ''; if (yt.open) yt.close(); };
+    document.querySelectorAll('.video[data-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        ytLast = btn;
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.id}?autoplay=1&rel=0&playsinline=1`;
+        iframe.title = btn.getAttribute('aria-label') || 'Member story';
+        iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+        iframe.allowFullscreen = true;
+        ytFrame.replaceChildren(iframe);
+        yt.showModal();
+      });
     });
-  });
-
-  // Sticky bar: only once the hero has scrolled out of view.
-  const bar = document.querySelector('.stickybar');
-  if (bar && hero && 'IntersectionObserver' in window) {
-    let pastHero = false, goingDown = false, lastY = window.scrollY;
-    const sync = () => { if (nav) nav.classList.toggle('is-away', pastHero && goingDown); };
-    new IntersectionObserver(([e]) => {
-      pastHero = !e.isIntersecting;
-      bar.classList.toggle('is-visible', pastHero);
-      sync();
-    }, { threshold: 0 }).observe(hero);
-    // Past the hero the bar replaces the header: hide the nav scrolling down, bring it back on a swipe up.
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      if (Math.abs(y - lastY) > 6) { goingDown = y > lastY; lastY = y; sync(); }
-    }, { passive: true });
-  } else if (bar) {
-    bar.classList.add('is-visible');
+    yt.querySelector('.vid__close').addEventListener('click', closeYt);
+    yt.addEventListener('click', e => { if (e.target === yt) closeYt(); });
+    yt.addEventListener('close', () => { ytFrame.innerHTML = ''; if (ytLast) ytLast.focus(); });
   }
 
   // Reveal sections as they enter the viewport.

@@ -318,6 +318,10 @@ p + p { margin-top: 1em; }
 .vid { border: 0; padding: 3.25rem 0 0; margin: auto; background: transparent; width: min(96vw, 1100px); max-width: none; max-height: none; overflow: visible; }
 .vid::backdrop { background: color-mix(in oklch, var(--ink) 88%, transparent); }
 .vid video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--ink); border-radius: 4px; }
+/* portrait variant for the 9:16 member stories: as tall as the viewport allows */
+.vid--portrait { width: min(92vw, calc((100dvh - 5rem) * 9 / 16)); }
+.yt__frame { position: relative; width: 100%; aspect-ratio: 9 / 16; background: var(--ink); border-radius: 4px; overflow: hidden; }
+.yt__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .vid__close {
   position: absolute; right: 0; top: 0; width: 2.5rem; height: 2.5rem;
   border: 0; border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer;
