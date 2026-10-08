@@ -92,14 +92,20 @@
   // Sticky bar: only once the hero has scrolled out of view.
   const bar = document.querySelector('.stickybar');
   if (bar && hero && 'IntersectionObserver' in window) {
+    let pastHero = false, goingDown = false, lastY = window.scrollY;
+    const sync = () => { if (nav) nav.classList.toggle('is-away', pastHero && goingDown); };
     new IntersectionObserver(([e]) => {
-      bar.classList.toggle('is-visible', !e.isIntersecting);
-      // On phones the bar replaces the header, so tuck the nav away while the bar is showing.
-      if (nav) nav.classList.toggle('is-away', !e.isIntersecting);
+      pastHero = !e.isIntersecting;
+      bar.classList.toggle('is-visible', pastHero);
+      sync();
     }, { threshold: 0 }).observe(hero);
+    // Past the hero the bar replaces the header: hide the nav scrolling down, bring it back on a swipe up.
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) > 6) { goingDown = y > lastY; lastY = y; sync(); }
+    }, { passive: true });
   } else if (bar) {
     bar.classList.add('is-visible');
-    if (nav) nav.classList.add('is-away');
   }
 
   // Reveal sections as they enter the viewport.

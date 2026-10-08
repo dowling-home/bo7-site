@@ -96,14 +96,14 @@ p + p { margin-top: 1em; }
 .nav__cta { display: none; min-height: 2.6rem; padding-inline: 1.1rem; font-size: .9rem; }
 
 /* Header CTA: a light sweep every 5 s to draw the eye. */
-.nav__cta { position: relative; overflow: hidden; }
-.nav__cta::after {
+.nav__cta, .stickybar__btn { position: relative; overflow: hidden; }
+.nav__cta::after, .stickybar__btn::after {
   content: ""; position: absolute; top: -40%; bottom: -40%; left: -60%; width: 45%;
   background: linear-gradient(105deg, transparent 0%, color-mix(in oklch, white 70%, transparent) 50%, transparent 100%);
   transform: skewX(-20deg); pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .nav__cta::after { animation: cta-shine 5s ease-in-out infinite; animation-delay: 2.5s; }
+  .nav__cta::after, .stickybar__btn::after { animation: cta-shine 5s ease-in-out infinite; animation-delay: 2.5s; }
 }
 @keyframes cta-shine {
   0%   { left: -60%; opacity: 0; }
@@ -466,7 +466,7 @@ p + p { margin-top: 1em; }
 }
 @media (min-width: 900px) { .stickybar { display: none; } }
 
-/* Phones: once the bottom bar is showing, the sticky header slides away. */
+/* Phones: once the bottom bar is showing, the sticky header slides away on scroll down and returns on scroll up. */
 @media (max-width: 899.98px) {
   .nav { transition: translate .45s var(--ease), visibility 0s; }
   .nav.is-away { translate: 0 -100%; visibility: hidden; transition: translate .45s var(--ease), visibility 0s linear .45s; }
