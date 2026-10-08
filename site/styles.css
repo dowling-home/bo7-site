@@ -489,9 +489,10 @@ p + p { margin-top: 1em; }
 .book__form iframe { display: block; width: 100%; height: 32rem; border: 0; }
 .has-modal { overflow: hidden; }
 
+/* Closed dialogs must stay display:none, otherwise an invisible layer sits over the page and eats wheel/clicks. */
+.book:not([open]), .vid:not([open]) { display: none; }
 @media (min-width: 700px) {
-  .book { display: grid; place-items: center; }
-  .book[open] { display: grid; }
+  .book[open] { display: grid; place-items: center; }
   .book__panel {
     position: relative; inset: auto; width: min(34rem, calc(100% - 2rem));
     border-radius: 6px; padding: 2.25rem 2.25rem calc(2.25rem);
