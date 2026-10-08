@@ -423,6 +423,8 @@ p + p { margin-top: 1em; }
 .foot__brand img { height: 34px; width: auto; filter: invert(1); margin-bottom: .75rem; }
 .foot h4 { font-family: var(--body); font-weight: 600; color: var(--ink); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .5rem; }
 .foot a { color: var(--ink); text-decoration-color: var(--stone); }
+.foot__ig { display: inline-flex; align-items: center; gap: .4rem; vertical-align: middle; }
+.foot__ig svg { width: 1.25rem; height: 1.25rem; flex: none; }
 .foot__fine { grid-column: 1 / -1; font-size: .8rem; }
 @media (min-width: 900px) {
   .foot .in { grid-template-columns: 2fr repeat(4, 1fr); padding-bottom: 3rem; }
