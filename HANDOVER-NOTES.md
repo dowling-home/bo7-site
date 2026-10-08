@@ -13,6 +13,7 @@ Running list of things found while rebuilding bo7.ie, to go through with Ryan at
 - **Orphan pages in the sitemap.** /learn-morebo7-1-1 and /learn-morebo7-1-2 are "First-Timers (Copy)" pages. /class-timetable is a duplicate of /booking-1.
 - **No meta descriptions on any inner page**, and titles like "Contact 1" and "First-Timers (Copy)" are indexed.
 - **Blackrock has no map pin or footer address** on the current site.
+- **Google Business Profile and map cookies.** Both locations appear to have Google Business Profile listings: the embedded maps (Locations section) show the business pin, name and reviews for "Bo7 Gym" at Blackrock Village Shopping Centre (5.0 stars, 15 reviews) and "Bo7" at 4 Military Road (4.9 stars, 99 reviews). Ryan should confirm he owns and manages both listings (hours, photos, correct category). Separately, the embedded Google Maps set Google cookies, so a cookie notice or click-to-load map may be needed before launch.
 
 ## What we built versus what they have
 

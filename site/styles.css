@@ -379,11 +379,13 @@ p + p { margin-top: 1em; }
 .location address { font-style: normal; margin-top: 1rem; font-weight: 500; }
 .location p:not(.eyebrow) { color: var(--muted); margin-top: .9rem; max-width: 30rem; }
 .location__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 1.75rem; }
-.location__photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.location__map { background: var(--paper-2); }
+.location__map iframe { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; border: 0; border-radius: 2px; }
+.location__maplink { display: block; margin-top: .6rem; font-size: .9rem; text-align: right; }
 @media (min-width: 900px) {
   .location { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); column-gap: clamp(3rem, 6vw, 7rem); align-items: center; }
   .location--alt .location__text { order: 2; }
-  .location__photo img { aspect-ratio: 5 / 4; }
+  .location__map iframe { aspect-ratio: 5 / 4; }
 }
 
 /* ---------- faq ---------- */
