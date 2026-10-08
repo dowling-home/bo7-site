@@ -28,8 +28,7 @@ Timetable links point at the matching `classes-week-view`.
 
 GitHub Pages, from the `dowling-home/bo7-site` repo. Every push to `main` runs `.github/workflows/pages.yml`, which publishes this `site/` folder.
 
-- Live: https://dowling-home.github.io/bo7-site/
-- Custom domain `bo7.thedowlings.co`: add a CNAME record `bo7 -> dowling-home.github.io` in the thedowlings.co zone (Cloudflare, DNS-only), then set the domain in the repo's Pages settings (`gh api -X PUT repos/dowling-home/bo7-site/pages -f cname=bo7.thedowlings.co`).
+- Live: https://bo7.thedowlings.co/ (CNAME `bo7 -> dowling-home.github.io` in the thedowlings.co Cloudflare zone, DNS-only; custom domain set on the repo's Pages settings with HTTPS enforced, 8 Oct 2026)
 - Going live on bo7.ie later: point its DNS at the same deployment and change the Pages custom domain.
 
 ## Still placeholder / needs Ryan
