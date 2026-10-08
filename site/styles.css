@@ -169,8 +169,11 @@ p + p { margin-top: 1em; }
 /* phones: two equal full-width buttons; desktop: side by side */
 .hero__actions { display: grid; grid-template-columns: 1fr; gap: .6rem; margin-top: 1.25rem; }
 .hero__actions .btn { width: 100%; }
+.hero__rating { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem; font-size: .9rem; color: oklch(80% 0.012 85); }
+.hero__rating strong { color: var(--paper); font-family: var(--display); font-weight: 400; font-size: 1.2rem; }
+.hero__rating .rating__stars { color: var(--gold); letter-spacing: .05em; }
 .hero__facts {
-  list-style: none; padding: .9rem 0 0; margin: 1.2rem 0 0;
+  list-style: none; padding: .8rem 0 0; margin: 1rem 0 0;
   display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.6rem;
   border-top: 1px solid oklch(32% 0.014 80);
   color: oklch(86% 0.012 85); font-size: .95rem; font-weight: 500;
