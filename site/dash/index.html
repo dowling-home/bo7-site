@@ -194,7 +194,7 @@ button { font: inherit; color: inherit; }
 .dot-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--text-tertiary); }
 .lead-note { grid-column: 1 / -1; font-size: var(--fs-sm); color: var(--text-tertiary); margin: 0; }
 .lead-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
-.btn { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: 500; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }
+.btn { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; padding: 3px 8px; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: 500; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }
 .btn:hover { background: var(--bg-hover); }
 .btn svg { width: 13px; height: 13px; flex: none; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); font-weight: 600; }
@@ -205,6 +205,69 @@ button { font: inherit; color: inherit; }
 .empty { padding: 32px 12px; text-align: center; font-size: var(--fs-sm); color: var(--text-tertiary); }
 
 .foot-note { font-size: var(--fs-xs); color: var(--text-tertiary); }
+
+/* Lead rows open the lead dialog */
+.lead.clickable { cursor: pointer; }
+.lead.clickable:focus-visible { outline: 2px solid var(--border-focus); outline-offset: -2px; }
+.lead-coach { font-size: var(--fs-xs); color: var(--text-tertiary); }
+
+/* Lead dialog. Closed dialogs must stay display:none. */
+.dlg:not([open]) { display: none; }
+.dlg { padding: 0; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-pop); width: min(960px, calc(100% - 32px)); max-height: calc(100vh - 48px); overflow: hidden; }
+.dlg[open] { display: flex; flex-direction: column; }
+.dlg::backdrop { background: rgba(11, 13, 17, .45); }
+.dlg-head { display: flex; align-items: flex-start; gap: var(--space-5); padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.dlg-title { font-size: var(--fs-lg); font-weight: 600; letter-spacing: var(--track-tight); margin: 0; }
+.dlg-head .lead-meta { margin-top: var(--space-2); }
+.dlg-head .lead-actions { margin-top: var(--space-3); }
+.icon-btn { margin-left: auto; border: 0; background: none; color: var(--text-tertiary); border-radius: var(--radius-md); padding: var(--space-2); cursor: pointer; display: grid; place-items: center; }
+.icon-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.icon-btn svg { width: 16px; height: 16px; }
+.dlg-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); overflow: auto; flex: 1; }
+.dlg-col { padding: 14px 16px; display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+.dlg-col + .dlg-col { border-left: 1px solid var(--border); background: var(--bg-page); }
+.dlg-section { font-size: var(--fs-base); font-weight: 600; letter-spacing: var(--track-tight); display: flex; align-items: center; gap: var(--space-4); }
+.dlg-section .panel-note { font-weight: 400; }
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+.field > span { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); }
+.days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-2); }
+.day { border: 1px solid var(--border); background: var(--bg-surface); border-radius: var(--radius-md); padding: 6px 4px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: var(--fs-xs); color: var(--text-secondary); }
+.day b { font-size: var(--fs-md); color: var(--text-primary); font-weight: 600; }
+.day:hover:not([disabled]) { background: var(--bg-hover); }
+.day[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-subtle); color: var(--accent-text); }
+.day[aria-pressed="true"] b { color: var(--accent-text); }
+.day[disabled] { cursor: default; opacity: .45; }
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: var(--space-3); min-height: 64px; align-content: start; }
+.slot { border: 1px solid var(--border-strong); background: var(--bg-surface); border-radius: var(--radius-md); padding: 5px 8px; cursor: pointer; text-align: left; display: flex; flex-direction: column; }
+.slot b { font-weight: 600; font-size: var(--fs-base); }
+.slot span { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.slot:hover { background: var(--bg-hover); }
+.slot[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+.slot[aria-pressed="true"] span { color: var(--accent-contrast); opacity: .85; }
+.slots .empty { grid-column: 1 / -1; padding: 16px 0; text-align: left; }
+.summary { font-size: var(--fs-sm); color: var(--text-secondary); padding: 8px 10px; border-radius: var(--radius-md); background: var(--bg-sunken); border: 1px solid var(--border); }
+.summary b { color: var(--text-primary); }
+.callout { border: 1px solid var(--border); border-left: 2px solid var(--status-positive); border-radius: var(--radius-lg); background: var(--bg-surface); padding: 10px 12px; display: flex; flex-direction: column; gap: var(--space-3); }
+.callout b { font-size: var(--fs-base); }
+.callout p { margin: 0; font-size: var(--fs-sm); color: var(--text-secondary); }
+.notes { display: flex; flex-direction: column; gap: var(--space-4); overflow: auto; }
+.note { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; }
+.note-meta { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.note p { margin: 2px 0 0; font-size: var(--fs-sm); white-space: pre-wrap; }
+textarea.input { font: inherit; font-size: var(--fs-base); color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 6px 8px; resize: vertical; min-height: 72px; }
+textarea.input:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 2px var(--accent-subtle); }
+.dlg-foot { display: flex; align-items: center; gap: var(--space-4); padding: 10px 16px; border-top: 1px solid var(--border); background: var(--bg-surface); }
+.dlg-foot .hint { font-size: var(--fs-xs); color: var(--text-tertiary); margin-right: auto; }
+.btn.lg { padding: 5px 11px; font-size: var(--fs-base); }
+.btn[disabled] { opacity: .45; cursor: default; }
+@media (max-width: 860px) {
+  .dlg-body { grid-template-columns: minmax(0, 1fr); }
+  .dlg-col + .dlg-col { border-left: 0; border-top: 1px solid var(--border); }
+}
+@media (max-width: 640px) {
+  .dlg { width: 100%; max-width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+  .days { grid-template-columns: repeat(7, minmax(44px, 1fr)); overflow-x: auto; }
+}
 
 /* Toast */
 .toast { position: fixed; left: 50%; bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 32px); background: var(--bg-raised); border: 1px solid var(--border); box-shadow: var(--shadow-pop); color: var(--text-primary); padding: 9px 12px; border-radius: var(--radius-lg); font-size: var(--fs-sm); opacity: 0; transition: opacity .15s; pointer-events: none; }
@@ -281,7 +344,7 @@ button { font: inherit; color: inherit; }
     </section>
 
     <section class="panel" aria-labelledby="h-new">
-      <div class="panel-head"><span class="panel-title" id="h-new">New leads</span><span class="panel-note">Not contacted yet, oldest first</span><span class="panel-actions"><span class="count" id="c-new">0</span></span></div>
+      <div class="panel-head"><span class="panel-title" id="h-new">New leads</span><span class="panel-note">Not contacted yet, oldest first. Open a lead to book or add notes</span><span class="panel-actions"><span class="count" id="c-new">0</span></span></div>
       <div id="list-new"></div>
     </section>
 
@@ -293,6 +356,40 @@ button { font: inherit; color: inherit; }
 
   <p class="foot-note">Sample data for layout only. The live version reads the Bo7 leads sheet and sits behind the team login at team.bo7.ie.</p>
 </main>
+<dialog class="dlg" id="lead-dlg" aria-labelledby="dlg-name">
+  <div class="dlg-head">
+    <div style="min-width:0">
+      <h2 class="dlg-title" id="dlg-name">Name</h2>
+      <div id="dlg-meta"></div>
+      <div id="dlg-contact"></div>
+    </div>
+    <button type="button" class="icon-btn" id="dlg-close" aria-label="Close" autofocus><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  </div>
+  <div class="dlg-body">
+    <section class="dlg-col" aria-labelledby="dlg-book-h">
+      <div class="dlg-section" id="dlg-book-h">Book a consultation <span class="panel-note">Bo7 consultations calendar</span></div>
+      <div id="dlg-booked"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px">
+        <label class="field"><span>Gym</span><div class="seg" role="group" aria-label="Gym" id="dlg-gym"></div></label>
+        <label class="field"><span>Coach</span><div class="seg" role="group" aria-label="Coach" id="dlg-coach"></div></label>
+      </div>
+      <div class="field"><span>Day</span><div class="days" id="dlg-days"></div></div>
+      <div class="field"><span>Free times</span><div class="slots" id="dlg-slots"></div></div>
+      <div class="summary" id="dlg-summary">Pick a time.</div>
+    </section>
+    <section class="dlg-col" aria-labelledby="dlg-notes-h">
+      <div class="dlg-section" id="dlg-notes-h">Notes <span class="panel-note" id="dlg-notes-count"></span></div>
+      <div class="notes" id="dlg-notes"></div>
+      <label class="field"><span>Add a note</span><textarea class="input" id="dlg-note-text" rows="3" placeholder="What did they say? Goals, injuries, best times to reach them..."></textarea></label>
+      <div><button type="button" class="btn" id="dlg-note-add">Add note</button></div>
+    </section>
+  </div>
+  <div class="dlg-foot">
+    <span class="hint">Sample data. Nothing is saved or sent.</span>
+    <button type="button" class="btn ghost lg" id="dlg-cancel">Cancel</button>
+    <button type="button" class="btn primary lg" id="dlg-book" disabled>Book consult</button>
+  </div>
+</dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -330,13 +427,27 @@ button { font: inherit; color: inherit; }
     { name: 'Paul Keane', source: 'google-ads', gym: 'Killiney', prefers: 'whatsapp', hours: 1, note: '' }
   ];
   var CONSULT = [
-    { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today', time: '18:30', booked: true },
-    { name: 'Mark Nolan', source: 'referral', gym: 'Blackrock', prefers: 'phone', when: 'Tomorrow', time: '07:00', booked: true },
-    { name: 'Laura Quinn', source: 'google-profile', gym: 'Blackrock', prefers: 'whatsapp', when: 'Thu', time: '12:15', booked: true },
-    { name: 'Tom Gallagher', source: 'walk-in', gym: 'Killiney', prefers: 'phone', when: 'Sat', time: '10:00', booked: true },
+    { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today', time: '18:00', booked: true, day: 0, coach: 'Ryan' },
+    { name: 'Mark Nolan', source: 'referral', gym: 'Blackrock', prefers: 'phone', when: 'Tomorrow', time: '09:15', booked: true, day: 1, coach: 'Coach C' },
+    { name: 'Laura Quinn', source: 'google-profile', gym: 'Blackrock', prefers: 'whatsapp', when: 'Thu 15 Oct', time: '12:15', booked: true, day: 6, coach: 'Ryan' },
+    { name: 'Tom Gallagher', source: 'walk-in', gym: 'Killiney', prefers: 'phone', when: 'Tomorrow', time: '10:30', booked: true, day: 1, coach: 'Coach B' },
     { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', when: 'Asked for evenings', time: '', booked: false },
     { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', when: 'Away until next week', time: '', booked: false }
   ];
+
+  // Sample calendar: today is Fri 9 Oct 2026, 11:00. Consult slots per gym; coaches per gym.
+  var DAYS = ['Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu'].map(function (d, i) { return { short: d, date: 9 + i, label: i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d + ' ' + (9 + i) + ' Oct' }; });
+  var SLOT_TIMES = {
+    Killiney: { weekday: ['07:00', '07:45', '12:30', '18:00', '18:45', '19:30'], Sat: ['09:00', '09:45', '10:30'], Sun: [] },
+    Blackrock: { weekday: ['06:45', '12:15', '13:00', '17:30', '18:15', '19:00'], Sat: ['08:30', '09:15', '10:00'], Sun: [] }
+  };
+  var COACHES = { Killiney: ['Ryan', 'Coach B'], Blackrock: ['Ryan', 'Coach C'] };
+  var NOW = '11:00';
+  NEW.concat(CONSULT).forEach(function (p, i) {
+    p.id = 'L' + i;
+    p.notes = p.note ? [{ by: 'Logged at enquiry', at: 'Earlier', text: p.note }] : [];
+  });
+  CONSULT.forEach(function (p) { if (p.booked) p.notes.push({ by: 'Ryan', at: 'Earlier', text: 'Consult booked for ' + p.when + ' at ' + p.time + ' with ' + p.coach + '.' }); });
 
   var ICON = {
     whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.3.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.2.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 .9c.3.1.5.2.5.4.1.1.1.7-.2 1.4Z"/></svg>',
@@ -452,20 +563,20 @@ button { font: inherit; color: inherit; }
     document.getElementById('k-late').classList.toggle('bad', late.length > 0);
     document.getElementById('m-late').textContent = late.length ? 'Oldest waiting ' + waited(late[0].hours) : 'Nobody waiting over 24 hours';
 
-    var cl = CONSULT.filter(byGym), booked = cl.filter(function (p) { return p.booked; }), tobook = cl.filter(function (p) { return !p.booked; });
+    var cl = CONSULT.filter(byGym), booked = cl.filter(function (p) { return p.booked; }).sort(function (a, b) { return (a.day - b.day) || (a.time < b.time ? -1 : a.time > b.time ? 1 : 0); }), tobook = cl.filter(function (p) { return !p.booked; });
     document.getElementById('k-consult').textContent = cl.length;
     document.getElementById('m-consult').textContent = booked.length + ' booked · ' + tobook.length + ' still to book';
 
     // New leads
     document.getElementById('list-new').innerHTML = nl.map(function (p) {
-      return '<article class="lead' + (p.hours > 24 ? ' late' : '') + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + (p.hours > 24 ? '<span class="chip bad">' + waited(p.hours) + '</span>' : 'waiting <b>' + waited(p.hours) + '</b>') + '</span>' + meta(p) + (p.note ? '<p class="lead-note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
+      return '<article class="lead clickable' + (p.hours > 24 ? ' late' : '') + '" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + (p.hours > 24 ? '<span class="chip bad">' + waited(p.hours) + '</span>' : 'waiting <b>' + waited(p.hours) + '</b>') + '</span>' + meta(p) + (p.note ? '<p class="lead-note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
     }).join('') || '<div class="empty">Nobody waiting. Every lead has had a reply.</div>';
     document.getElementById('c-new').textContent = nl.length;
 
     // Waiting for a consult
     function consultRow(p) {
-      var when = p.booked ? '<b>' + esc(p.when) + '</b> ' + esc(p.time) : esc(p.when);
-      return '<article class="lead"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + when + '</span>' + meta(p) + actions(p) + '</article>';
+      var when = p.booked ? '<b>' + esc(p.when) + '</b> ' + esc(p.time) + '<br><span class="lead-coach">with ' + esc(p.coach) + '</span>' : esc(p.when);
+      return '<article class="lead clickable" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + when + '</span>' + meta(p) + actions(p) + '</article>';
     }
     document.getElementById('list-consult').innerHTML =
       (booked.length ? '<div class="group-label">Booked · ' + booked.length + '</div>' + booked.map(consultRow).join('') : '') +
@@ -502,13 +613,112 @@ button { font: inherit; color: inherit; }
   });
   markTheme();
 
+
+  // ---------- Lead dialog: book a consult, keep notes ----------
+  var dlg = document.getElementById('lead-dlg'), cur = null, pick = { gym: null, coach: 'any', day: 0, slot: null };
+  function findLead(id) { return NEW.concat(CONSULT).filter(function (p) { return p.id === id; })[0]; }
+  function busy(gym, day, time, coach) {
+    var taken = CONSULT.some(function (p) { return p.booked && p !== cur && p.gym === gym && p.day === day && p.time === time && p.coach === coach; });
+    if (taken) return true;
+    var h = 0, k = gym + day + time + coach;
+    for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) % 997;
+    return h % 3 === 0;
+  }
+  function slotsFor(gym, day, coach) {
+    var d = DAYS[day].short, times = d === 'Sat' ? SLOT_TIMES[gym].Sat : d === 'Sun' ? SLOT_TIMES[gym].Sun : SLOT_TIMES[gym].weekday;
+    var out = [];
+    times.forEach(function (t) {
+      if (day === 0 && t <= NOW) return;
+      COACHES[gym].forEach(function (c) {
+        if (coach !== 'any' && coach !== c) return;
+        if (!busy(gym, day, t, c)) out.push({ time: t, coach: c });
+      });
+    });
+    return out;
+  }
+  function segHtml(opts, current, attr) {
+    return opts.map(function (o) { return '<button type="button" data-' + attr + '="' + esc(o[0]) + '" aria-pressed="' + (o[0] === current) + '">' + esc(o[1]) + '</button>'; }).join('');
+  }
+  function drawBooking() {
+    document.getElementById('dlg-gym').innerHTML = segHtml([['Killiney', 'Killiney'], ['Blackrock', 'Blackrock']], pick.gym, 'pgym');
+    document.getElementById('dlg-coach').innerHTML = segHtml([['any', 'Any coach']].concat(COACHES[pick.gym].map(function (c) { return [c, c]; })), pick.coach, 'pcoach');
+    document.getElementById('dlg-days').innerHTML = DAYS.map(function (d, i) {
+      var n = slotsFor(pick.gym, i, pick.coach).length;
+      return '<button type="button" class="day" data-pday="' + i + '" aria-pressed="' + (i === pick.day) + '"' + (n ? '' : ' disabled') + '><span>' + d.short + '</span><b>' + d.date + '</b><span>' + (n ? n + ' free' : 'none') + '</span></button>';
+    }).join('');
+    var sl = slotsFor(pick.gym, pick.day, pick.coach);
+    document.getElementById('dlg-slots').innerHTML = sl.map(function (x) {
+      var on = pick.slot && pick.slot.time === x.time && pick.slot.coach === x.coach;
+      return '<button type="button" class="slot" data-ptime="' + x.time + '" data-pc="' + esc(x.coach) + '" aria-pressed="' + !!on + '"><b>' + x.time + '</b><span>' + esc(x.coach) + '</span></button>';
+    }).join('') || '<p class="empty">No free times this day. Try another day or coach.</p>';
+    var sum = document.getElementById('dlg-summary'), btn = document.getElementById('dlg-book');
+    if (pick.slot) {
+      sum.innerHTML = '<b>' + DAYS[pick.day].label + ' at ' + pick.slot.time + '</b> \u00b7 ' + pick.gym + ' \u00b7 with ' + esc(pick.slot.coach) + ' \u00b7 45 minutes';
+      btn.disabled = false;
+    } else { sum.textContent = 'Pick a time.'; btn.disabled = true; }
+    btn.textContent = cur.booked ? 'Move consult' : 'Book consult';
+  }
+  function drawNotes() {
+    document.getElementById('dlg-notes').innerHTML = cur.notes.slice().reverse().map(function (n) {
+      return '<div class="note"><div class="note-meta">' + esc(n.by) + ' \u00b7 ' + esc(n.at) + '</div><p>' + esc(n.text) + '</p></div>';
+    }).join('') || '<p class="empty" style="padding:8px 0;text-align:left">No notes yet.</p>';
+    document.getElementById('dlg-notes-count').textContent = cur.notes.length ? cur.notes.length + (cur.notes.length === 1 ? ' note' : ' notes') : '';
+  }
+  function drawHead() {
+    document.getElementById('dlg-name').textContent = cur.name;
+    document.getElementById('dlg-meta').innerHTML = meta(cur);
+    document.getElementById('dlg-contact').innerHTML = actions(cur);
+    document.getElementById('dlg-booked').innerHTML = cur.booked
+      ? '<div class="callout"><b>Booked: ' + esc(cur.when) + ' at ' + esc(cur.time) + ', ' + esc(cur.gym) + ', with ' + esc(cur.coach) + '</b><p>Pick a new time below to move it.</p></div>' : '';
+  }
+  function openLead(id) {
+    cur = findLead(id); if (!cur) return;
+    pick = { gym: cur.gym, coach: 'any', day: 0, slot: null };
+    for (var i = 0; i < 7; i++) { if (slotsFor(pick.gym, i, 'any').length) { pick.day = i; break; } }
+    document.getElementById('dlg-note-text').value = '';
+    drawHead(); drawBooking(); drawNotes();
+    dlg.showModal();
+  }
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg) { dlg.close(); return; }
+    var b;
+    if ((b = e.target.closest('[data-pgym]'))) { pick.gym = b.dataset.pgym; pick.coach = 'any'; pick.slot = null; drawBooking(); }
+    else if ((b = e.target.closest('[data-pcoach]'))) { pick.coach = b.dataset.pcoach; pick.slot = null; drawBooking(); }
+    else if ((b = e.target.closest('[data-pday]'))) { pick.day = +b.dataset.pday; pick.slot = null; drawBooking(); }
+    else if ((b = e.target.closest('[data-ptime]'))) { pick.slot = { time: b.dataset.ptime, coach: b.dataset.pc }; drawBooking(); }
+  });
+  document.getElementById('dlg-close').addEventListener('click', function () { dlg.close(); });
+  document.getElementById('dlg-cancel').addEventListener('click', function () { dlg.close(); });
+  document.getElementById('dlg-note-add').addEventListener('click', function () {
+    var t = document.getElementById('dlg-note-text'), v = t.value.trim();
+    if (!v) { t.focus(); return; }
+    cur.notes.push({ by: 'You', at: 'Just now', text: v });
+    t.value = ''; drawNotes();
+  });
+  document.getElementById('dlg-book').addEventListener('click', function () {
+    if (!pick.slot) return;
+    var label = DAYS[pick.day].label, wasNew = NEW.indexOf(cur) !== -1;
+    if (wasNew) { NEW.splice(NEW.indexOf(cur), 1); CONSULT.unshift(cur); }
+    cur.booked = true; cur.gym = pick.gym; cur.day = pick.day; cur.when = label; cur.time = pick.slot.time; cur.coach = pick.slot.coach;
+    cur.notes.push({ by: 'You', at: 'Just now', text: 'Consult booked for ' + label + ' at ' + cur.time + ' with ' + cur.coach + ' (' + cur.gym + ').' });
+    render(); drawNotes(); drawHead(); pick.slot = null; drawBooking();
+    showToast('Booked ' + cur.name + ': ' + label + ' at ' + cur.time + ' with ' + cur.coach + '. In the live board this adds it to the Bo7 consultations calendar and offers the WhatsApp confirmation.');
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-act]') || dlg.contains(e.target)) return;
+    var card = e.target.closest('[data-lead]');
+    if (card) openLead(card.dataset.lead);
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-lead]')) { e.preventDefault(); openLead(e.target.dataset.lead); }
+  });
+
   var toast = document.getElementById('toast'), tt;
+  function showToast(msg) { (dlg.open ? dlg : document.body).appendChild(toast); toast.textContent = msg; toast.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 3800); }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-act]');
     if (!b) return;
-    toast.textContent = 'Sample data. In the live board this opens ' + LABEL[b.dataset.act] + ' for ' + b.dataset.name + ' with the right message ready.';
-    toast.classList.add('show');
-    clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 2800);
+    showToast('Sample data. In the live board this opens ' + LABEL[b.dataset.act] + ' for ' + b.dataset.name + ' with the right message ready.');
   });
   // Restyle sparklines if the theme changes.
   if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
