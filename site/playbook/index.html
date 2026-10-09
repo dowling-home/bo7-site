@@ -1110,11 +1110,136 @@ a { color: var(--gold-text); }
         </div>
       </details>
       <details class="step" id="step-6">
-        <summary><span class="step-n">06</span><span class="step-title"><h2>Refer</h2><span>Turn happy members into the next ones</span></span><span class="pill">Next</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="step-body"><p class="soon-body">To come: review and referral asks at the right moment, and member story videos. With prompts for each ask.</p></div>
+        <summary>
+          <span class="step-n">06</span>
+          <span class="step-title"><h2>Refer</h2><span>Turn happy members into the next ones</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>Members who stay are the cheapest source of new ones. This step asks at the right moments, collects reviews, tracks every referral through to a reward, and keeps real member stories coming. Everything feeds back into Reach.</p>
+          <p class="progress" data-progress="step-6"></p>
+
+          <div class="tasks">
+            <details class="task" id="t6-1">
+              <summary>
+                <span class="t-n">1</span>
+                <span class="t-title"><b>Spot the high points</b><span>A daily list of who to ask, with prompt 6.1</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Members are most willing to leave a review or bring a friend straight after a high point: a 50th session, a personal best, a year at Bo7. This task finds those moments every morning and puts them on one list for the coaches.</p>
+                <ol>
+                  <li>Run prompt 6.1 in Claude Code. It adds a morning job that finds milestones from Glofox attendance, and builds team.bo7.ie/refer: today's asks by coach, each with the right message one tap away.</li>
+                  <li>Coaches log wins as they happen (a personal best, a first pull-up) with the "Log a win" button. Those become moments too.</li>
+                  <li>Only happy, healthy members are asked, never anyone who is slowing or at risk, and nobody more than once every 60 days.</li>
+                  <li>Coaches send the asks themselves and record the answer. Nothing on this page sends automatically.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/6.1-moments.txt">
+                  <summary><span class="p-id">6.1</span><span class="p-name">Spot the high points</span><span class="p-use">Run in Claude Code: a morning job for milestones and the team.bo7.ie/refer page</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/6.1-moments.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/6.1-moments.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t6-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Ask for Google reviews</b><span>Especially Blackrock, with prompt 6.2</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Killiney has 99 reviews and Blackrock 15 (8 Oct 2026). Reviews are what people read before they reach out, and they help both gyms show up in local searches.</p>
+                <ol>
+                  <li>Run prompt 6.2. Claude gets each gym's "ask for reviews" link from its Google profile, and writes a message for each moment, a reminder, a line coaches can say in person, and a QR card for each front desk.</li>
+                  <li>Put the QR cards at both front desks.</li>
+                  <li>Reply to every new review within a few days, using the templates from prompt 3.2.</li>
+                  <li>Never offer anything in return for a review: Google doesn't allow it.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/6.2-reviews.txt">
+                  <summary><span class="p-id">6.2</span><span class="p-name">Ask for Google reviews</span><span class="p-use">Review links, messages per moment, in-person line and QR cards</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/6.2-reviews.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/6.2-reviews.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t6-3">
+              <summary>
+                <span class="t-n">3</span>
+                <span class="t-title"><b>Track every referral and reward it</b><span>From the member to the friend who joins, with prompt 6.3</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>The referral reward was launched in Reach (task 3.4). This keeps it working: every referred friend is linked to the member who sent them, and when the friend joins, both rewards and a thank-you from Ryan happen without anyone keeping a list.</p>
+                <ol>
+                  <li>Run prompt 6.3 in Claude Code. It links referred leads to the member who sent them, moves each referral along as the friend books and joins, and puts "give the reward" tasks on the refer page.</li>
+                  <li>Whenever a lead says a member sent them, pick that member when adding the lead.</li>
+                  <li>Send Ryan's thank-you the day the friend joins, and give both rewards that week.</li>
+                  <li>Once a quarter, Ryan thanks the members who referred the most, in person.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/6.3-referrals.txt">
+                  <summary><span class="p-id">6.3</span><span class="p-name">Track referrals and rewards</span><span class="p-use">Run in Claude Code: referrals table, rewards owed, thank-yous, and a Refer tab in the dashboard design</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/6.3-referrals.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/6.3-referrals.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t6-4">
+              <summary>
+                <span class="t-n">4</span>
+                <span class="t-title"><b>Publish a member story every month</b><span>Video and words, with prompt 6.4</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Six member videos already exist and are on the new site. A new one each month keeps Instagram, the website and the ads fresh, and real members are more convincing than anything Bo7 says about itself.</p>
+                <ol>
+                  <li>Run prompt 6.4. Claude suggests members who opted in to telling their story, with a clear before and now. Ryan picks one.</li>
+                  <li>Use the interview questions and shot list: under 30 minutes, on a phone.</li>
+                  <li>Get the consent form signed before anything is posted, and keep it in the Bo7 Drive.</li>
+                  <li>Give Claude the interview transcript: it cuts a 45 to 60 second script, a caption, a short written story for the website and a quote for ads, all in the member's own words.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/6.4-member-stories.txt">
+                  <summary><span class="p-id">6.4</span><span class="p-name">Member stories</span><span class="p-use">Who to ask, interview, shot list, consent form, and the outputs</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/6.4-member-stories.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/6.4-member-stories.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t6-5">
+              <summary>
+                <span class="t-n">5</span>
+                <span class="t-title"><b>Run a monthly bring-a-friend session</b><span>At each gym, with prompt 6.5</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>A relaxed, normal session where members bring someone to try it with them. Friends arrive with someone they trust, which makes the first visit far easier.</p>
+                <ol>
+                  <li>Pick a regular slot at each gym: [day and time]. Set it up in Glofox as a monthly class with guest spots.</li>
+                  <li>Run prompt 6.5 for the invite, the reminder, what members forward to their friend, the coach's checklist for the day, and the follow-up.</li>
+                  <li>Every guest goes into the database as a referral lead linked to the member, and hears from the coach the next day with two consult times.</li>
+                  <li>Check the numbers on the refer page each month: guests, consults booked, joined.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/6.5-bring-a-friend.txt">
+                  <summary><span class="p-id">6.5</span><span class="p-name">Bring-a-friend sessions</span><span class="p-use">Format, invites, coach checklist, follow-up and tracking</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/6.5-bring-a-friend.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/6.5-bring-a-friend.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+          </div>
+        </div>
       </details>
       <details class="step" id="monthly">
-        <summary><span class="step-n">·</span><span class="step-title"><h2>Monthly review</h2><span>30 minutes on the scorecard</span></span><span class="pill">To write</span><span class="chev" aria-hidden="true"></span></summary>
+        <summary><span class="step-n">·</span><span class="step-title"><h2>Monthly review</h2><span>30 minutes on the scorecard</span></span><span class="pill">Next</span><span class="chev" aria-hidden="true"></span></summary>
         <div class="step-body"><p class="soon-body">To come: the scorecard, one number per step, and a prompt that reads the month's exports and names the worst number to fix first.</p></div>
       </details>
     </main>
