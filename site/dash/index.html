@@ -281,6 +281,70 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
 .parked b { color: var(--text-primary); font-weight: 600; }
 .parked .due { margin-left: auto; color: var(--text-tertiary); font-size: var(--fs-xs); }
 
+/* Tabs and panels */
+.tabpanel { display: flex; flex-direction: column; gap: var(--space-6); }
+.tabpanel[hidden], .seg[hidden], .switch[hidden] { display: none; }
+
+/* Consult tab: list on the left, consult sheet on the right; full-screen sheet on phones */
+.cx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-5); }
+.cx { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: var(--space-6); align-items: start; }
+.cx-row { width: 100%; border: 0; border-bottom: 1px solid var(--table-border); background: none; text-align: left; cursor: pointer; padding: 10px 12px; display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: var(--space-2) var(--space-5); align-items: center; min-height: 60px; }
+.cx-row:hover { background: var(--row-hover); }
+.cx-row[aria-current="true"] { background: var(--bg-active); box-shadow: inset 2px 0 0 var(--accent); }
+.cx-time { font-size: var(--fs-md); font-weight: 600; letter-spacing: var(--track-tight); }
+.cx-who { min-width: 0; }
+.cx-who b { display: block; font-weight: 600; font-size: var(--fs-base); }
+.cx-who span { display: block; font-size: var(--fs-sm); color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.group-label.today { color: var(--accent-text); background: var(--accent-subtle); }
+.cx-list-panel, .cx-detail { height: calc(100vh - var(--topbar-h) - 64px); min-height: 480px; }
+.cx-list-panel { display: flex; flex-direction: column; overflow: hidden; }
+.cx-list-panel #x-list { overflow: auto; flex: 1; }
+.cx-detail { display: flex; flex-direction: column; overflow: hidden; }
+.cx-empty { padding: 48px 16px; text-align: center; color: var(--text-tertiary); font-size: var(--fs-sm); }
+.cx-head { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: var(--space-3); }
+.cx-head-top { display: flex; align-items: center; gap: var(--space-4); }
+.cx-name { font-size: var(--fs-xl); font-weight: 600; letter-spacing: var(--track-tight); margin: 0; flex: 1; min-width: 0; }
+.cx-when { font-size: var(--fs-sm); color: var(--text-secondary); }
+.cx-when b { color: var(--text-primary); }
+.cx-back { display: none; }
+.cx-body { overflow: auto; padding: 4px 16px 16px; display: flex; flex-direction: column; gap: var(--space-6); flex: 1; }
+.cx-sec { display: flex; flex-direction: column; gap: var(--space-4); padding-top: var(--space-5); }
+.cx-sec + .cx-sec { border-top: 1px solid var(--border); }
+.cx-sec h3 { margin: 0; font-size: var(--fs-base); font-weight: 600; letter-spacing: var(--track-tight); display: flex; align-items: baseline; gap: var(--space-4); }
+.cx-sec h3 .panel-note { font-weight: 400; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: var(--fs-sm); }
+.facts dt { color: var(--text-tertiary); }
+.facts dd { margin: 0; color: var(--text-primary); }
+.prev-notes { display: flex; flex-direction: column; gap: var(--space-3); }
+.prev-notes .note { background: var(--bg-sunken); }
+.cx textarea.input, .cx-detail textarea.input { min-height: 64px; }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.tog { border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-secondary); border-radius: var(--radius-full); padding: 5px 12px; font-size: var(--fs-sm); font-weight: 500; cursor: pointer; min-height: 32px; }
+.tog:hover { background: var(--bg-hover); color: var(--text-primary); }
+.tog[aria-pressed="true"] { background: var(--accent-subtle); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+.tog.big { padding: 8px 14px; font-size: var(--fs-base); min-height: 40px; }
+.tog.good[aria-pressed="true"] { background: var(--status-positive-subtle); border-color: var(--status-positive); color: var(--status-positive); }
+.tog.bad[aria-pressed="true"] { background: var(--status-negative-subtle); border-color: var(--status-negative); color: var(--status-negative); }
+.saved { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.hint-text { font-size: var(--fs-xs); color: var(--text-tertiary); margin: 0; }
+.cx-foot { padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--border); display: flex; align-items: center; gap: var(--space-4); background: var(--bg-surface); }
+.cx-foot .hint { font-size: var(--fs-xs); color: var(--text-tertiary); margin-right: auto; }
+
+@media (max-width: 1000px) {
+  .cx { grid-template-columns: minmax(0, 1fr); }
+  .cx-detail { display: none; }
+  .cx-list-panel { height: auto; min-height: 0; }
+  .cx-detail.open { display: flex; position: fixed; inset: 0; z-index: 50; max-height: none; border-radius: 0; border: 0; padding-top: env(safe-area-inset-top, 0px); }
+  .cx-back { display: grid; margin-left: -6px; }
+  body.sheet-open { overflow: hidden; }
+}
+@media (max-width: 640px) {
+  .cx-detail textarea.input { font-size: 16px; } /* stops phones zooming in on focus */
+  .cx-foot .btn.primary { flex: 1; justify-content: center; padding: 10px 12px; font-size: var(--fs-md); }
+  .cx-foot .hint { display: none; }
+  .cx-row { grid-template-columns: 48px minmax(0, 1fr) auto; }
+}
+
 /* Toast */
 .toast { position: fixed; left: 50%; bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 32px); background: var(--bg-raised); border: 1px solid var(--border); box-shadow: var(--shadow-pop); color: var(--text-primary); padding: 9px 12px; border-radius: var(--radius-lg); font-size: var(--fs-sm); opacity: 0; transition: opacity .15s; pointer-events: none; }
 .toast.show { opacity: 1; }
@@ -302,11 +366,11 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
         <button type="button" data-gym="Killiney" aria-pressed="false">Killiney</button>
         <button type="button" data-gym="Blackrock" aria-pressed="false">Blackrock</button>
       </div>
-      <div class="seg" role="group" aria-label="Period">
+      <div class="seg" role="group" aria-label="Period" id="period-seg">
         <button type="button" data-period="week" aria-pressed="true">This week</button>
         <button type="button" data-period="month" aria-pressed="false">Last 4 weeks</button>
       </div>
-      <label class="switch"><input type="checkbox" id="compare" checked><span class="track" aria-hidden="true"></span>Versus previous</label>
+      <label class="switch" id="compare-wrap"><input type="checkbox" id="compare" checked><span class="track" aria-hidden="true"></span>Versus previous</label>
       <div class="seg icons" role="group" aria-label="Theme">
         <button type="button" data-theme-opt="light" aria-pressed="false" title="Light" aria-label="Light"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg></button>
         <button type="button" data-theme-opt="dark" aria-pressed="false" title="Dark" aria-label="Dark"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M13.6 9.6A5.8 5.8 0 0 1 6.4 2.4a5.8 5.8 0 1 0 7.2 7.2Z"/></svg></button>
@@ -318,12 +382,13 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
 
 <main class="content">
   <nav class="tabs" role="tablist" aria-label="Dashboard sections">
-    <button role="tab" aria-selected="true" type="button">Leads</button>
-    <button role="tab" aria-selected="false" type="button" disabled>Close <span class="chip mute">Soon</span></button>
+    <button role="tab" aria-selected="true" type="button" data-tab="leads">Leads</button>
+    <button role="tab" aria-selected="false" type="button" data-tab="consult">Consult</button>
     <button role="tab" aria-selected="false" type="button" disabled>Retain <span class="chip mute">Soon</span></button>
     <button role="tab" aria-selected="false" type="button" disabled>Reach <span class="chip mute">Soon</span></button>
   </nav>
 
+  <div class="tabpanel" id="tab-leads" role="tabpanel">
   <section class="kpis" aria-label="Summary">
     <div class="kpi">
       <span class="eyebrow">Leads in</span>
@@ -364,6 +429,28 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
       <div class="panel-head"><span class="panel-title" id="h-consult">Consults booked</span><span class="panel-note">Next 7 days, by date and time</span><span class="panel-actions"><span class="count" id="c-consult">0</span></span></div>
       <div id="list-consult"></div>
     </section>
+  </div>
+
+  </div>
+
+  <div class="tabpanel" id="tab-consult" role="tabpanel" hidden>
+    <section class="kpis" aria-label="This week's consults">
+      <div class="kpi"><span class="eyebrow">Booked this week</span><span class="kpi-value" id="x-booked">0</span><span class="kpi-meta"><span class="kpi-ly" id="x-booked-m"></span></span></div>
+      <div class="kpi"><span class="eyebrow">Done</span><span class="kpi-value" id="x-done">0</span><span class="kpi-meta"><span class="kpi-ly" id="x-done-m"></span></span></div>
+      <div class="kpi"><span class="eyebrow">Showed up</span><span class="kpi-value" id="x-show">0%</span><span class="kpi-meta"><span class="kpi-ly" id="x-show-m"></span></span></div>
+      <div class="kpi"><span class="eyebrow">Joined</span><span class="kpi-value" id="x-joined">0</span><span class="kpi-meta"><span class="kpi-ly" id="x-joined-m"></span></span></div>
+    </section>
+    <div class="cx-bar">
+      <div class="seg" role="group" aria-label="Coach" id="x-coach"></div>
+      <span class="panel-note">This week and next. Open a consult to take notes and record the outcome.</span>
+    </div>
+    <div class="cx">
+      <section class="panel cx-list-panel" aria-labelledby="x-list-h">
+        <div class="panel-head"><span class="panel-title" id="x-list-h">Consults</span><span class="panel-actions"><span class="count" id="x-count">0</span></span></div>
+        <div id="x-list"></div>
+      </section>
+      <section class="panel cx-detail" id="cx-detail" aria-label="Consult"></section>
+    </div>
   </div>
 
   <p class="foot-note">Sample data for layout only. The live version reads the Bo7 leads sheet and sits behind the team login at team.bo7.ie.</p>
@@ -620,6 +707,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
         document.querySelectorAll('[data-' + attr + ']').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
         state[key] = b.getAttribute('data-' + attr);
         render();
+        if (!document.getElementById('tab-consult').hidden) renderConsult();
       });
     });
   }
@@ -788,6 +876,173 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-lead]')) { e.preventDefault(); openLead(e.target.dataset.lead); }
   });
 
+  // ---------- Consult tab ----------
+  var WD = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  function dayName(d) { return WD[(4 + d + 700) % 7]; }
+  function dayLong(d) { return (d === 0 ? 'Today \u00b7 ' : d === 1 ? 'Tomorrow \u00b7 ' : '') + dayName(d) + ' ' + (9 + d) + ' Oct'; }
+  var EARLIER = [
+    { name: 'Gavin Reilly', source: 'google-profile', gym: 'Killiney', prefers: 'phone', day: -4, time: '07:00', coach: 'Ryan', outcome: 'joined', interested: 'Getting back into training after years off' },
+    { name: 'Fiona Lynch', source: 'meta-ads', gym: 'Blackrock', prefers: 'whatsapp', day: -3, time: '12:15', coach: 'Coach C', outcome: 'notyet', reason: 'Price', interested: 'Strength for running' },
+    { name: 'Kevin Daly', source: 'walk-in', gym: 'Killiney', prefers: 'phone', day: -2, time: '18:45', coach: 'Coach B', outcome: 'noshow', interested: 'Lose weight before a wedding' },
+    { name: 'Aisling Kenny', source: 'referral', gym: 'Blackrock', prefers: 'whatsapp', day: -1, time: '17:30', coach: 'Ryan', outcome: 'joined', interested: 'Referred by her sister, wants evening sessions' }
+  ];
+  var LATER = [
+    { name: 'Sarah Whelan', source: 'instagram', gym: 'Killiney', prefers: 'whatsapp', day: 3, time: '07:45', coach: 'Ryan', interested: 'Back pain from desk work' },
+    { name: 'Conor Hayes', source: 'corporate', gym: 'Blackrock', prefers: 'email', day: 4, time: '18:15', coach: 'Coach C', interested: 'Via the company deal' }
+  ];
+  EARLIER.concat(LATER).forEach(function (p, i) { p.id = 'X' + i; p.booked = true; p.notes = p.interested ? [{ by: 'Logged at enquiry', at: 'Earlier', text: p.interested }] : []; });
+  CONSULT.forEach(function (p) { if (!p.interested) p.interested = ({ 'Emma Byrne': 'Wants to feel strong again after an injury', 'Mark Nolan': 'Friend of a member, played rugby', 'Tom Gallagher': 'Walked in, wants to lose weight', 'Laura Quinn': 'Early mornings only' })[p.name] || ''; });
+  var xs = { coach: 'all', sel: null };
+  var REASONS_NJ = ['Price', 'Timing or schedule', 'Location', 'Not ready yet', 'Chose somewhere else', 'Wanted one-to-one', 'Other'];
+  function consults() {
+    return EARLIER.concat(CONSULT.filter(function (p) { return p.booked; }), LATER).filter(byGym)
+      .filter(function (p) { return xs.coach === 'all' || p.coach === xs.coach; })
+      .sort(function (a, b) { return (a.day - b.day) || (a.time < b.time ? -1 : a.time > b.time ? 1 : 0); });
+  }
+  function outcomeChip(p) {
+    if (p.outcome === 'joined') return '<span class="chip ok">Joined</span>';
+    if (p.outcome === 'notyet') return '<span class="chip warn">Not yet</span>';
+    if (p.outcome === 'thinking') return '<span class="chip info">Thinking it over</span>';
+    if (p.outcome === 'noshow') return '<span class="chip bad">No-show</span>';
+    if (p.day < 0) return '<span class="chip warn">No outcome</span>';
+    return p.day === 0 ? '<span class="chip info">Today</span>' : '<span class="chip mute">Booked</span>';
+  }
+  function renderConsult() {
+    var all = consults();
+    var coaches = ['all', 'Ryan', 'Coach B', 'Coach C'];
+    document.getElementById('x-coach').innerHTML = coaches.map(function (c) { return '<button type="button" data-xcoach="' + c + '" aria-pressed="' + (xs.coach === c) + '">' + (c === 'all' ? 'All coaches' : c) + '</button>'; }).join('');
+    var week = all.filter(function (p) { return p.day <= 2; });
+    var done = week.filter(function (p) { return p.outcome; });
+    var showed = done.filter(function (p) { return p.outcome !== 'noshow'; });
+    var joined = done.filter(function (p) { return p.outcome === 'joined'; });
+    var left = week.filter(function (p) { return !p.outcome && p.day >= 0; });
+    document.getElementById('x-booked').textContent = week.length;
+    document.getElementById('x-booked-m').textContent = 'Mon 5 to Sun 11 Oct';
+    document.getElementById('x-done').innerHTML = done.length + '<span class="kpi-secondary">of ' + week.length + '</span>';
+    document.getElementById('x-done-m').textContent = left.length + ' still to come';
+    document.getElementById('x-show').textContent = done.length ? Math.round(showed.length / done.length * 100) + '%' : '\u2014';
+    document.getElementById('x-show-m').textContent = showed.length + ' of ' + done.length + ' turned up';
+    document.getElementById('x-joined').textContent = joined.length;
+    document.getElementById('x-joined-m').textContent = showed.length ? Math.round(joined.length / showed.length * 100) + '% of those who showed' : 'None yet';
+
+    // Upcoming first (today at the top), then earlier this week, most recent first.
+    var upcoming = all.filter(function (p) { return p.day >= 0; });
+    var earlier = all.filter(function (p) { return p.day < 0; }).reverse();
+    var html = '', lastGroup = null;
+    upcoming.concat(earlier).forEach(function (p) {
+      var group = p.day >= 3 ? 'next' : p.day < 0 ? 'earlier' : String(p.day);
+      if (group !== lastGroup) {
+        html += '<div class="group-label' + (p.day === 0 ? ' today' : '') + '">' + (p.day >= 3 ? 'Next week' : p.day < 0 ? 'Earlier this week' : esc(dayLong(p.day))) + '</div>';
+        lastGroup = group;
+      }
+      var sub = (p.day >= 3 || p.day < 0 ? dayName(p.day) + ' ' + (9 + p.day) + ' \u00b7 ' : '') + p.gym + ' \u00b7 ' + p.coach;
+      html += '<button type="button" class="cx-row" data-x="' + p.id + '" aria-current="' + (xs.sel === p.id) + '"><span class="cx-time">' + esc(p.time) + '</span><span class="cx-who"><b>' + esc(p.name) + '</b><span>' + esc(sub) + '</span></span>' + outcomeChip(p) + '</button>';
+    });
+    document.getElementById('x-list').innerHTML = html || '<div class="empty">No consults for this coach.</div>';
+    document.getElementById('x-count').textContent = all.length;
+    if (xs.sel && !all.some(function (p) { return p.id === xs.sel; })) xs.sel = null;
+    if (!xs.sel && window.innerWidth > 1000) {
+      var next = all.filter(function (p) { return p.day >= 0 && !p.outcome; })[0] || all[0];
+      if (next) { xs.sel = next.id; markRows(); }
+    }
+    drawSheet();
+  }
+  function markRows() { document.querySelectorAll('[data-x]').forEach(function (r) { r.setAttribute('aria-current', String(r.dataset.x === xs.sel)); }); }
+  function findX(id) { return EARLIER.concat(CONSULT, LATER).filter(function (p) { return p.id === id; })[0]; }
+  function tog(group, value, label, on, extra) { return '<button type="button" class="tog' + (extra || '') + '" data-' + group + '="' + esc(value) + '" aria-pressed="' + !!on + '">' + esc(label) + '</button>'; }
+  function drawSheet() {
+    var box = document.getElementById('cx-detail'), p = xs.sel && findX(xs.sel);
+    if (!p) { box.innerHTML = '<div class="cx-empty">Pick a consult to open it.</div>'; return; }
+    var f = p.form = p.form || { goals: '', history: '', health: '', other: '', days: [], times: [] };
+    var o = p.draft = p.draft || { showed: p.outcome ? (p.outcome === 'noshow' ? 'no' : 'yes') : '', result: p.outcome && p.outcome !== 'noshow' ? p.outcome : '', reason: p.reason || '', follow: '1 week' };
+    var past = p.notes.filter(function (n) { return n.by !== 'Consult notes'; });
+    box.innerHTML =
+      '<div class="cx-head"><div class="cx-head-top"><button type="button" class="icon-btn cx-back" data-xback aria-label="Back to the list"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg></button><h2 class="cx-name">' + esc(p.name) + '</h2>' + outcomeChip(p) + '</div>' +
+      '<div class="cx-when"><b>' + esc(dayLong(p.day)) + ', ' + esc(p.time) + '</b> \u00b7 ' + esc(p.gym) + ' \u00b7 with ' + esc(p.coach) + '</div>' + actions(p) + '</div>' +
+      '<div class="cx-body">' +
+        '<section class="cx-sec"><h3>About them</h3><dl class="facts">' +
+          '<dt>Found Bo7 through</dt><dd>' + esc(SOURCES[p.source]) + '</dd>' +
+          '<dt>Interested in</dt><dd>' + esc(p.interested || '\u2014') + '</dd>' +
+          '<dt>Best way to reach</dt><dd>' + LABEL[p.prefers] + '</dd>' +
+        '</dl>' + (past.length ? '<div class="prev-notes">' + past.slice().reverse().map(function (n) { return '<div class="note"><div class="note-meta">' + esc(n.by) + ' \u00b7 ' + esc(n.at) + '</div><p>' + esc(n.text) + '</p></div>'; }).join('') + '</div>' : '') + '</section>' +
+        '<section class="cx-sec"><h3>Consult notes <span class="saved" id="cx-saved">' + (p.savedAt ? 'Saved ' + p.savedAt : 'Saved as you type') + '</span></h3>' +
+          '<label class="field"><span>What they want to achieve</span><textarea class="input" data-f="goals" rows="3" placeholder="In their words">' + esc(f.goals) + '</textarea></label>' +
+          '<label class="field"><span>Training so far</span><textarea class="input" data-f="history" rows="2" placeholder="What they\u2019ve done before, what worked, what didn\u2019t">' + esc(f.history) + '</textarea></label>' +
+          '<label class="field"><span>Injuries or health</span><textarea class="input" data-f="health" rows="2" placeholder="Anything to work around"></textarea></label>' +
+          '<p class="hint-text">Only what a coach needs to train them safely, and only with their OK.</p>' +
+          '<div class="field"><span>Days that suit</span><div class="chips">' + WD.map(function (d) { return tog('fday', d, d, f.days.indexOf(d) !== -1); }).join('') + '</div></div>' +
+          '<div class="field"><span>Times that suit</span><div class="chips">' + ['Early morning', 'Lunchtime', 'Evening', 'Weekend'].map(function (t) { return tog('ftime', t, t, f.times.indexOf(t) !== -1); }).join('') + '</div></div>' +
+          '<label class="field"><span>Anything else</span><textarea class="input" data-f="other" rows="2" placeholder="Questions they asked, what they\u2019re worried about"></textarea></label>' +
+        '</section>' +
+        '<section class="cx-sec"><h3>Outcome</h3>' +
+          '<div class="field"><span>Did they show up?</span><div class="chips">' + tog('oshow', 'yes', 'Showed up', o.showed === 'yes', ' big good') + tog('oshow', 'no', 'No-show', o.showed === 'no', ' big bad') + '</div></div>' +
+          (o.showed === 'yes' ? '<div class="field"><span>Result</span><div class="chips">' + tog('ores', 'joined', 'Joined', o.result === 'joined', ' big good') + tog('ores', 'thinking', 'Thinking it over', o.result === 'thinking', ' big') + tog('ores', 'notyet', 'Not yet', o.result === 'notyet', ' big') + '</div></div>' : '') +
+          (o.showed === 'yes' && o.result === 'notyet' ? '<div class="field"><span>Why not yet</span><div class="chips">' + REASONS_NJ.map(function (r) { return tog('oreason', r, r, o.reason === r); }).join('') + '</div></div>' : '') +
+          (o.showed === 'yes' && o.result === 'thinking' ? '<div class="field"><span>Follow up in</span><div class="chips">' + ['3 days', '1 week', '2 weeks'].map(function (r) { return tog('ofollow', r, r, o.follow === r); }).join('') + '</div></div>' : '') +
+          (o.showed === 'yes' && o.result === 'joined' ? '<p class="hint-text">Next: Ryan\u2019s welcome message and the community WhatsApp group (Step 4, task 5).</p>' : '') +
+          (o.showed === 'no' ? '<p class="hint-text">They move back to Contacted on the Leads tab, with a no-show message ready to send.</p>' : '') +
+        '</section>' +
+      '</div>' +
+      '<div class="cx-foot"><span class="hint">Sample data. Nothing is saved.</span><button type="button" class="btn primary lg" data-xsave' + (o.showed ? '' : ' disabled') + '>Save outcome</button></div>';
+    box.querySelector('[data-f="health"]').value = f.health;
+    box.querySelector('[data-f="other"]').value = f.other;
+  }
+  function openSheet(id) {
+    xs.sel = id; markRows(); drawSheet();
+    var box = document.getElementById('cx-detail');
+    if (window.innerWidth <= 1000) { box.classList.add('open'); document.body.classList.add('sheet-open'); box.scrollTop = 0; }
+  }
+  function closeSheet() { document.getElementById('cx-detail').classList.remove('open'); document.body.classList.remove('sheet-open'); }
+  document.getElementById('tab-consult').addEventListener('click', function (e) {
+    var b, p = xs.sel && findX(xs.sel);
+    if ((b = e.target.closest('[data-xcoach]'))) { xs.coach = b.dataset.xcoach; xs.sel = null; renderConsult(); return; }
+    if ((b = e.target.closest('[data-x]'))) { openSheet(b.dataset.x); return; }
+    if (e.target.closest('[data-xback]')) { closeSheet(); return; }
+    if (!p) return;
+    if ((b = e.target.closest('[data-fday]'))) { var i = p.form.days.indexOf(b.dataset.fday); if (i === -1) p.form.days.push(b.dataset.fday); else p.form.days.splice(i, 1); b.setAttribute('aria-pressed', String(i === -1)); saved(p); return; }
+    if ((b = e.target.closest('[data-ftime]'))) { var j = p.form.times.indexOf(b.dataset.ftime); if (j === -1) p.form.times.push(b.dataset.ftime); else p.form.times.splice(j, 1); b.setAttribute('aria-pressed', String(j === -1)); saved(p); return; }
+    if ((b = e.target.closest('[data-oshow]'))) { p.draft.showed = b.dataset.oshow; keepScroll(drawSheet); return; }
+    if ((b = e.target.closest('[data-ores]'))) { p.draft.result = b.dataset.ores; keepScroll(drawSheet); return; }
+    if ((b = e.target.closest('[data-oreason]'))) { p.draft.reason = b.dataset.oreason; keepScroll(drawSheet); return; }
+    if ((b = e.target.closest('[data-ofollow]'))) { p.draft.follow = b.dataset.ofollow; keepScroll(drawSheet); return; }
+    if (e.target.closest('[data-xsave]')) {
+      var d = p.draft;
+      p.outcome = d.showed === 'no' ? 'noshow' : (d.result || 'thinking');
+      p.reason = d.reason;
+      var f = p.form, bits = [];
+      if (f.goals) bits.push('Goals: ' + f.goals);
+      if (f.history) bits.push('Training so far: ' + f.history);
+      if (f.days.length || f.times.length) bits.push('Suits: ' + f.days.concat(f.times).join(', '));
+      if (f.other) bits.push('Other: ' + f.other);
+      var summary = { noshow: 'No-show.', joined: 'Joined.', thinking: 'Thinking it over; follow up in ' + d.follow + '.', notyet: 'Not yet' + (d.reason ? ' (' + d.reason + ').' : '.') }[p.outcome];
+      p.notes.push({ by: p.coach, at: 'Just now', text: 'Consult: ' + summary + (bits.length ? '\n' + bits.join('\n') : '') });
+      renderConsult(); render();
+      showToast(p.name + ': ' + summary + ' In the live board this saves the notes and outcome to the leads sheet.');
+      if (window.innerWidth <= 1000) closeSheet();
+    }
+  });
+  function keepScroll(fn) { var body = document.querySelector('.cx-body'), y = body ? body.scrollTop : 0; fn(); var nb = document.querySelector('.cx-body'); if (nb) nb.scrollTop = y; }
+  function saved(p) { p.savedAt = 'just now'; var el = document.getElementById('cx-saved'); if (el) el.textContent = 'Saved just now'; }
+  document.getElementById('tab-consult').addEventListener('input', function (e) {
+    var t = e.target.closest('[data-f]'), p = xs.sel && findX(xs.sel);
+    if (!t || !p) return;
+    p.form[t.dataset.f] = t.value; saved(p);
+  });
+
+  // ---------- Tabs ----------
+  function showTab(name) {
+    document.querySelectorAll('[data-tab]').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === name)); });
+    document.getElementById('tab-leads').hidden = name !== 'leads';
+    document.getElementById('tab-consult').hidden = name !== 'consult';
+    document.getElementById('period-seg').hidden = name !== 'leads';
+    document.getElementById('compare-wrap').hidden = name !== 'leads';
+    document.getElementById('period-sub').textContent = name === 'consult' ? 'Consults \u00b7 week of 5 Oct 2026' : (state.period === 'week' ? 'This week \u00b7 5 to 11 Oct 2026' : 'Last 4 weeks \u00b7 14 Sep to 11 Oct 2026');
+    if (name === 'consult') renderConsult(); else closeSheet();
+    try { history.replaceState(null, '', name === 'leads' ? location.pathname : '#' + name); } catch (e) {}
+  }
+  document.querySelectorAll('[data-tab]').forEach(function (b) { b.addEventListener('click', function () { showTab(b.dataset.tab); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.getElementById('cx-detail').classList.contains('open')) closeSheet(); });
+
   var toast = document.getElementById('toast'), tt;
   function showToast(msg) { (dlg.open ? dlg : document.body).appendChild(toast); toast.textContent = msg; toast.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 3800); }
   document.addEventListener('click', function (e) {
@@ -800,6 +1055,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   render();
+  if (location.hash === '#consult') showTab('consult');
 })();
 </script>
 </body>
