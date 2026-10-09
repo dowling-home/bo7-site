@@ -83,7 +83,6 @@ details.task .chev, details.prompt .chev { width: 18px; height: 18px; }
 .step-body p, .step-body li { max-width: 65ch; }
 .step-body ul, .step-body ol { padding-left: 1.3em; display: grid; gap: 6px; }
 .done { border-top: 1px solid var(--line); padding-top: 16px; }
-.soon-body { color: var(--muted); }
 
 /* Rules */
 .rules { counter-reset: r; list-style: none; padding: 0 !important; }
@@ -625,7 +624,6 @@ a { color: var(--gold-text); }
                   <li>Run prompt 2.9 in Claude Code every Monday. It reads the database and changes nothing.</li>
                   <li>Ask Claude Code to run it on a schedule, first thing every Monday.</li>
                   <li>Act on what it shows: a source that has gone quiet, slow replies, or rows missing their source.</li>
-                  <li>Bring the numbers to the monthly review.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/2.9-weekly-report.txt">
                   <summary><span class="p-id">2.9</span><span class="p-name">Monday lead report</span><span class="p-use">Leads, replies, consults and joins by source, compared with the last 4 weeks</span><span class="chev" aria-hidden="true"></span></summary>
@@ -1096,7 +1094,7 @@ a { color: var(--gold-text); }
                 <ol>
                   <li>Run prompt 5.5. Claude adds leavers to the retain page with a reason to record, writes Ryan's message for when someone cancels, and adds monthly retention.</li>
                   <li>When someone cancels, Ryan sends the message and records the reason. Every leaver, every time.</li>
-                  <li>At the monthly review, look at the reasons. One that keeps coming up is the next thing to fix.</li>
+                  <li>Check the reasons on the retain page. One that keeps coming up is the next thing to fix.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/5.5-why-people-leave.txt">
                   <summary><span class="p-id">5.5</span><span class="p-name">Learn why people leave</span><span class="p-use">Leavers on the retain page, a cancel message, and monthly retention</span><span class="chev" aria-hidden="true"></span></summary>
@@ -1275,10 +1273,6 @@ a { color: var(--gold-text); }
             </details>
           </div>
         </div>
-      </details>
-      <details class="step" id="monthly">
-        <summary><span class="step-n">·</span><span class="step-title"><h2>Monthly review</h2><span>30 minutes on the scorecard</span></span><span class="pill">Next</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="step-body"><p class="soon-body">To come: the scorecard, one number per step, and a prompt that reads the month's exports and names the worst number to fix first.</p></div>
       </details>
     </main>
 </div>
