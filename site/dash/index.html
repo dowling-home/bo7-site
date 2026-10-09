@@ -345,6 +345,47 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   .cx-row { grid-template-columns: 48px minmax(0, 1fr) auto; }
 }
 
+/* Retain tab: member health column, then the win-back list */
+.rt { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: var(--space-6); align-items: start; }
+.rt-health { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: var(--space-6); padding: 16px; align-items: stretch; }
+.hcol { display: flex; flex-direction: column; height: 420px; border-radius: var(--radius-lg); overflow: hidden; gap: 2px; background: var(--bg-surface); }
+.hseg { border: 0; padding: 0; margin: 0; min-height: 6px; display: flex; align-items: flex-start; justify-content: center; color: var(--text-inverse); font-weight: 600; font-size: var(--fs-sm); cursor: pointer; position: relative; }
+.hseg span { padding-top: 8px; }
+.hseg.healthy { background: var(--status-positive); cursor: default; }
+.hseg.slowing { background: var(--status-warning); }
+.hseg.risk { background: var(--status-negative); }
+.hseg:not(.healthy):hover { filter: brightness(1.08); }
+.hseg[aria-pressed="true"] { box-shadow: inset 0 0 0 3px var(--text-primary); }
+.hlegend { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.hrow { border: 1px solid var(--border); background: var(--bg-surface); border-radius: var(--radius-lg); padding: 10px 12px; text-align: left; display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 2px var(--space-4); align-items: baseline; cursor: pointer; }
+.hrow:hover { background: var(--bg-hover); }
+.hrow[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-subtle); }
+.hrow.healthy { cursor: default; }
+.hrow.healthy:hover { background: var(--bg-surface); }
+.hdot { width: 10px; height: 10px; border-radius: 3px; align-self: center; }
+.hdot.healthy { background: var(--status-positive); } .hdot.slowing { background: var(--status-warning); } .hdot.risk { background: var(--status-negative); }
+.hname { font-weight: 600; font-size: var(--fs-base); }
+.hnum { font-size: var(--fs-xl); font-weight: 600; letter-spacing: var(--track-tight); text-align: right; }
+.hdef { grid-column: 2 / -1; font-size: var(--fs-xs); color: var(--text-tertiary); }
+.hmeta { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font-size: var(--fs-xs); color: var(--text-tertiary); }
+.hmeta > * { white-space: nowrap; }
+.seq { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--bg-sunken); }
+.seq-step { display: flex; flex-direction: column; gap: 1px; padding: 6px 10px; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px solid var(--border); min-width: 0; flex: 1 1 120px; }
+.seq-step b { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); }
+.seq-step span { font-size: var(--fs-sm); color: var(--text-primary); }
+.seq-step em { font-style: normal; font-size: var(--fs-xs); color: var(--text-tertiary); }
+.seq-step.human { border-left: 2px solid var(--accent); }
+.seq-note { padding: 8px 12px; font-size: var(--fs-xs); color: var(--text-tertiary); border-bottom: 1px solid var(--border); }
+.mrow { padding: 10px 12px; border-bottom: 1px solid var(--table-border); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2) var(--space-5); }
+.mrow:last-child { border-bottom: 0; }
+.mrow:hover { background: var(--row-hover); }
+.mrow .lead-meta b { color: var(--text-primary); font-weight: 600; }
+.mstage { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.mstage .next { font-size: var(--fs-xs); color: var(--text-tertiary); white-space: nowrap; }
+.pace { font-variant-numeric: tabular-nums; }
+@media (max-width: 1000px) { .rt { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { .mrow .lead-actions { gap: var(--space-1); } .mrow .btn.ghost { padding: 3px 6px; } .rt-health { grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-5); padding: 12px; } .hcol { height: 340px; } .mstage .next { white-space: normal; } }
+
 /* Toast */
 .toast { position: fixed; left: 50%; bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 32px); background: var(--bg-raised); border: 1px solid var(--border); box-shadow: var(--shadow-pop); color: var(--text-primary); padding: 9px 12px; border-radius: var(--radius-lg); font-size: var(--fs-sm); opacity: 0; transition: opacity .15s; pointer-events: none; }
 .toast.show { opacity: 1; }
@@ -384,7 +425,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   <nav class="tabs" role="tablist" aria-label="Dashboard sections">
     <button role="tab" aria-selected="true" type="button" data-tab="leads">Leads</button>
     <button role="tab" aria-selected="false" type="button" data-tab="consult">Consult</button>
-    <button role="tab" aria-selected="false" type="button" disabled>Retain <span class="chip mute">Soon</span></button>
+    <button role="tab" aria-selected="false" type="button" data-tab="retain">Retain</button>
     <button role="tab" aria-selected="false" type="button" disabled>Reach <span class="chip mute">Soon</span></button>
   </nav>
 
@@ -450,6 +491,29 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
         <div id="x-list"></div>
       </section>
       <section class="panel cx-detail" id="cx-detail" aria-label="Consult"></section>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-retain" role="tabpanel" hidden>
+    <section class="kpis" aria-label="Member health">
+      <div class="kpi"><span class="eyebrow">Members</span><span class="kpi-value" id="r-members">0</span><span class="kpi-meta"><span class="kpi-ly" id="r-members-m"></span></span></div>
+      <div class="kpi"><span class="eyebrow">Healthy</span><span class="kpi-value" id="r-healthy">0%</span><span class="kpi-meta" id="r-healthy-m"></span></div>
+      <div class="kpi"><span class="eyebrow">Won back, last 30 days</span><span class="kpi-value" id="r-won">0</span><span class="kpi-meta"><span class="kpi-ly" id="r-won-m"></span></span></div>
+      <div class="kpi"><span class="eyebrow">Win-back rate</span><span class="kpi-value" id="r-rate">0%</span><span class="kpi-meta"><span class="kpi-ly" id="r-rate-m"></span></span></div>
+    </section>
+    <div class="rt">
+      <section class="panel" aria-labelledby="r-health-h">
+        <div class="panel-head"><span class="panel-title" id="r-health-h">Member health</span><span class="panel-note">From Glofox bookings and check-ins</span></div>
+        <div class="rt-health">
+          <div class="hcol" id="r-col" role="group" aria-label="Members by health"></div>
+          <div class="hlegend" id="r-legend"></div>
+        </div>
+      </section>
+      <section class="panel" id="r-list-panel" aria-labelledby="r-list-h">
+        <div class="panel-head"><span class="panel-title" id="r-list-h">Win-back</span><span class="panel-note" id="r-list-note"></span><span class="panel-actions"><span class="count" id="r-count">0</span></span></div>
+        <div id="r-seq"></div>
+        <div id="r-list"></div>
+      </section>
     </div>
   </div>
 
@@ -708,12 +772,13 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
         state[key] = b.getAttribute('data-' + attr);
         render();
         if (!document.getElementById('tab-consult').hidden) renderConsult();
+        if (!document.getElementById('tab-retain').hidden) renderRetain();
       });
     });
   }
   wireSeg('gym', 'gym');
   wireSeg('period', 'period');
-  document.getElementById('compare').addEventListener('change', function (e) { state.compare = e.target.checked; render(); });
+  document.getElementById('compare').addEventListener('change', function (e) { state.compare = e.target.checked; render(); if (!document.getElementById('tab-retain').hidden) renderRetain(); });
 
   // Theme: System (no attribute, follows the device), Light or Dark. Remembered in this browser only.
   var THEME_KEY = 'bo7-dash-theme';
@@ -1029,15 +1094,154 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     p.form[t.dataset.f] = t.value; saved(p);
   });
 
+  // ---------- Retain tab ----------
+  // Sample: 200 members. Healthy counts per gym; slowing and at-risk members listed by name.
+  var HEALTHY = { Killiney: 98, Blackrock: 72 };
+  var HEALTH_4W_AGO = { healthy: 162, slowing: 24, risk: 14 };
+  function mk(name, gym, coach, days, before, now, stage, next, extra) { var m = { name: name, gym: gym, coach: coach, days: days, before: before, now: now, stage: stage, next: next, prefers: 'whatsapp', source: 'member' }; for (var k in extra || {}) m[k] = extra[k]; return m; }
+  var SLOWING = [
+    mk('Brian Walsh', 'Killiney', 'Ryan', 12, 3, 1.5, 'nudge', 'Coach check-in Wed'),
+    mk('Deirdre Moore', 'Killiney', 'Coach B', 11, 2, 1, 'nudge', 'Coach check-in Thu'),
+    mk('Eoghan Ryan', 'Blackrock', 'Coach C', 14, 3, 1, 'checkin', 'Coach check-in due today'),
+    mk('Grace Cullen', 'Blackrock', 'Ryan', 10, 2, 1, 'new', 'Nudge goes out tonight'),
+    mk('Hugh Fallon', 'Killiney', 'Coach B', 16, 2, 0.5, 'checkin', 'Coach check-in due today'),
+    mk('Isabel Farrell', 'Killiney', 'Ryan', 13, 3, 1.5, 'nudge', 'Coach check-in Tue'),
+    mk('Joe Brady', 'Blackrock', 'Coach C', 12, 2, 1, 'nudge', 'Coach check-in Wed'),
+    mk('Karen Doherty', 'Killiney', 'Coach B', 18, 2, 0.5, 'checkin', 'Coach check-in overdue'),
+    mk('Liam Power', 'Blackrock', 'Ryan', 11, 3, 1.5, 'nudge', 'Coach check-in Thu'),
+    mk('Maeve Boyle', 'Killiney', 'Ryan', 15, 2, 1, 'paused', 'Paused: knee injury, physio until 1 Nov'),
+    mk('Niall Hogan', 'Blackrock', 'Coach C', 10, 2, 1, 'new', 'Nudge goes out tonight'),
+    mk('Olivia Nash', 'Killiney', 'Coach B', 12, 3, 1.5, 'nudge', 'Coach check-in Wed'),
+    mk('Pat Coyle', 'Killiney', 'Ryan', 17, 2, 0.5, 'checkin', 'Coach check-in due today'),
+    mk('Roisin Keogh', 'Blackrock', 'Ryan', 13, 2, 1, 'nudge', 'Coach check-in Tue'),
+    mk('Sean Molloy', 'Killiney', 'Coach B', 11, 3, 1.5, 'nudge', 'Coach check-in Thu'),
+    mk('Tara Quigley', 'Blackrock', 'Coach C', 14, 2, 1, 'nudge', 'Coach check-in Mon'),
+    mk('Una Dillon', 'Killiney', 'Ryan', 12, 2, 1, 'nudge', 'Coach check-in Wed'),
+    mk('Vincent Ward', 'Blackrock', 'Coach C', 19, 3, 0.5, 'checkin', 'Coach check-in overdue'),
+    mk('Wendy Sheehan', 'Killiney', 'Coach B', 10, 2, 1, 'nudge', 'Coach check-in Fri'),
+    mk('Yvonne Carey', 'Blackrock', 'Ryan', 13, 2, 1, 'nudge', 'Coach check-in Tue')
+  ];
+  var RISK = [
+    mk('Adam Kinsella', 'Killiney', 'Ryan', 23, 3, 0, 'd0', 'Coach WhatsApp due today'),
+    mk('Bernadette Lyons', 'Blackrock', 'Coach C', 22, 2, 0, 'd0', 'Coach WhatsApp due today'),
+    mk('Colm Healy', 'Killiney', 'Coach B', 21, 2, 0, 'd0', 'Coach WhatsApp due today', { noshows: 2 }),
+    mk('Dara Corcoran', 'Blackrock', 'Ryan', 25, 3, 0, 'd3', 'Offer goes out Mon'),
+    mk('Emer Fitzpatrick', 'Killiney', 'Ryan', 26, 2, 0, 'd3', 'Offer goes out Sun'),
+    mk('Finbar Egan', 'Killiney', 'Coach B', 27, 2, 0, 'd3', 'Offer goes out Sat'),
+    mk('Gemma Rooney', 'Blackrock', 'Coach C', 30, 3, 0, 'd7', 'Ryan\u2019s note Thu'),
+    mk('Harry McGrath', 'Killiney', 'Ryan', 33, 2, 0, 'd7', 'Ryan\u2019s note Tue'),
+    mk('Ita Gleeson', 'Blackrock', 'Ryan', 36, 2, 0, 'd14', 'Ryan\u2019s note due today'),
+    mk('Jim O\u2019Brien', 'Killiney', 'Coach B', 24, 2, 0, 'paused', 'Paused: away until 20 Oct')
+  ];
+  SLOWING.concat(RISK).forEach(function (m, i) { m.id = 'M' + i; });
+  var STAGES = {
+    slowing: [
+      { key: 'new', step: 'Today', what: 'Joins tonight', who: 'auto' },
+      { key: 'nudge', step: 'Day 0', what: 'Nudge with their usual sessions', who: 'auto' },
+      { key: 'checkin', step: 'Day 5', what: 'Coach check-in', who: 'coach' }
+    ],
+    risk: [
+      { key: 'd0', step: 'Day 0', what: 'WhatsApp from their coach', who: 'coach' },
+      { key: 'd3', step: 'Day 3', what: 'Hold a spot this week', who: 'auto' },
+      { key: 'd7', step: 'Day 7', what: 'Free catch-up session [offer]', who: 'auto' },
+      { key: 'd14', step: 'Day 14', what: 'Note from Ryan, pause option', who: 'coach' }
+    ]
+  };
+  var STAGE_CHIP = {
+    new: ['mute', 'Starts tonight'], nudge: ['info', 'Nudge sent'], checkin: ['warn', 'Coach check-in'],
+    d0: ['warn', 'Day 0: coach message'], d3: ['info', 'Day 3 sent'], d7: ['info', 'Day 7 offer sent'], d14: ['warn', 'Day 14: Ryan\u2019s note'],
+    paused: ['mute', 'Paused'], removed: ['mute', 'Out of sequence']
+  };
+  var rs = { seg: 'risk' };
+  function renderRetain() {
+    var slow = SLOWING.filter(byGym), risk = RISK.filter(byGym);
+    var healthy = state.gym === 'all' ? HEALTHY.Killiney + HEALTHY.Blackrock : HEALTHY[state.gym];
+    var total = healthy + slow.length + risk.length;
+    var scale = state.gym === 'all' ? 1 : total / 200;
+    document.getElementById('r-members').textContent = total;
+    document.getElementById('r-members-m').textContent = state.gym === 'all' ? 'Killiney ' + (HEALTHY.Killiney + SLOWING.concat(RISK).filter(function (m) { return m.gym === 'Killiney'; }).length) + ' \u00b7 Blackrock ' + (HEALTHY.Blackrock + SLOWING.concat(RISK).filter(function (m) { return m.gym === 'Blackrock'; }).length) : 'Active members';
+    document.getElementById('r-healthy').textContent = Math.round(healthy / total * 100) + '%';
+    var prevHealthy = Math.round(HEALTH_4W_AGO.healthy * scale);
+    document.getElementById('r-healthy-m').innerHTML = state.compare ? delta(Math.round(healthy / total * 100), Math.round(prevHealthy / total * 100), 'pt', 'up') + '<span class="kpi-ly">4 weeks ago ' + Math.round(prevHealthy / total * 100) + '%</span>' : '<span class="kpi-ly">' + healthy + ' training regularly</span>';
+    document.getElementById('r-won').textContent = Math.round(7 * scale);
+    document.getElementById('r-won-m').textContent = 'Back training after going red or amber';
+    document.getElementById('r-rate').textContent = '41%';
+    document.getElementById('r-rate-m').textContent = '7 of 17 who went red in the last 60 days';
+
+    var segs = [
+      { key: 'healthy', label: 'Healthy', n: healthy, prev: Math.round(HEALTH_4W_AGO.healthy * scale), def: 'Trained in the last 10 days, at their usual pace', good: 'up' },
+      { key: 'slowing', label: 'Slowing down', n: slow.length, prev: Math.round(HEALTH_4W_AGO.slowing * scale), def: '10 to 20 days since they trained, or half their usual sessions', good: 'down' },
+      { key: 'risk', label: 'At risk', n: risk.length, prev: Math.round(HEALTH_4W_AGO.risk * scale), def: 'No booking or visit for 21 days, or two no-shows in a row', good: 'down' }
+    ];
+    document.getElementById('r-col').innerHTML = segs.map(function (g) {
+      var tag = g.key === 'healthy' ? 'div' : 'button';
+      return '<' + tag + (tag === 'button' ? ' type="button" data-rseg="' + g.key + '" aria-pressed="' + (rs.seg === g.key) + '" aria-label="' + g.label + ', ' + g.n + ' members"' : '') + ' class="hseg ' + g.key + '" style="flex:' + g.n + ' 1 0"><span>' + (g.n / total > 0.12 ? g.n : '') + '</span></' + tag + '>';
+    }).join('');
+    document.getElementById('r-legend').innerHTML = segs.map(function (g) {
+      var tag = g.key === 'healthy' ? 'div' : 'button';
+      return '<' + tag + (tag === 'button' ? ' type="button" data-rseg="' + g.key + '" aria-pressed="' + (rs.seg === g.key) + '"' : '') + ' class="hrow ' + (g.key === 'healthy' ? 'healthy' : '') + '"><span class="hdot ' + g.key + '"></span><span class="hname">' + g.label + '</span><span class="hnum">' + g.n + '</span>' +
+        '<span class="hdef">' + g.def + '</span>' +
+        '<span class="hmeta"><span>' + Math.round(g.n / total * 100) + '% of members</span>' + (state.compare ? delta(g.n, g.prev, '%', g.good) + '<span>4 weeks ago ' + g.prev + '</span>' : '') + '</span></' + tag + '>';
+    }).join('');
+
+    var list = rs.seg === 'slowing' ? slow : risk;
+    document.getElementById('r-list-h').textContent = rs.seg === 'slowing' ? 'Slowing down' : 'At risk';
+    document.getElementById('r-list-note').textContent = rs.seg === 'slowing' ? 'Light-touch, mostly automatic' : 'Win-back sequence';
+    document.getElementById('r-count').textContent = list.length;
+    document.getElementById('r-seq').innerHTML = '<div class="seq">' + STAGES[rs.seg].map(function (st) {
+      var n = list.filter(function (m) { return m.stage === st.key; }).length;
+      return '<div class="seq-step' + (st.who === 'coach' ? ' human' : '') + '"><b>' + st.step + '</b><span>' + st.what + '</span><em>' + (st.who === 'coach' ? 'Sent by a person' : 'Automatic') + ' \u00b7 ' + n + ' now</em></div>';
+    }).join('') + '</div><div class="seq-note">' + (rs.seg === 'slowing'
+      ? 'Anyone who books or trains drops out straight away. Still not training after the coach check-in? They move to At risk.'
+      : 'Anyone who books or trains drops out straight away. After Day 14 with no reply they\u2019re marked Lapsed, with one check-in at 60 days.') + '</div>';
+    var order = STAGES[rs.seg].map(function (s) { return s.key; }).concat(['paused', 'removed']);
+    list = list.slice().sort(function (a, b) { return (order.indexOf(b.stage) - order.indexOf(a.stage)) || (b.days - a.days); });
+    list.sort(function (a, b) { var due = function (m) { return /due today|overdue/.test(m.next) ? 0 : 1; }; return due(a) - due(b); });
+    document.getElementById('r-list').innerHTML = list.map(function (m) {
+      var chip = STAGE_CHIP[m.stage];
+      var coachDue = m.stage === 'd0' || m.stage === 'checkin' || m.stage === 'd14';
+      return '<article class="mrow"><span class="lead-name">' + esc(m.name) + '</span>' +
+        '<span class="mstage"><span class="chip ' + chip[0] + '">' + chip[1] + '</span></span>' +
+        '<div class="lead-meta"><span>' + esc(m.gym) + ' \u00b7 ' + esc(m.coach) + '</span><span class="dot-sep" aria-hidden="true"></span><span>Last trained <b>' + m.days + ' days ago</b></span><span class="dot-sep" aria-hidden="true"></span><span class="pace">' + m.before + ' a week \u2192 ' + m.now + '</span>' + (m.noshows ? '<span class="dot-sep" aria-hidden="true"></span><span>' + m.noshows + ' no-shows</span>' : '') + '</div>' +
+        '<p class="lead-note" style="grid-column:1/-1">' + esc(m.next) + '</p>' +
+        '<div class="lead-actions">' +
+          (m.stage === 'removed' ? '' : '<button type="button" class="btn' + (coachDue ? ' primary wa' : '') + '" data-ract="wa" data-m="' + m.id + '">' + ICON.whatsapp + (coachDue ? 'Message' : 'WhatsApp') + '</button>' +
+          '<button type="button" class="btn ghost" data-ract="call" data-m="' + m.id + '">' + ICON.phone + 'Call</button>' +
+          (m.stage === 'paused' ? '<button type="button" class="btn ghost" data-ract="resume" data-m="' + m.id + '">Resume</button>' : '<button type="button" class="btn ghost" data-ract="pause" data-m="' + m.id + '">Pause</button>') +
+          '<button type="button" class="btn ghost" data-ract="remove" data-m="' + m.id + '">Take out</button>') +
+        '</div></article>';
+    }).join('') || '<div class="empty">Nobody here. Good.</div>';
+  }
+  function findM(id) { return SLOWING.concat(RISK).filter(function (m) { return m.id === id; })[0]; }
+  document.getElementById('tab-retain').addEventListener('click', function (e) {
+    var b;
+    if ((b = e.target.closest('[data-rseg]'))) {
+      rs.seg = b.dataset.rseg; renderRetain();
+      if (window.innerWidth <= 1000) document.getElementById('r-list-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    if ((b = e.target.closest('[data-ract]'))) {
+      var m = findM(b.dataset.m), a = b.dataset.ract;
+      if (a === 'pause') { m.prevStage = m.stage; m.stage = 'paused'; m.next = 'Paused by you. No messages until you resume.'; showToast(m.name + ' paused. In the live version this stops their sequence.'); }
+      else if (a === 'resume') { m.stage = m.prevStage || (RISK.indexOf(m) !== -1 ? 'd0' : 'nudge'); m.next = 'Resumed'; showToast(m.name + ' is back in the sequence.'); }
+      else if (a === 'remove') { m.stage = 'removed'; m.next = 'Taken out of the sequence. They stay on the members list.'; showToast(m.name + ' taken out of the win-back sequence.'); }
+      else if (a === 'wa') { showToast('Sample data. In the live version this opens WhatsApp to ' + m.name + ' with ' + m.coach + '\u2019s message ready, then moves them on a step.'); return; }
+      else { showToast('Sample data. In the live version this calls ' + m.name + '.'); return; }
+      renderRetain();
+    }
+  });
+
   // ---------- Tabs ----------
   function showTab(name) {
     document.querySelectorAll('[data-tab]').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === name)); });
     document.getElementById('tab-leads').hidden = name !== 'leads';
     document.getElementById('tab-consult').hidden = name !== 'consult';
+    document.getElementById('tab-retain').hidden = name !== 'retain';
     document.getElementById('period-seg').hidden = name !== 'leads';
-    document.getElementById('compare-wrap').hidden = name !== 'leads';
-    document.getElementById('period-sub').textContent = name === 'consult' ? 'Consults \u00b7 week of 5 Oct 2026' : (state.period === 'week' ? 'This week \u00b7 5 to 11 Oct 2026' : 'Last 4 weeks \u00b7 14 Sep to 11 Oct 2026');
+    document.getElementById('compare-wrap').hidden = name === 'consult';
+    document.getElementById('period-sub').textContent = name === 'retain' ? 'Members \u00b7 as of Fri 9 Oct 2026' : name === 'consult' ? 'Consults \u00b7 week of 5 Oct 2026' : (state.period === 'week' ? 'This week \u00b7 5 to 11 Oct 2026' : 'Last 4 weeks \u00b7 14 Sep to 11 Oct 2026');
     if (name === 'consult') renderConsult(); else closeSheet();
+    if (name === 'retain') renderRetain();
     try { history.replaceState(null, '', name === 'leads' ? location.pathname : '#' + name); } catch (e) {}
   }
   document.querySelectorAll('[data-tab]').forEach(function (b) { b.addEventListener('click', function () { showTab(b.dataset.tab); }); });
@@ -1055,7 +1259,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   render();
-  if (location.hash === '#consult') showTab('consult');
+  if (location.hash === '#consult' || location.hash === '#retain') showTab(location.hash.slice(1));
 })();
 </script>
 </body>
