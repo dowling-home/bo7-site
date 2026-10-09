@@ -13,10 +13,10 @@ How it works: a small server-side function in the bo7-team project reads and upd
 Design: match the dashboard mockup at site/dash/index.html in the bo7-site project (live at bo7.thedowlings.co/dash): the same layout, components, colours, light and dark themes, and the same lead dialog. Replace its sample data with the real sheet and calendar.
 
 The board:
-1. A summary strip: leads in this week by source, share answered within 24 hours, waiting over 24 hours, waiting for a consult.
+1. A summary strip: leads in this week by source, share answered within 24 hours, waiting over 24 hours for a first reply, and consults booked in the next 7 days (with the next one).
 2. Where leads come from: count per source for the week or the last 4 weeks, with a gym filter.
-3. New leads (no reply yet), oldest first, anyone over 24 hours marked. Each card shows name, gym, source, preferred contact and how long they've waited, with WhatsApp, Call and Email buttons; the preferred one stands out. WhatsApp opens the chat with the first-reply script for their source already typed (scripts are in the project; ask me for the file if you can't find it). Show the number and email as text too, in case a button doesn't work.
-4. Waiting for a consult: booked first (by date and time, with the coach), then contacted but not yet booked.
+3. Leads: everyone not booked yet, in two groups. "Not contacted yet" comes first, oldest first, with anyone over 24 hours marked: this is where the 24-hour rule applies. "Contacted" follows: people who have had a reply but haven't agreed a consult time, showing when they were last contacted and their latest note. A lead moves from the first group to the second when it's marked Contacted, and leaves the column when a consult is booked. Each card shows name, gym, source, preferred contact and how long they've waited, with WhatsApp, Call and Email buttons; the preferred one stands out. WhatsApp opens the chat with the first-reply script for their source already typed (scripts are in the project; ask me for the file if you can't find it). Show the number and email as text too, in case a button doesn't work.
+4. Consults booked: booked consults only, by date and time, with the coach. Nothing else goes in this column.
 5. Filters for gym, and "only mine" (leads the signed-in coach logged or is booked with).
 
 The lead dialog (opens when someone clicks a lead):

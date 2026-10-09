@@ -331,7 +331,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
       <span class="kpi-meta"><span class="kpi-ly" id="m-late"></span></span>
     </div>
     <div class="kpi">
-      <span class="eyebrow">Waiting for a consult</span>
+      <span class="eyebrow">Consults booked</span>
       <span class="kpi-value" id="k-consult">0</span>
       <span class="kpi-meta"><span class="kpi-ly" id="m-consult"></span></span>
     </div>
@@ -344,12 +344,12 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     </section>
 
     <section class="panel" aria-labelledby="h-new">
-      <div class="panel-head"><span class="panel-title" id="h-new">New leads</span><span class="panel-note">Not contacted yet, oldest first. Open a lead to book or add notes</span><span class="panel-actions"><span class="count" id="c-new">0</span></span></div>
+      <div class="panel-head"><span class="panel-title" id="h-new">Leads</span><span class="panel-note">Not booked yet. Open a lead to book or add notes</span><span class="panel-actions"><span class="count" id="c-new">0</span></span></div>
       <div id="list-new"></div>
     </section>
 
     <section class="panel" aria-labelledby="h-consult">
-      <div class="panel-head"><span class="panel-title" id="h-consult">Waiting for a consult</span><span class="panel-note">Contacted and interested</span><span class="panel-actions"><span class="count" id="c-consult">0</span></span></div>
+      <div class="panel-head"><span class="panel-title" id="h-consult">Consults booked</span><span class="panel-note">Next 7 days, by date and time</span><span class="panel-actions"><span class="count" id="c-consult">0</span></span></div>
       <div id="list-consult"></div>
     </section>
   </div>
@@ -362,6 +362,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
       <h2 class="dlg-title" id="dlg-name">Name</h2>
       <div id="dlg-meta"></div>
       <div id="dlg-contact"></div>
+      <div id="dlg-status" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
     </div>
     <button type="button" class="icon-btn" id="dlg-close" aria-label="Close" autofocus><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
   </div>
@@ -424,15 +425,15 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     { name: 'Niamh O’Sullivan', source: 'referral', gym: 'Killiney', prefers: 'whatsapp', hours: 9, note: 'Referred by a member (Orla)' },
     { name: 'Rory Fitzgerald', source: 'corporate', gym: 'Blackrock', prefers: 'email', hours: 6, note: 'Via the company deal, wants lunchtime' },
     { name: 'Grainne Walsh', source: 'walk-in', gym: 'Blackrock', prefers: 'phone', hours: 3, note: 'Walked in Saturday, back injury history' },
-    { name: 'Paul Keane', source: 'google-ads', gym: 'Killiney', prefers: 'whatsapp', hours: 1, note: '' }
+    { name: 'Paul Keane', source: 'google-ads', gym: 'Killiney', prefers: 'whatsapp', hours: 1, note: '' },
+    { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', hours: 70, contacted: true, replied: '2d ago', status: 'Asked for evenings', note: '' },
+    { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', hours: 96, contacted: true, replied: '3d ago', status: 'Away until next week', note: 'Met at the stand, keen once back' }
   ];
   var CONSULT = [
     { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today', time: '18:00', booked: true, day: 0, coach: 'Ryan' },
     { name: 'Mark Nolan', source: 'referral', gym: 'Blackrock', prefers: 'phone', when: 'Tomorrow', time: '09:15', booked: true, day: 1, coach: 'Coach C' },
     { name: 'Laura Quinn', source: 'google-profile', gym: 'Blackrock', prefers: 'whatsapp', when: 'Thu 15 Oct', time: '12:15', booked: true, day: 6, coach: 'Ryan' },
     { name: 'Tom Gallagher', source: 'walk-in', gym: 'Killiney', prefers: 'phone', when: 'Tomorrow', time: '10:30', booked: true, day: 1, coach: 'Coach B' },
-    { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', when: 'Asked for evenings', time: '', booked: false },
-    { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', when: 'Away until next week', time: '', booked: false }
   ];
 
   // Sample calendar: today is Fri 9 Oct 2026, 11:00. Consult slots per gym; coaches per gym.
@@ -447,6 +448,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     p.id = 'L' + i;
     p.notes = p.note ? [{ by: 'Logged at enquiry', at: 'Earlier', text: p.note }] : [];
   });
+  NEW.forEach(function (p) { if (p.contacted) p.notes.push({ by: 'Ryan', at: p.replied, text: 'Replied on ' + (p.prefers === 'email' ? 'email' : 'WhatsApp') + '. ' + p.status + '.' }); });
   CONSULT.forEach(function (p) { if (p.booked) p.notes.push({ by: 'Ryan', at: 'Earlier', text: 'Consult booked for ' + p.when + ' at ' + p.time + ' with ' + p.coach + '.' }); });
 
   var ICON = {
@@ -557,32 +559,37 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     document.getElementById('m-reply').innerHTML = state.compare ? delta(reply, replyPrev, 'pt', 'up') + '<span class="kpi-ly">' + (wk ? 'Last week ' : 'Previous 4 weeks ') + replyPrev + '%</span>' : '';
     spark(document.getElementById('s-reply'), WEEKLY_REPLY.slice(4), WEEKLY_REPLY.slice(0, 4));
 
-    var nl = NEW.filter(byGym).sort(function (a, b) { return b.hours - a.hours; });
-    var late = nl.filter(function (p) { return p.hours > 24; });
-    document.getElementById('k-late').innerHTML = late.length + '<span class="kpi-secondary">of ' + nl.length + ' new</span>';
+    var mine = NEW.filter(byGym);
+    var fresh = mine.filter(function (p) { return !p.contacted; }).sort(function (a, b) { return b.hours - a.hours; });
+    var talking = mine.filter(function (p) { return p.contacted; }).sort(function (a, b) { return b.hours - a.hours; });
+    var late = fresh.filter(function (p) { return p.hours > 24; });
+    document.getElementById('k-late').innerHTML = late.length + '<span class="kpi-secondary">of ' + fresh.length + ' not contacted</span>';
     document.getElementById('k-late').classList.toggle('bad', late.length > 0);
     document.getElementById('m-late').textContent = late.length ? 'Oldest waiting ' + waited(late[0].hours) : 'Nobody waiting over 24 hours';
 
-    var cl = CONSULT.filter(byGym), booked = cl.filter(function (p) { return p.booked; }).sort(function (a, b) { return (a.day - b.day) || (a.time < b.time ? -1 : a.time > b.time ? 1 : 0); }), tobook = cl.filter(function (p) { return !p.booked; });
-    document.getElementById('k-consult').textContent = cl.length;
-    document.getElementById('m-consult').textContent = booked.length + ' booked · ' + tobook.length + ' still to book';
+    var booked = CONSULT.filter(byGym).filter(function (p) { return p.booked; }).sort(function (a, b) { return (a.day - b.day) || (a.time < b.time ? -1 : a.time > b.time ? 1 : 0); });
+    document.getElementById('k-consult').textContent = booked.length;
+    document.getElementById('m-consult').textContent = booked.length ? 'Next: ' + booked[0].when + ' ' + booked[0].time + ', ' + booked[0].name : 'None booked';
 
-    // New leads
-    document.getElementById('list-new').innerHTML = nl.map(function (p) {
+    // Leads: not contacted yet (the 24-hour rule), then contacted but not booked
+    function freshRow(p) {
       return '<article class="lead clickable' + (p.hours > 24 ? ' late' : '') + '" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + (p.hours > 24 ? '<span class="chip bad">' + waited(p.hours) + '</span>' : 'waiting <b>' + waited(p.hours) + '</b>') + '</span>' + meta(p) + (p.note ? '<p class="lead-note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
-    }).join('') || '<div class="empty">Nobody waiting. Every lead has had a reply.</div>';
-    document.getElementById('c-new').textContent = nl.length;
+    }
+    function talkingRow(p) {
+      return '<article class="lead clickable" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">replied <b>' + esc(p.replied) + '</b></span>' + meta(p) + '<p class="lead-note">' + esc(p.status) + '</p>' + actions(p) + '</article>';
+    }
+    document.getElementById('list-new').innerHTML =
+      '<div class="group-label">Not contacted yet \u00b7 ' + fresh.length + '</div>' + (fresh.map(freshRow).join('') || '<div class="empty">Everyone has had a reply.</div>') +
+      '<div class="group-label">Contacted \u00b7 ' + talking.length + '</div>' + (talking.map(talkingRow).join('') || '<div class="empty">Nobody in conversation.</div>');
+    document.getElementById('c-new').textContent = mine.length;
 
-    // Waiting for a consult
+    // Consults booked
     function consultRow(p) {
-      var when = p.booked ? '<b>' + esc(p.when) + '</b> ' + esc(p.time) + '<br><span class="lead-coach">with ' + esc(p.coach) + '</span>' : esc(p.when);
+      var when = '<b>' + esc(p.when) + '</b> ' + esc(p.time) + '<br><span class="lead-coach">with ' + esc(p.coach) + '</span>';
       return '<article class="lead clickable" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + when + '</span>' + meta(p) + actions(p) + '</article>';
     }
-    document.getElementById('list-consult').innerHTML =
-      (booked.length ? '<div class="group-label">Booked · ' + booked.length + '</div>' + booked.map(consultRow).join('') : '') +
-      (tobook.length ? '<div class="group-label">Still to book · ' + tobook.length + '</div>' + tobook.map(consultRow).join('') : '') ||
-      '<div class="empty">No consults waiting.</div>';
-    document.getElementById('c-consult').textContent = cl.length;
+    document.getElementById('list-consult').innerHTML = booked.map(consultRow).join('') || '<div class="empty">No consults booked.</div>';
+    document.getElementById('c-consult').textContent = booked.length;
   }
 
   function wireSeg(attr, key) {
@@ -670,6 +677,10 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     document.getElementById('dlg-contact').innerHTML = actions(cur);
     document.getElementById('dlg-booked').innerHTML = cur.booked
       ? '<div class="callout"><b>Booked: ' + esc(cur.when) + ' at ' + esc(cur.time) + ', ' + esc(cur.gym) + ', with ' + esc(cur.coach) + '</b><p>Pick a new time below to move it.</p></div>' : '';
+    var st = document.getElementById('dlg-status');
+    st.innerHTML = cur.booked ? '<span class="chip ok">Consult booked</span>'
+      : cur.contacted ? '<span class="chip info">Contacted ' + esc(cur.replied) + '</span>'
+      : '<span class="chip ' + (cur.hours > 24 ? 'bad' : 'warn') + '">Not contacted · ' + waited(cur.hours) + '</span> <button type="button" class="btn" id="dlg-contacted">Mark as contacted</button>';
   }
   function openLead(id) {
     cur = findLead(id); if (!cur) return;
@@ -688,6 +699,13 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     else if ((b = e.target.closest('[data-ptime]'))) { pick.slot = { time: b.dataset.ptime, coach: b.dataset.pc }; drawBooking(); }
   });
   document.getElementById('dlg-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) {
+    if (!e.target.closest('#dlg-contacted')) return;
+    cur.contacted = true; cur.replied = 'just now'; cur.status = 'Replied, no time agreed yet';
+    cur.notes.push({ by: 'You', at: 'Just now', text: 'Marked as contacted.' });
+    render(); drawHead(); drawNotes();
+    showToast(cur.name + ' moved to Contacted. In the live board this also records the first reply time in the leads sheet.');
+  });
   document.getElementById('dlg-cancel').addEventListener('click', function () { dlg.close(); });
   document.getElementById('dlg-note-add').addEventListener('click', function () {
     var t = document.getElementById('dlg-note-text'), v = t.value.trim();
