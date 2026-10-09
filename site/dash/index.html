@@ -159,7 +159,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 760px) { .board { grid-template-columns: minmax(0, 1fr); } }
 
 .panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); min-width: 0; }
-.panel-head { min-height: 36px; padding: 9px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: var(--space-4); }
+.panel-head { min-height: 36px; padding: 9px 12px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
 .panel-title { font-size: var(--fs-base); font-weight: 600; letter-spacing: var(--track-tight); }
 .panel-note { font-size: var(--fs-xs); color: var(--text-tertiary); }
 .panel-actions { margin-left: auto; display: flex; align-items: center; gap: var(--space-4); }
@@ -504,7 +504,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     </section>
     <div class="rt">
       <section class="panel" aria-labelledby="r-health-h">
-        <div class="panel-head"><span class="panel-title" id="r-health-h">Member health</span><span class="panel-note">From Glofox bookings and check-ins</span></div>
+        <div class="panel-head"><span class="panel-title" id="r-health-h">Member health</span><span class="panel-note">From Glofox bookings and check-ins</span><span class="panel-actions"><div class="seg" role="group" aria-label="Gym" id="r-gym"></div></span></div>
         <div class="rt-health">
           <div class="hcol" id="r-col" role="group" aria-label="Members by health"></div>
           <div class="hlegend" id="r-legend"></div>
@@ -694,7 +694,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
 
   function render() {
     var wk = state.period === 'week';
-    document.getElementById('period-sub').textContent = wk ? 'This week · 5 to 11 Oct 2026' : 'Last 4 weeks · 14 Sep to 11 Oct 2026';
+    if (!document.getElementById('tab-leads').hidden) document.getElementById('period-sub').textContent = wk ? 'This week · 5 to 11 Oct 2026' : 'Last 4 weeks · 14 Sep to 11 Oct 2026';
 
     // Sources
     var cur = {}, prev = {}, split = {};
@@ -1155,6 +1155,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   };
   var rs = { seg: 'risk' };
   function renderRetain() {
+    document.getElementById('r-gym').innerHTML = [['all', 'All'], ['Killiney', 'Killiney'], ['Blackrock', 'Blackrock']].map(function (g) { return '<button type="button" data-rgym="' + g[0] + '" aria-pressed="' + (state.gym === g[0]) + '">' + g[1] + '</button>'; }).join('');
     var slow = SLOWING.filter(byGym), risk = RISK.filter(byGym);
     var healthy = state.gym === 'all' ? HEALTHY.Killiney + HEALTHY.Blackrock : HEALTHY[state.gym];
     var total = healthy + slow.length + risk.length;
@@ -1216,6 +1217,11 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   function findM(id) { return SLOWING.concat(RISK).filter(function (m) { return m.id === id; })[0]; }
   document.getElementById('tab-retain').addEventListener('click', function (e) {
     var b;
+    if ((b = e.target.closest('[data-rgym]'))) {
+      state.gym = b.dataset.rgym;
+      document.querySelectorAll('[data-gym]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.gym === state.gym)); });
+      render(); renderRetain(); return;
+    }
     if ((b = e.target.closest('[data-rseg]'))) {
       rs.seg = b.dataset.rseg; renderRetain();
       if (window.innerWidth <= 1000) document.getElementById('r-list-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
