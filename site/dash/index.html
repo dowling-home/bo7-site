@@ -269,6 +269,18 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   .days { grid-template-columns: repeat(7, minmax(44px, 1fr)); overflow-x: auto; }
 }
 
+/* Remove-from-board panel */
+.park { margin-top: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-sunken); padding: 10px 12px; display: flex; flex-direction: column; gap: var(--space-4); }
+.park-title { font-size: var(--fs-base); font-weight: 600; }
+.park p { margin: 0; font-size: var(--fs-sm); color: var(--text-secondary); }
+.park-row { display: flex; flex-wrap: wrap; gap: var(--space-5); align-items: flex-end; }
+.park-actions { display: flex; gap: var(--space-3); }
+.btn.danger { background: var(--status-negative); border-color: var(--status-negative); color: var(--text-inverse); font-weight: 600; }
+.parked { padding: 6px 12px; border-bottom: 1px solid var(--table-border); display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: baseline; font-size: var(--fs-sm); color: var(--text-secondary); }
+.parked:last-child { border-bottom: 0; }
+.parked b { color: var(--text-primary); font-weight: 600; }
+.parked .due { margin-left: auto; color: var(--text-tertiary); font-size: var(--fs-xs); }
+
 /* Toast */
 .toast { position: fixed; left: 50%; bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 32px); background: var(--bg-raised); border: 1px solid var(--border); box-shadow: var(--shadow-pop); color: var(--text-primary); padding: 9px 12px; border-radius: var(--radius-lg); font-size: var(--fs-sm); opacity: 0; transition: opacity .15s; pointer-events: none; }
 .toast.show { opacity: 1; }
@@ -363,6 +375,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
       <div id="dlg-meta"></div>
       <div id="dlg-contact"></div>
       <div id="dlg-status" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+      <div id="dlg-remove"></div>
     </div>
     <button type="button" class="icon-btn" id="dlg-close" aria-label="Close" autofocus><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
   </div>
@@ -428,6 +441,11 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     { name: 'Paul Keane', source: 'google-ads', gym: 'Killiney', prefers: 'whatsapp', hours: 1, note: '' },
     { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', hours: 70, contacted: true, replied: '2d ago', status: 'Asked for evenings', note: '' },
     { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', hours: 96, contacted: true, replied: '3d ago', status: 'Away until next week', note: 'Met at the stand, keen once back' }
+  ];
+  // Taken off the board, kept in the leads sheet to try again later.
+  var PARKED = [
+    { name: 'Shane Byrne', gym: 'Killiney', status: "Couldn't reach", reason: 'No reply to 3 messages', tryAgain: '12 Oct' },
+    { name: 'Ruth Hayes', gym: 'Blackrock', status: 'Not now', reason: 'Training for a marathon until spring', tryAgain: '9 Jan 2027' }
   ];
   var CONSULT = [
     { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today', time: '18:00', booked: true, day: 0, coach: 'Ryan' },
@@ -563,6 +581,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     var fresh = mine.filter(function (p) { return !p.contacted; }).sort(function (a, b) { return b.hours - a.hours; });
     var talking = mine.filter(function (p) { return p.contacted; }).sort(function (a, b) { return b.hours - a.hours; });
     var late = fresh.filter(function (p) { return p.hours > 24; });
+    var parked = PARKED.filter(byGym);
     document.getElementById('k-late').innerHTML = late.length + '<span class="kpi-secondary">of ' + fresh.length + ' not contacted</span>';
     document.getElementById('k-late').classList.toggle('bad', late.length > 0);
     document.getElementById('m-late').textContent = late.length ? 'Oldest waiting ' + waited(late[0].hours) : 'Nobody waiting over 24 hours';
@@ -580,7 +599,10 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     }
     document.getElementById('list-new').innerHTML =
       '<div class="group-label">Not contacted yet \u00b7 ' + fresh.length + '</div>' + (fresh.map(freshRow).join('') || '<div class="empty">Everyone has had a reply.</div>') +
-      '<div class="group-label">Contacted \u00b7 ' + talking.length + '</div>' + (talking.map(talkingRow).join('') || '<div class="empty">Nobody in conversation.</div>');
+      '<div class="group-label">Contacted \u00b7 ' + talking.length + '</div>' + (talking.map(talkingRow).join('') || '<div class="empty">Nobody in conversation.</div>') +
+      (parked.length ? '<div class="group-label">Parked to try again \u00b7 ' + parked.length + '</div>' + parked.map(function (p) {
+        return '<div class="parked"><b>' + esc(p.name) + '</b><span>' + esc(p.status) + ': ' + esc(p.reason) + '</span><span class="due">' + (p.tryAgain ? 'try again ' + esc(p.tryAgain) : 'do not contact') + '</span></div>';
+      }).join('') : '');
     document.getElementById('c-new').textContent = mine.length;
 
     // Consults booked
@@ -678,11 +700,46 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     document.getElementById('dlg-booked').innerHTML = cur.booked
       ? '<div class="callout"><b>Booked: ' + esc(cur.when) + ' at ' + esc(cur.time) + ', ' + esc(cur.gym) + ', with ' + esc(cur.coach) + '</b><p>Pick a new time below to move it.</p></div>' : '';
     var st = document.getElementById('dlg-status');
-    st.innerHTML = cur.booked ? '<span class="chip ok">Consult booked</span>'
+    var off = cur.booked ? '' : ' <button type="button" class="btn ghost" id="dlg-park">Remove from board</button>';
+    st.innerHTML = (cur.booked ? '<span class="chip ok">Consult booked</span>'
       : cur.contacted ? '<span class="chip info">Contacted ' + esc(cur.replied) + '</span>'
-      : '<span class="chip ' + (cur.hours > 24 ? 'bad' : 'warn') + '">Not contacted · ' + waited(cur.hours) + '</span> <button type="button" class="btn" id="dlg-contacted">Mark as contacted</button>';
+      : '<span class="chip ' + (cur.hours > 24 ? 'bad' : 'warn') + '">Not contacted · ' + waited(cur.hours) + '</span> <button type="button" class="btn" id="dlg-contacted">Mark as contacted</button>') + off;
+    drawPark();
   }
+  var parking = false, park = { reason: 'unreachable', months: 3 };
+  var REASONS = { unreachable: ["Couldn't reach them", "Couldn't reach"], notnow: ['Not interested right now', 'Not now'], stop: ["Don't contact again", 'Lost'] };
+  var AGAIN = { 1: '9 Nov', 3: '9 Jan 2027', 6: '9 Apr 2027' };
+  function drawPark() {
+    var box = document.getElementById('dlg-remove');
+    if (!parking || cur.booked) { box.innerHTML = ''; return; }
+    var stop = park.reason === 'stop';
+    box.innerHTML = '<div class="park"><span class="park-title">Remove ' + esc(cur.name) + ' from the board</span>' +
+      '<p>They stay in the leads sheet with this status, so they can be contacted again later. Only people who agreed to hear from Bo7 get contacted again.</p>' +
+      '<div class="park-row"><label class="field"><span>Why</span><div class="seg" role="group" aria-label="Why">' +
+      Object.keys(REASONS).map(function (k) { return '<button type="button" data-preason="' + k + '" aria-pressed="' + (park.reason === k) + '">' + REASONS[k][0] + '</button>'; }).join('') + '</div></label>' +
+      (stop ? '' : '<label class="field"><span>Try again in</span><div class="seg" role="group" aria-label="Try again in">' +
+        [1, 3, 6].map(function (m) { return '<button type="button" data-pmonths="' + m + '" aria-pressed="' + (park.months === m) + '">' + m + (m === 1 ? ' month' : ' months') + '</button>'; }).join('') + '</div></label>') +
+      '</div><p>' + (stop ? 'Status becomes <b>Lost</b>. They won\u2019t be contacted again.' : 'Status becomes <b>' + REASONS[park.reason][1] + '</b>. They come back onto the board on <b>' + AGAIN[park.months] + '</b>.') + ' Add a note to say why.</p>' +
+      '<div class="park-actions"><button type="button" class="btn danger" id="dlg-park-ok">Remove from board</button><button type="button" class="btn ghost" id="dlg-park-cancel">Keep on board</button></div></div>';
+  }
+  dlg.addEventListener('click', function (e) {
+    var b;
+    if (e.target.closest('#dlg-park')) { parking = true; drawPark(); }
+    else if (e.target.closest('#dlg-park-cancel')) { parking = false; drawPark(); }
+    else if ((b = e.target.closest('[data-preason]'))) { park.reason = b.dataset.preason; drawPark(); }
+    else if ((b = e.target.closest('[data-pmonths]'))) { park.months = +b.dataset.pmonths; drawPark(); }
+    else if (e.target.closest('#dlg-park-ok')) {
+      var stop = park.reason === 'stop', status = REASONS[park.reason][1], typed = document.getElementById('dlg-note-text').value.trim();
+      var reason = typed || REASONS[park.reason][0];
+      cur.notes.push({ by: 'You', at: 'Just now', text: 'Removed from the board: ' + reason + (stop ? '. Do not contact again.' : '. Try again on ' + AGAIN[park.months] + '.') });
+      NEW.splice(NEW.indexOf(cur), 1);
+      PARKED.unshift({ name: cur.name, gym: cur.gym, status: status, reason: reason, tryAgain: stop ? '' : AGAIN[park.months] });
+      parking = false; dlg.close(); render();
+      showToast(cur.name + ' removed from the board as "' + status + '"' + (stop ? '.' : ', back on ' + AGAIN[park.months] + '.') + ' In the live board this updates the leads sheet.');
+    }
+  });
   function openLead(id) {
+    parking = false; park = { reason: 'unreachable', months: 3 };
     cur = findLead(id); if (!cur) return;
     pick = { gym: cur.gym, coach: 'any', day: 0, slot: null };
     for (var i = 0; i < 7; i++) { if (slotsFor(pick.gym, i, 'any').length) { pick.day = i; break; } }

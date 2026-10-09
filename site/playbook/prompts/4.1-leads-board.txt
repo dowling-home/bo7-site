@@ -18,9 +18,11 @@ The board:
 3. Leads: everyone not booked yet, in two groups. "Not contacted yet" comes first, oldest first, with anyone over 24 hours marked: this is where the 24-hour rule applies. "Contacted" follows: people who have had a reply but haven't agreed a consult time, showing when they were last contacted and their latest note. A lead moves from the first group to the second when it's marked Contacted, and leaves the column when a consult is booked. Each card shows name, gym, source, preferred contact and how long they've waited, with WhatsApp, Call and Email buttons; the preferred one stands out. WhatsApp opens the chat with the first-reply script for their source already typed (scripts are in the project; ask me for the file if you can't find it). Show the number and email as text too, in case a button doesn't work.
 4. Consults booked: booked consults only, by date and time, with the coach. Nothing else goes in this column.
 5. Filters for gym, and "only mine" (leads the signed-in coach logged or is booked with).
+5a. Parked leads: at the bottom of the Leads column, a short "Parked to try again" list (name, status, reason, try-again date). On their Follow up on date, Not now and Couldn't reach leads come back into the Contacted group marked "Try again", but only if Consent to contact is Yes. Lost leads never come back.
 
 The lead dialog (opens when someone clicks a lead):
-6. The lead's details, contact buttons, and quick status updates: Contacted, Showed up, Joined, Not yet (with reason and follow-up date), Lost. Marking Contacted the first time fills in First reply.
+6. The lead's details, contact buttons, and quick status updates: Contacted, Showed up, Joined, Not yet (with reason and follow-up date). Marking Contacted the first time fills in First reply.
+   Remove from board, for leads not booked: pick why (Couldn't reach them, Not interested right now, Don't contact again) and, unless it's Don't contact again, when to try again (1, 3 or 6 months). It sets Status to Couldn't reach, Not now or Lost, sets Follow up on, adds a note with the reason (using the note box if something is typed), and takes the lead off the board. Nothing is deleted.
 7. Book a consultation:
    - Pick the gym (defaults to the lead's), a coach or "any coach", and a day in the next 14 days.
    - Free times = the Consult hours tab for that coach, gym and day, in slots of the consult length, minus anything already on the Bo7 consultations calendar for that coach. Hide times in the past.
