@@ -369,12 +369,13 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
 .hdef { grid-column: 2 / -1; font-size: var(--fs-xs); color: var(--text-tertiary); }
 .hmeta { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font-size: var(--fs-xs); color: var(--text-tertiary); }
 .hmeta > * { white-space: nowrap; }
-.seq { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--bg-sunken); }
-.seq-step { display: flex; flex-direction: column; gap: 1px; padding: 6px 10px; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px solid var(--border); min-width: 0; flex: 1 1 120px; }
-.seq-step b { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); }
-.seq-step span { font-size: var(--fs-sm); color: var(--text-primary); }
-.seq-step em { font-style: normal; font-size: var(--fs-xs); color: var(--text-tertiary); }
-.seq-step.human { border-left: 2px solid var(--accent); }
+.seq-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 64px 72px; gap: var(--space-5); align-items: center; padding: 6px 12px; border-bottom: 1px solid var(--table-border); font-size: var(--fs-base); }
+.seq-row.head { background: var(--bg-sunken); font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); }
+.seq-row .when { color: var(--text-secondary); white-space: nowrap; }
+.seq-row .who { color: var(--text-secondary); }
+.seq-row .n { text-align: right; font-weight: 600; }
+.seq-row.head .n { font-weight: 600; }
+@media (max-width: 640px) { .seq-row { grid-template-columns: 52px minmax(0, 1fr) 52px 40px; gap: var(--space-4); } }
 .seq-note { padding: 8px 12px; font-size: var(--fs-xs); color: var(--text-tertiary); border-bottom: 1px solid var(--border); }
 .mrow { padding: 10px 12px; border-bottom: 1px solid var(--table-border); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2) var(--space-5); }
 .mrow:last-child { border-bottom: 0; }
@@ -1188,9 +1189,9 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     document.getElementById('r-list-h').textContent = rs.seg === 'slowing' ? 'Slowing down' : 'At risk';
     document.getElementById('r-list-note').textContent = rs.seg === 'slowing' ? 'Light-touch, mostly automatic' : 'Win-back sequence';
     document.getElementById('r-count').textContent = list.length;
-    document.getElementById('r-seq').innerHTML = '<div class="seq">' + STAGES[rs.seg].map(function (st) {
+    document.getElementById('r-seq').innerHTML = '<div role="table" aria-label="Sequence"><div class="seq-row head" role="row"><span role="columnheader">Step</span><span role="columnheader">Message</span><span role="columnheader">Sent by</span><span class="n" role="columnheader">Members</span></div>' + STAGES[rs.seg].map(function (st) {
       var n = list.filter(function (m) { return m.stage === st.key; }).length;
-      return '<div class="seq-step' + (st.who === 'coach' ? ' human' : '') + '"><b>' + st.step + '</b><span>' + st.what + '</span><em>' + (st.who === 'coach' ? 'Sent by a person' : 'Automatic') + ' \u00b7 ' + n + ' now</em></div>';
+      return '<div class="seq-row" role="row"><span class="when" role="cell">' + st.step + '</span><span role="cell">' + st.what + '</span><span class="who" role="cell">' + (st.who === 'coach' ? 'Coach' : 'Automatic') + '</span><span class="n" role="cell">' + n + '</span></div>';
     }).join('') + '</div><div class="seq-note">' + (rs.seg === 'slowing'
       ? 'Anyone who books or trains drops out straight away. Still not training after the coach check-in? They move to At risk.'
       : 'Anyone who books or trains drops out straight away. After Day 14 with no reply they\u2019re marked Lapsed, with one check-in at 60 days.') + '</div>';
