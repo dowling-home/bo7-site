@@ -1106,6 +1106,44 @@ a { color: var(--gold-text); }
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
               </div>
             </details>
+            <details class="task" id="t5-6">
+              <summary>
+                <span class="t-n">6</span>
+                <span class="t-title"><b>Give members their own area</b><span>members.bo7.ie: log in by text code, announcements, PBs and milestones, with prompts 5.6a and 5.6b</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>A place members open on their phone between sessions: Bo7 news for their gym, their PBs and their milestones. Glofox's app still does bookings and payments; this adds the part that makes training feel like progress. The design is mocked up at <a href="https://bo7.thedowlings.co/members/" target="_blank" rel="noopener">bo7.thedowlings.co/members</a> (sample data: any six digits log you in).</p>
+                <h3>Log in by text code</h3>
+                <p>Members log in with the mobile number they gave Bo7 and a 6-digit code sent by text. No passwords to forget. Only numbers that belong to current members get a code, and the form never says who is a member.</p>
+                <ol>
+                  <li>Ryan creates a Twilio account with the Bo7 email (Claude doesn't create accounts). Twilio sends the codes; each login costs a few cents.</li>
+                  <li>Decide a monthly spending limit for texts: [€__]. Twilio stops sending above it and warns Ryan at half.</li>
+                  <li>Run prompt 5.6a in Claude Code. In your browser it sets up Twilio for Ireland only with fraud protection, the members.bo7.ie site, Cloudflare's free bot check on the form, limits on how many codes can be sent, and 30-day logins.</li>
+                  <li>Approve the line it adds to the privacy notice about using members' numbers for login codes.</li>
+                  <li>Test it with your own number, including five wrong codes in a row.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/5.6a-sms-login.txt">
+                  <summary><span class="p-id">5.6a</span><span class="p-name">Set up text-code login</span><span class="p-use">Run in Claude Code with Chrome: Twilio Verify, members.bo7.ie, bot check, rate limits, sessions</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.6a-sms-login.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.6a-sms-login.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>The members area</h3>
+                <ol>
+                  <li>Run prompt 5.6b in Claude Code. It builds the members area to match the mockup, the database tables behind it, and team.bo7.ie/announcements for staff.</li>
+                  <li>Post the first announcements: one for each gym, and one for both.</li>
+                  <li>Tell members: a message in the community WhatsApp group from Ryan with the link, and a "Members" link in the website footer.</li>
+                  <li>Shared PBs and milestones show up as wins on the refer page (Step 6). Congratulate people when they appear.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/5.6b-members-area.txt">
+                  <summary><span class="p-id">5.6b</span><span class="p-name">Build the members area</span><span class="p-use">Run in Claude Code: members.bo7.ie, announcements for staff, PBs and milestones</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.6b-members-area.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.6b-members-area.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
           </div>
         </div>
       </details>
