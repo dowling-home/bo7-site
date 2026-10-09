@@ -6,6 +6,6 @@ Using the Bo7 brand position in the project files, write what a new Bo7 member r
 4. End of week 2: a check-in on how it's going, what they'd like more of, and a reminder of the next sessions. Under 60 words.
 5. A one-page "your first month at Bo7" note: what to expect week by week, how booking works, who to ask about what.
 
-Then tell me what to record in the leads sheet (Joined, Status) so the member moves from leads to the retention step.
+Then tell me what to record on the consult page (outcome Joined) so the member moves from leads to the retention step.
 
 Warm, personal, short. Do not invent names, times, prices or facts; use [placeholders].

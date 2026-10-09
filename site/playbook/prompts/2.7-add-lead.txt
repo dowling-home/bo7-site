@@ -1,0 +1,24 @@
+Run this in Claude Code with the bo7-team project open (prompts 2.2a and 2.2b done).
+
+Build an add-a-lead page at team.bo7.ie/add (with team.bo7.ie/walkin as a second address for the same page), so coaches can log anyone who walks in, phones, messages on WhatsApp or emails, and every one of those leads is tagged with its source in the Bo7 database. The page sits behind the Cloudflare login, so only people with a @bo7.ie email can use it.
+
+Rules: never put a password, key or token in the code. Save through the team area's API (see README.md), never straight to the database from the page.
+
+1. The page. Mobile-first, in the style of the dashboard mockup (site/dash/index.html in the bo7-site project), quick to fill in at the front desk:
+   - Name (required) and phone (required), email (optional)
+   - Best way to reach them: WhatsApp (default), Call or Email
+   - Gym: Killiney or Blackrock (remember the last choice on this device)
+   - How they got in touch: Walked in (default), Phoned, WhatsApp, Email, Other. For WhatsApp, also pick the source from their opening message (from the tagged links in prompt 3.1), if it matches one.
+   - Interested in (short text)
+   - A tick box: "Happy for Bo7 to contact you about training". Record yes or no, with the date.
+   On submit: save the lead with status "new" and the logged-in coach as "logged by", show a clear "Saved" message, and clear the form for the next person. If it fails or the device is offline, keep the entry on the device, say so, and retry later.
+
+2. Duplicates. Before saving, check for a lead or member with the same phone number or email. If there is one, show it and ask whether to add a note to that record instead.
+
+3. Measurement. When a lead saves, also record a Google Tag Manager event called lead with the source, so these show up next to the other sources.
+
+4. Add the page to the team.bo7.ie home page.
+
+5. Test it: add one test lead from a phone-sized screen, show me the row in the database, then delete it. Commit and push.
+
+Finish with: the page address and what each coach needs to do once on their phone (open the page, log in with their @bo7.ie email, add it to their home screen).

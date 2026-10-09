@@ -195,7 +195,7 @@ a { color: var(--gold-text); }
           </ol>
           <p><b>Setup:</b> the prompts are written for Claude Code in the Claude desktop app, with the Claude in Chrome extension connected. That lets Claude work in your own browser: clicking through settings pages like DNS, Google profiles, Google Forms and ad accounts while you watch.</p>
           <ul>
-            <li>Connect Google Drive to Claude with the Bo7 Google account (Settings, Connectors). Claude can then read and update the leads sheet, survey results and other Bo7 files directly.</li>
+            <li>Connect Google Drive to Claude with the Bo7 Google account (Settings, Connectors). Claude can then read the survey results, the nightly copy of the Bo7 database and other Bo7 files directly.</li>
             <li>You sign in to every site yourself. Claude never types a password.</li>
             <li>Claude shows you what it is about to change and waits for your OK before it saves, sends or deletes anything.</li>
             <li>Keep everything in one Bo7 folder that Claude Code works in (the bo7-site project is a good home): the brand position, the scorecard and any exports. Then a prompt can say "using the project files" instead of pasting everything in.</li>
@@ -374,44 +374,18 @@ a { color: var(--gold-text); }
       <details class="step" id="step-2">
         <summary>
           <span class="step-n">02</span>
-          <span class="step-title"><h2>Capture</h2><span>One lead list, the website on bo7.ie, WhatsApp and email, a reply within 24 hours</span></span>
+          <span class="step-title"><h2>Capture</h2><span>The website on bo7.ie, one database, WhatsApp and email, a reply within 24 hours</span></span>
           <span class="chev" aria-hidden="true"></span>
         </summary>
         <div class="step-body">
-          <p>Before chasing new people, make sure every enquiry is caught and answered. One lead list, the website moved to bo7.ie, WhatsApp and email set up, and a reply from a real person within 24 hours. Then Step 3 brings people in.</p>
+          <p>Before chasing new people, make sure every enquiry is caught and answered. The website moved to bo7.ie, one database that every lead goes into, WhatsApp and email set up, and a reply from a real person within 24 hours. Then Step 3 brings people in.</p>
           <p class="progress" data-progress="step-2"></p>
 
           <div class="tasks">
             <details class="task" id="t2-1">
               <summary>
                 <span class="t-n">1</span>
-                <span class="t-title"><b>Build the Bo7 leads sheet</b><span>One list for every enquiry, with prompt 2.1</span></span>
-                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
-                <span class="chev" aria-hidden="true"></span>
-              </summary>
-              <div class="task-body">
-                <p>Every later task writes into this sheet, so it comes first. One row per enquiry, whatever the source, followed through to joined or not. Its Summary tab shows leads, consults and joiners per source each month, which is what tells you where to spend.</p>
-                <ol>
-                  <li>Connect Google Drive to Claude, signed in with the Bo7 Google account (in Claude: Settings, Connectors, Google Drive). Claude can then find and read the sheet directly for reports and later prompts, without opening a browser each time.</li>
-                  <li>Paste prompt 2.1 into Claude Code. It builds the "Bo7 leads" sheet in the Bo7 Google Drive in your browser: a Leads tab with dropdowns (including how each person prefers to be contacted), a Notes tab that keeps every note, a Consult hours tab, a Sources tab and a Summary tab that updates itself.</li>
-                  <li>Fill in the Consult hours tab: which coach takes free consultations at which gym, on which days and times, and how long a consult lasts. The leads board (Step 4) uses it to offer free times.</li>
-                  <li>Look through it with the two example rows, then delete them.</li>
-                  <li>Share it with Ryan and the coaches who answer enquiries (edit access). Nobody else.</li>
-                  <li>From today, every enquiry gets a row: WhatsApp messages, calls, walk-ins, and leads from the website form in Glofox. Step 3 adds the source tags that fill the Source column.</li>
-                  <li>Decide how long you keep leads who don't join: [__ months]. Personal details shouldn't sit there forever.</li>
-                </ol>
-                <details class="prompt" data-src="prompts/2.1-leads-sheet.txt">
-                  <summary><span class="p-id">2.1</span><span class="p-name">Build the leads sheet</span><span class="p-use">Run in Claude Code with Chrome: Leads, Sources and Summary tabs</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.1-leads-sheet.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.1-leads-sheet.txt</span><span class="status" aria-live="polite"></span></div>
-                  <pre>Loading…</pre>
-                </details>
-                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
-              </div>
-            </details>
-            <details class="task" id="t2-2">
-              <summary>
-                <span class="t-n">2</span>
-                <span class="t-title"><b>Move bo7.ie to the new website</b><span>Off Squarespace onto a site you own, plus a staff-only team area</span></span>
+                <span class="t-title"><b>Move bo7.ie to the new website</b><span>Off Squarespace onto a site you own and edit with Claude</span></span>
                 <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
                 <span class="chev" aria-hidden="true"></span>
               </summary>
@@ -421,45 +395,32 @@ a { color: var(--gold-text); }
                 <ol>
                   <li>Ryan creates a GitHub account for Bo7 with a Bo7 email address he controls, and turns on two-factor sign-in. Claude doesn't create accounts or handle passwords, so this one is by hand.</li>
                   <li>A Claude plan that includes Claude Code, on the same Bo7 email. Install the Claude desktop app and the Claude in Chrome extension.</li>
-                  <li>A free Cloudflare account on the same Bo7 email. Ryan creates this one too. bo7.ie's settings (DNS) move there, which is what makes the staff-only login possible.</li>
+                  <li>A free Cloudflare account on the same Bo7 email. Ryan creates this one too. bo7.ie's settings (DNS) move there, which is what makes the staff-only team area and the database in task 2 possible.</li>
                   <li>Eoin transfers the bo7-site project from his GitHub to Bo7's and Ryan accepts it. Do this when you are ready to switch: the preview address, bo7.thedowlings.co, stops working once it moves.</li>
                 </ol>
                 <h3>Get the site ready</h3>
                 <ol>
-                  <li>Open the bo7-site project in Claude Code and run prompt 2.2a. It creates a Killiney page and a Blackrock page (copies of the homepage for now, ready to tailor later), adds tracking, sends the old Squarespace addresses to the right new pages, and lists what still blocks launch.</li>
+                  <li>Open the bo7-site project in Claude Code and run prompt 2.1a. It creates a Killiney page and a Blackrock page (copies of the homepage for now, ready to tailor later), adds tracking, sends the old Squarespace addresses to the right new pages, and lists what still blocks launch.</li>
                   <li>Decide the open items it reports: prices, Blackrock photos, a cookie banner (the maps, YouTube and tracking set cookies), and what replaces the Squarespace shop and gift vouchers.</li>
                   <li>Read the finished site on a phone and a laptop before going any further.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/2.2a-site-ready.txt">
-                  <summary><span class="p-id">2.2a</span><span class="p-name">Get the site ready for bo7.ie</span><span class="p-use">Run in Claude Code: tracking, old-address redirects, launch blockers</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2a-site-ready.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2a-site-ready.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/2.1a-site-ready.txt">
+                  <summary><span class="p-id">2.1a</span><span class="p-name">Get the site ready for bo7.ie</span><span class="p-use">Run in Claude Code: tracking, old-address redirects, launch blockers</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.1a-site-ready.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.1a-site-ready.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
                 <h3>Point bo7.ie at it</h3>
-                <p>Claude Code does this in your browser with prompt 2.2b: it finds where bo7.ie is registered, records every DNS setting before touching it, moves the DNS to Cloudflare, points the website at GitHub, and tests the result. You sign in and approve each change.</p>
+                <p>Claude Code does this in your browser with prompt 2.1b: it finds where bo7.ie is registered, records every DNS setting before touching it, moves the DNS to Cloudflare, points the website at GitHub, and tests the result. You sign in and approve each change.</p>
                 <p><b>Watch the email records.</b> If Bo7 uses @bo7.ie email, its records must stay exactly as they are, or email stops. The prompt tells Claude to leave them alone and to save a copy of every record first.</p>
                 <ol>
-                  <li>Paste prompt 2.2b into Claude Code. Fill in the Bo7 GitHub account name first.</li>
+                  <li>Paste prompt 2.1b into Claude Code. Fill in the Bo7 GitHub account name first.</li>
                   <li>Sign in to Squarespace (or wherever bo7.ie is registered), Cloudflare and GitHub when Claude asks.</li>
                   <li>Check each change Claude shows you before saying OK. Moving the DNS usually takes effect within a few hours, sometimes up to a day.</li>
                   <li>Send a test email to an @bo7.ie address once it is live.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/2.2b-domain-switch.txt">
-                  <summary><span class="p-id">2.2b</span><span class="p-name">Point bo7.ie at the new site</span><span class="p-use">Run in Claude Code with Chrome: DNS switch, HTTPS and checks</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2b-domain-switch.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2b-domain-switch.txt</span><span class="status" aria-live="polite"></span></div>
-                  <pre>Loading…</pre>
-                </details>
-                <h3>Set up the team area: team.bo7.ie</h3>
-                <p>A staff-only part of the site for Bo7's own tools: the walk-in page (task 7), the leads board (Step 4) and, later, reporting dashboards. Cloudflare asks for a @bo7.ie email address and sends a login code to it; nobody else gets in.</p>
-                <ol>
-                  <li>Check that Ryan and every coach who will use the tools has a @bo7.ie email address they can read on their phone: [list]. If not, set them up first.</li>
-                  <li>Run prompt 2.2c in Claude Code. In your browser it creates a private bo7-team project, publishes it at team.bo7.ie, puts the Cloudflare login in front of it, and gives it secure access to the leads sheet. It also creates a shared "Bo7 consultations" Google Calendar, which every consult gets booked into. You sign in and approve each step.</li>
-                  <li>Each coach adds the Bo7 consultations calendar to the calendar app on their phone, so their consults show up alongside everything else.</li>
-                  <li>Test it in a private browser window: a @bo7.ie address gets in, anything else is refused.</li>
-                </ol>
-                <details class="prompt" data-src="prompts/2.2c-team-area.txt">
-                  <summary><span class="p-id">2.2c</span><span class="p-name">Set up team.bo7.ie</span><span class="p-use">Run in Claude Code with Chrome: private project, Cloudflare login for @bo7.ie, access to the leads sheet</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2c-team-area.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2c-team-area.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/2.1b-domain-switch.txt">
+                  <summary><span class="p-id">2.1b</span><span class="p-name">Point bo7.ie at the new site</span><span class="p-use">Run in Claude Code with Chrome: DNS switch, HTTPS and checks</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.1b-domain-switch.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.1b-domain-switch.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
                 <h3>Then close Squarespace</h3>
@@ -471,6 +432,44 @@ a { color: var(--gold-text); }
                 <h3>Changing the site from now on</h3>
                 <p>Open the project in Claude Code and ask in plain words. Claude reads the project notes, makes the change, shows phone and desktop screenshots, and publishes when you say so. For example:</p>
                 <blockquote>Add a pricing section under the locations: Killiney and Blackrock, [prices]. Same style as the rest of the page. Show me phone and desktop screenshots before you publish.</blockquote>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Set up the team area and the Bo7 database</b><span>team.bo7.ie behind a login, and one database for everything, with prompts 2.2a and 2.2b</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Every later task writes into the database, so it comes right after the website. It holds every lead, note, consult, member and win-back message in one place, so the leads board, the consult page, the retain page and the reports all agree. It lives on Cloudflare next to the website, free at Bo7's size.</p>
+                <h3>The team area: team.bo7.ie</h3>
+                <p>A staff-only part of the site for Bo7's own tools. Cloudflare asks for a @bo7.ie email address and sends a login code to it; nobody else gets in.</p>
+                <ol>
+                  <li>Check that Ryan and every coach who will use the tools has a @bo7.ie email address they can read on their phone: [list]. If not, set them up first.</li>
+                  <li>Run prompt 2.2a in Claude Code. In your browser it creates a private bo7-team project, publishes it at team.bo7.ie, puts the Cloudflare login in front of it, and creates a shared "Bo7 consultations" Google Calendar that every consult gets booked into. You sign in and approve each step.</li>
+                  <li>Each coach adds the Bo7 consultations calendar to the calendar app on their phone.</li>
+                  <li>Test it in a private browser window: a @bo7.ie address gets in, anything else is refused.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.2a-team-area.txt">
+                  <summary><span class="p-id">2.2a</span><span class="p-name">Set up team.bo7.ie</span><span class="p-use">Run in Claude Code with Chrome: private project, Cloudflare login for @bo7.ie, consultations calendar</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2a-team-area.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2a-team-area.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>The database</h3>
+                <p>Cloudflare's built-in database (D1). It records leads with their source and status, notes, consults and their outcomes, coaches and their consult hours, members and their attendance from Glofox, member health day by day, win-back sequences, every message sent, and who changed what.</p>
+                <ol>
+                  <li>Run prompt 2.2b in Claude Code. It shows you the design first, then creates the database, the team area's API, and the scheduled jobs.</li>
+                  <li>Fill in the coaches and their consult hours: which coach takes free consultations at which gym, on which days and times, and how long a consult lasts.</li>
+                  <li>Decide how long to keep leads who never join: [__ months]. A nightly job removes their personal details after that.</li>
+                  <li>Check the nightly read-only copy: a Google Sheet called "Bo7 data (read-only)" in the Bo7 Drive. Ryan can open it any time; Claude can read it through the Google Drive connector. Changes are always made in the tools, never in the sheet.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.2b-database.txt">
+                  <summary><span class="p-id">2.2b</span><span class="p-name">Set up the Bo7 database</span><span class="p-use">Run in Claude Code: the D1 database, its API, scheduled jobs and the nightly read-only export</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2b-database.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2b-database.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
               </div>
             </details>
@@ -488,7 +487,7 @@ a { color: var(--gold-text); }
                   <li>Connect WhatsApp Business to the Bo7 Facebook Page (in the app: Settings, Business tools, Facebook and Instagram). The Meta ads in Step 3 need this for their WhatsApp button.</li>
                   <li>Run prompt 2.3. Claude writes the business profile, a greeting message, an away message, quick replies and a set of labels.</li>
                   <li>Put them into the app: Settings, then Business tools. This part is by hand on the phone; the prompt gives step-by-step instructions.</li>
-                  <li>Use the labels on every chat (New lead, Replied, Consult booked, Joined, Not now, Member), so the phone and the leads sheet tell the same story.</li>
+                  <li>Use the labels on every chat (New lead, Replied, Consult booked, Joined, Not now, Member), so the phone and the leads board tell the same story.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/2.3-whatsapp-setup.txt">
                   <summary><span class="p-id">2.3</span><span class="p-name">WhatsApp Business setup</span><span class="p-use">Profile, greeting, away message, quick replies and labels</span><span class="chev" aria-hidden="true"></span></summary>
@@ -510,7 +509,7 @@ a { color: var(--gold-text); }
                   <li>Pick one address for enquiries, for example hello@bo7.ie: [address]. Use it on the website, Glofox, both Google profiles and Instagram.</li>
                   <li>Make sure whoever answers enquiries sees it, on their phone as well as a laptop.</li>
                   <li>Turn on an automatic reply that says a person will get back within 24 hours, with the WhatsApp number for anyone in a hurry.</li>
-                  <li>Every enquiry email gets a row in the leads sheet, like any other source.</li>
+                  <li>Every enquiry email gets logged as a lead on the add-a-lead page (task 7), like any other source.</li>
                 </ol>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
               </div>
@@ -548,7 +547,7 @@ a { color: var(--gold-text); }
                 <ol>
                   <li>Decide who answers WhatsApp and the enquiry email on each day, weekends included: [rota].</li>
                   <li>The promise: every enquiry gets a reply from a person within 24 hours. An automatic greeting doesn't count.</li>
-                  <li>Whoever replies fills in First reply, Status and Gym in the leads sheet straight away.</li>
+                  <li>Whoever replies marks the lead as contacted on the leads board straight away, which records the reply time.</li>
                   <li>If someone is off sick or on holiday, the cover person is named in advance, not on the day.</li>
                 </ol>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
@@ -557,19 +556,20 @@ a { color: var(--gold-text); }
             <details class="task" id="t2-7">
               <summary>
                 <span class="t-n">7</span>
-                <span class="t-title"><b>Build the walk-in page</b><span>team.bo7.ie/walkin for coaches, with prompt 2.7</span></span>
+                <span class="t-title"><b>Build the add-a-lead page</b><span>team.bo7.ie/add for walk-ins, calls, WhatsApp and email, with prompt 2.7</span></span>
                 <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
-                <p>Anyone who walks in or phones is a lead too. A page in the team area lets a coach log them in seconds, tagged walk-in or phone, straight into the leads sheet.</p>
+                <p>Every enquiry needs to reach the database, whichever way it arrives. Website and ad leads arrive by themselves (task 8); this page is for everything a person takes: walk-ins, calls, WhatsApp messages and emails.</p>
                 <ol>
-                  <li>Paste prompt 2.7 into Claude Code. It builds team.bo7.ie/walkin, behind the Cloudflare login, where a coach enters anyone who walks in or phones. Submit saves them to the leads sheet tagged walk-in or phone, with the coach's name, so they are counted like every other source.</li>
-                  <li>Each coach opens team.bo7.ie/walkin on their phone once, logs in with their @bo7.ie email, and adds it to their home screen. Anyone who comes in asking about training gets logged there and then.</li>
+                  <li>Paste prompt 2.7 into Claude Code. It builds team.bo7.ie/add, behind the Cloudflare login: name, phone, best way to reach them, gym, how they got in touch, what they're interested in, and their OK to be contacted. It warns you if the person is already a lead or member.</li>
+                  <li>Each coach opens team.bo7.ie/add on their phone once, logs in with their @bo7.ie email, and adds it to their home screen.</li>
+                  <li>Anyone who walks in, calls, messages or emails about training gets added there and then, before the conversation is forgotten.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/2.7-walkin-page.txt">
-                  <summary><span class="p-id">2.7</span><span class="p-name">Build the walk-in page</span><span class="p-use">Run in Claude Code: team.bo7.ie/walkin, saving to the Bo7 leads sheet</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.7-walkin-page.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.7-walkin-page.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/2.7-add-lead.txt">
+                  <summary><span class="p-id">2.7</span><span class="p-name">Build the add-a-lead page</span><span class="p-use">Run in Claude Code: team.bo7.ie/add, saving to the Bo7 database</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.7-add-lead.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.7-add-lead.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
@@ -578,24 +578,24 @@ a { color: var(--gold-text); }
             <details class="task" id="t2-8">
               <summary>
                 <span class="t-n">8</span>
-                <span class="t-title"><b>Bring website form leads into the sheet</b><span>Glofox leads, with prompt 2.8</span></span>
+                <span class="t-title"><b>Bring website form leads in automatically</b><span>Glofox leads into the database, with prompt 2.8</span></span>
                 <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
-                <p>People who fill in the form on the website land in Glofox, not the leads sheet. Copy them across every day so they get the same 24-hour reply and show up in the numbers.</p>
+                <p>People who fill in the form on the website land in Glofox. They need to reach the database without anyone copying them across, so they get the same 24-hour reply and show up in the numbers.</p>
                 <ol>
-                  <li>Run prompt 2.8 in Claude Code. It reads the Glofox leads list in your browser and adds any new ones to the sheet, tagged website-form. It changes nothing in Glofox.</li>
-                  <li>Run it every morning, before the team works the leads board. Claude Code can do this on a schedule; ask it to set one up.</li>
+                  <li>Run prompt 2.8 in Claude Code. It picks the best route that works: the Glofox API if Bo7 has access; otherwise a copy of Glofox's new-lead emails, read automatically; otherwise reading the Glofox leads list each morning.</li>
+                  <li>Test it by filling in the website form yourself and watching the lead appear on the leads board.</li>
                   <li>Fix the Blackrock form in Glofox: it has no consent boxes, so all web leads currently go through the Killiney branch and get sorted by hand.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/2.8-glofox-sync.txt">
-                  <summary><span class="p-id">2.8</span><span class="p-name">Copy Glofox leads to the sheet</span><span class="p-use">Run in Claude Code with Chrome and Drive: new website leads into the sheet</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.8-glofox-sync.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.8-glofox-sync.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/2.8-glofox-leads.txt">
+                  <summary><span class="p-id">2.8</span><span class="p-name">Bring website leads in</span><span class="p-use">Run in Claude Code: Glofox leads into the Bo7 database, automatically</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.8-glofox-leads.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.8-glofox-leads.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
-                <h3>Later: pull leads through the Glofox API</h3>
-                <p>Reading the Glofox screens works without anyone's approval, so start there. Glofox also has an API (run by its parent company, ABC Fitness), but access has to be requested. If they grant it, Claude can write a small script that copies new leads into the sheet every morning, more reliably than reading screens.</p>
+                <h3>Ask Glofox for API access</h3>
+                <p>The cleanest route is Glofox's API (run by its parent company, ABC Fitness), but access has to be requested, so ask now.</p>
                 <ol>
                   <li>Ryan asks his Glofox account rep for API access for Bo7, for both branches (Killiney and Blackrock). Glofox's API team can also be emailed directly; ask the rep which address to use.</li>
                   <li>Ask these questions:
@@ -606,8 +606,8 @@ a { color: var(--gold-text); }
                       <li>Is there a cost, and does it need a particular Glofox plan?</li>
                     </ul>
                   </li>
-                  <li>If the answers are yes: keep the API key and token somewhere private (never in the website project, which is public), and ask Claude Code to replace the daily browser copy with a script that uses them. Same sheet, same columns, same 24-hour check.</li>
-                  <li>If they're no: carry on with prompt 2.8.</li>
+                  <li>If the answers are yes: keep the API key and token somewhere private (never in the website project, which is public), and run prompt 2.8 again and it switches to the API.</li>
+                  <li>If they're no: prompt 2.8 uses Glofox's emails or, as a last resort, reads the Glofox screens each morning.</li>
                 </ol>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
               </div>
@@ -622,7 +622,7 @@ a { color: var(--gold-text); }
               <div class="task-body">
                 <p>The leads board (Step 4) is for working leads day to day. This is the weekly view: which sources brought leads, how fast they were answered, and which ones turned into consults and members.</p>
                 <ol>
-                  <li>Run prompt 2.9 in Claude Code every Monday. It reads the leads sheet and changes nothing.</li>
+                  <li>Run prompt 2.9 in Claude Code every Monday. It reads the database and changes nothing.</li>
                   <li>Ask Claude Code to run it on a schedule, first thing every Monday.</li>
                   <li>Act on what it shows: a source that has gone quiet, slow replies, or rows missing their source.</li>
                   <li>Bring the numbers to the monthly review.</li>
@@ -662,7 +662,7 @@ a { color: var(--gold-text); }
                   <li>Paste prompt 3.1 into Claude Code with the bo7-site project open. It returns a table of opening messages, WhatsApp links and website links for every source, and builds the bo7.ie/go/ addresses for the QR codes.</li>
                   <li>Tap each WhatsApp link on a phone to check it opens the Bo7 chat with the right message.</li>
                   <li>Make a QR code for each printed source (each window, the stand, referral cards) from its bo7.ie/go/ address, not the WhatsApp link, so scans are counted and the destination can change without reprinting. In Chrome: open the address, click the share icon in the address bar, then Create QR code.</li>
-                  <li>Whoever answers WhatsApp logs the source from the opening message in the same Bo7 leads sheet.</li>
+                  <li>Whoever answers WhatsApp adds the lead on the add-a-lead page, picking the source from the opening message.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/3.1-tagged-links.txt">
                   <summary><span class="p-id">3.1</span><span class="p-name">Make the tagged links</span><span class="p-use">Every source with its message and links, plus the QR addresses on the site</span><span class="chev" aria-hidden="true"></span></summary>
@@ -796,9 +796,9 @@ a { color: var(--gold-text); }
                 <ol>
                   <li>Decide a test budget for four weeks: [€__ a week]. One campaign covers both gyms: they are a few miles apart, so one budget learns faster than two half-budgets. Split later only if one gym needs filling more than the other.</li>
                   <li>Run prompt 3.6b. Claude writes ad text and video ideas from the survey and the brand position; you pick the ones you like.</li>
-                  <li>Claude builds the campaign in the Bo7 ad account through the connector: WhatsApp button, people living near either gym, your budget. Everything is created switched off. The person picks their gym in the WhatsApp chat; record it in the leads sheet.</li>
+                  <li>Claude builds the campaign in the Bo7 ad account through the connector: WhatsApp button, people living near either gym, your budget. Everything is created switched off. The person picks their gym in the WhatsApp chat; record it when you add the lead.</li>
                   <li>Review the campaign in Ads Manager and switch it on yourself. Claude never starts spending.</li>
-                  <li>After four weeks, compare cost per consultation booked against the other sources in the leads sheet.</li>
+                  <li>After four weeks, compare cost per consultation booked against the other sources on the dashboard.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/3.6b-meta-ads.txt">
                   <summary><span class="p-id">3.6b</span><span class="p-name">Write and build the Meta ads</span><span class="p-use">Ad text, video ideas, then one campaign for both gyms, built switched off</span><span class="chev" aria-hidden="true"></span></summary>
@@ -835,7 +835,7 @@ a { color: var(--gold-text); }
                   <li>Run prompt 3.7b. Claude writes the plan first. Searches naming Blackrock go to the Blackrock page, searches naming Killiney or nearby go to the Killiney page, and general searches go to the homepage, where people pick their gym. You approve it.</li>
                   <li>Claude builds the campaign in your browser, showing you each screen before it saves. It is created paused.</li>
                   <li>Review it in Google Ads and switch it on yourself. Claude never starts spending.</li>
-                  <li>After four weeks, compare cost per consultation booked against Meta and the free sources in the leads sheet.</li>
+                  <li>After four weeks, compare cost per consultation booked against Meta and the free sources on the dashboard.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/3.7b-google-ads.txt">
                   <summary><span class="p-id">3.7b</span><span class="p-name">Write and build the Google ads</span><span class="p-use">The plan, then one campaign for both gyms, built paused</span><span class="chev" aria-hidden="true"></span></summary>
@@ -870,13 +870,13 @@ a { color: var(--gold-text); }
                 <p>One page that shows every lead by stage, where they came from, how long they have waited, and buttons to WhatsApp, call or email them. Open a lead to book their consult and keep notes. Working through it every morning is how nobody slips through.</p>
                 <p>The design is already mocked up with sample data at <a href="https://bo7.thedowlings.co/dash/" target="_blank" rel="noopener">bo7.thedowlings.co/dash</a>; click a lead there to see the booking dialog. Prompt 4.1 builds the real version to match.</p>
                 <ol>
-                  <li>Run prompt 4.1. Claude builds the board at team.bo7.ie/leads, on top of the leads sheet. It sits behind the Cloudflare login, so only @bo7.ie email addresses get in, because it shows personal details.</li>
+                  <li>Run prompt 4.1. Claude builds the board at team.bo7.ie/leads, on top of the Bo7 database. It sits behind the Cloudflare login, so only @bo7.ie email addresses get in, because it shows personal details.</li>
                   <li>Each coach opens team.bo7.ie/leads once, logs in with their @bo7.ie email, and adds it to their phone's home screen.</li>
                   <li>Every morning: start with anyone waiting over 24 hours, then follow-ups due today, then upcoming consults. The WhatsApp button opens the chat with the right script already typed.</li>
-                  <li>To book a consult, open the lead: pick the gym, a coach (or any coach) and one of the free times. It goes straight into the Bo7 consultations calendar and the leads sheet, and adds a note. Then tap the WhatsApp button to send the confirmation, already written.</li>
+                  <li>To book a consult, open the lead: pick the gym, a coach (or any coach) and one of the free times. It goes straight into the Bo7 consultations calendar and the database, and adds a note. Then tap the WhatsApp button to send the confirmation, already written.</li>
                   <li>Add a note whenever you speak to someone: goals, injuries, best times to reach them. Every note is kept, with who wrote it and when.</li>
-                  <li>Update the lead as you go (Contacted, Showed up, Joined, Not yet). It writes straight back to the sheet, so the numbers stay right without extra typing.</li>
-                  <li>If someone never gets back to you, or the number is wrong, open the lead and choose Remove from board: Couldn't reach them, Not interested right now, or Don't contact again. They stay in the leads sheet with that status and a note, and come back onto the board in 1, 3 or 6 months to try again, if they agreed to hear from Bo7.</li>
+                  <li>Update the lead as you go (Contacted, Showed up, Joined, Not yet). It writes straight to the database, so the numbers stay right without extra typing.</li>
+                  <li>If someone never gets back to you, or the number is wrong, open the lead and choose Remove from board: Couldn't reach them, Not interested right now, or Don't contact again. They stay in the database with that status and a note, and come back onto the board in 1, 3 or 6 months to try again, if they agreed to hear from Bo7.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/4.1-leads-board.txt">
                   <summary><span class="p-id">4.1</span><span class="p-name">Build the leads board</span><span class="p-use">Run in Claude Code: team.bo7.ie/leads, with contact buttons, consult booking and notes</span><span class="chev" aria-hidden="true"></span></summary>
@@ -912,19 +912,21 @@ a { color: var(--gold-text); }
             <details class="task" id="t4-3">
               <summary>
                 <span class="t-n">3</span>
-                <span class="t-title"><b>Record what happens at every consult</b><span>Show rate, join rate and why not, with prompt 4.3</span></span>
+                <span class="t-title"><b>Build the consult page</b><span>Notes and outcome during the consult, on a phone, with prompt 4.3</span></span>
                 <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
+                <p>The page a coach opens just before and during a free consultation: who's coming, notes as they talk, and the outcome. It matches the Consult tab of the dashboard mockup (<a href="https://bo7.thedowlings.co/dash/#consult" target="_blank" rel="noopener">bo7.thedowlings.co/dash/#consult</a>).</p>
                 <ol>
-                  <li>Run prompt 4.3. Claude adds a "Reason not joined" dropdown and a "Follow up on" date to the leads sheet, and adds show rate and join rate per gym to the Summary tab.</li>
-                  <li>After every consult, whoever ran it fills in Showed up, Joined, and the reason if they didn't join. Same day.</li>
-                  <li>Each month, look at the reasons. If one keeps coming up (price, timing), that is the thing to fix.</li>
+                  <li>Run prompt 4.3 in Claude Code. It builds team.bo7.ie/consult on top of the database.</li>
+                  <li>During each consult, the coach fills in what they want to achieve, training so far, anything to work around, and the days and times that suit.</li>
+                  <li>Straight after, record the outcome: showed up or no-show, then joined, thinking it over, or not yet with the reason. Same day, every time.</li>
+                  <li>Each month, look at the reasons for "not yet". If one keeps coming up (price, timing), that is the thing to fix.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/4.3-consult-outcomes.txt">
-                  <summary><span class="p-id">4.3</span><span class="p-name">Add consult outcomes to the sheet</span><span class="p-use">Run in Claude Code: new columns and show and join rates</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.3-consult-outcomes.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.3-consult-outcomes.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/4.3-consult-page.txt">
+                  <summary><span class="p-id">4.3</span><span class="p-name">Build the consult page</span><span class="p-use">Run in Claude Code: team.bo7.ie/consult, notes and outcomes into the database</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.3-consult-page.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.3-consult-page.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
@@ -941,7 +943,7 @@ a { color: var(--gold-text); }
                 <p>Most people who don't join on the day aren't saying no forever. A few kind messages, matched to their reason, bring some of them back. Only for people who agreed to hear from you.</p>
                 <ol>
                   <li>Run prompt 4.4. Claude writes a short sequence for each reason (price, timing, location, not ready, and so on): one week, one month and three months after.</li>
-                  <li>When a consult ends without joining, set the "Follow up on" date in the sheet to one week later.</li>
+                  <li>When a consult ends without joining, the consult page sets the follow-up date to one week later.</li>
                   <li>Send each message when the leads board shows it's due, then move the date on. After three months, stop unless they reply.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/4.4-not-yet-followups.txt">
@@ -964,7 +966,7 @@ a { color: var(--gold-text); }
                 <ol>
                   <li>Run prompt 4.5 for a welcome message from Ryan, an introduction for the community WhatsApp group, a check-in after the first session and another at the end of week two, plus a one-page "your first month" note.</li>
                   <li>Send the welcome the day they join, and add them to the community WhatsApp group (with their permission).</li>
-                  <li>Mark them Joined in the leads sheet. From here, Step 5 keeps them coming.</li>
+                  <li>Record Joined on the consult page. From here, Step 5 keeps them coming.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/4.5-welcome.txt">
                   <summary><span class="p-id">4.5</span><span class="p-name">Welcome new members</span><span class="p-use">Welcome, group intro, first-session and week-two check-ins, first-month note</span><span class="chev" aria-hidden="true"></span></summary>
@@ -991,20 +993,20 @@ a { color: var(--gold-text); }
             <details class="task" id="t5-1">
               <summary>
                 <span class="t-n">1</span>
-                <span class="t-title"><b>Pull attendance into a members sheet</b><span>Who is training and who is drifting, with prompt 5.1</span></span>
+                <span class="t-title"><b>Bring members and attendance in every night</b><span>Who is training and who is drifting, with prompt 5.1</span></span>
                 <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
-                <p>Every session is booked in Glofox, so the warning signs are already there: someone who used to come three times a week and hasn't been in for ten days. This task gets that into one sheet, refreshed every week.</p>
+                <p>Every session is booked in Glofox, so the warning signs are already there: someone who used to come three times a week and hasn't been in for ten days. This task brings members and their attendance into the database every night and works out each member's health: healthy, slowing or at risk.</p>
                 <ol>
-                  <li>Run prompt 5.1 in Claude Code. In your browser it finds Glofox's member and attendance reports for both gyms, and builds a "Bo7 members" sheet: last visit, visits in the last four weeks against the four before, milestones, and a Flags column. It changes nothing in Glofox.</li>
-                  <li>Check the coach column. Where Glofox doesn't record who coaches whom, fill it in once by hand.</li>
-                  <li>Schedule it to refresh every Monday morning. If Glofox grants API access (task 2.8), the refresh can use that instead.</li>
+                  <li>Run prompt 5.1 in Claude Code. It uses the Glofox API if Bo7 has access (task 2.8), otherwise Glofox's reports, downloaded each night. It changes nothing in Glofox.</li>
+                  <li>Check the coach on each member. Where Glofox doesn't record who coaches whom, fill it in once on the retain page.</li>
+                  <li>Check the first night's numbers by gym against what Ryan expects.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/5.1-members-sheet.txt">
-                  <summary><span class="p-id">5.1</span><span class="p-name">Build the members sheet</span><span class="p-use">Run in Claude Code with Chrome and Drive: attendance from Glofox into one sheet, with flags</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.1-members-sheet.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.1-members-sheet.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/5.1-members-data.txt">
+                  <summary><span class="p-id">5.1</span><span class="p-name">Bring members in every night</span><span class="p-use">Run in Claude Code: members, visits and daily health into the database</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.1-members-data.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.1-members-data.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
@@ -1018,7 +1020,7 @@ a { color: var(--gold-text); }
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
-                <p>These are the starting rules. Change the numbers to suit how Bo7 members actually train, then write the agreed version to retention-rules.md in the project folder so every prompt uses it.</p>
+                <p>These are the starting rules. Change the numbers to suit how Bo7 members actually train, then write the agreed version to retention-rules.md in the project folder. Prompt 5.4 puts the numbers into the database's settings so they can be changed without code.</p>
                 <div class="tbl">
                   <table>
                     <tr><th>When this happens</th><th>Bo7 does this</th><th>Sent by</th></tr>
@@ -1062,20 +1064,21 @@ a { color: var(--gold-text); }
             <details class="task" id="t5-4">
               <summary>
                 <span class="t-n">4</span>
-                <span class="t-title"><b>Build the members board, and work it every Monday</b><span>team.bo7.ie/members, with prompt 5.4</span></span>
+                <span class="t-title"><b>Build the retain page and the win-back sequences</b><span>team.bo7.ie/retain, mostly automatic, with prompt 5.4</span></span>
                 <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
-                <p>The same idea as the leads board: one page, behind the Cloudflare login, listing the members who need a message this week, with the right message ready to send in one tap.</p>
+                <p>Members who are slowing down or at risk get the right message at the right time, and drop out the moment they train again. The page matches the Retain tab of the dashboard mockup (<a href="https://bo7.thedowlings.co/dash/#retain" target="_blank" rel="noopener">bo7.thedowlings.co/dash/#retain</a>).</p>
                 <ol>
-                  <li>Run prompt 5.4 in Claude Code. It builds the board at team.bo7.ie/members on top of the members sheet.</li>
-                  <li>Every Monday, after the refresh, each coach works through their own members: send the message or make the call, then tap Done with a short note.</li>
-                  <li>Ryan checks the top line each week: how many were flagged, how many were contacted, and how many members trained compared with last week.</li>
+                  <li>Run prompt 5.4 in Claude Code. It builds the page and a job that runs every morning: it starts new sequences, stops them for anyone who has trained, sends the automatic steps, and puts the coach steps on the page as today's tasks.</li>
+                  <li>Decide how the automatic messages are sent. Check what Glofox can send first; otherwise an email service with a free tier. Automated WhatsApp costs per message and needs approved templates, so it can wait.</li>
+                  <li>Ryan decides the Day 7 offer: [offer].</li>
+                  <li>Each morning, coaches send their coach steps from the page. Ryan checks the top line each week: healthy share, members won back, win-back rate.</li>
                 </ol>
-                <details class="prompt" data-src="prompts/5.4-members-board.txt">
-                  <summary><span class="p-id">5.4</span><span class="p-name">Build the members board</span><span class="p-use">Run in Claude Code: team.bo7.ie/members, flagged members with one-tap messages</span><span class="chev" aria-hidden="true"></span></summary>
-                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.4-members-board.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.4-members-board.txt</span><span class="status" aria-live="polite"></span></div>
+                <details class="prompt" data-src="prompts/5.4-retain-page.txt">
+                  <summary><span class="p-id">5.4</span><span class="p-name">Build the retain page and sequences</span><span class="p-use">Run in Claude Code: team.bo7.ie/retain and the win-back engine</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.4-retain-page.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.4-retain-page.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
                 <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
@@ -1091,12 +1094,12 @@ a { color: var(--gold-text); }
               <div class="task-body">
                 <p>Some people will always move away. The useful reasons are the ones Bo7 can fix: schedule, not seeing results, not feeling part of it.</p>
                 <ol>
-                  <li>Run prompt 5.5. Claude adds a Leavers tab to the members sheet with a reason dropdown, writes Ryan's message for when someone cancels, and adds a monthly retention figure.</li>
+                  <li>Run prompt 5.5. Claude adds leavers to the retain page with a reason to record, writes Ryan's message for when someone cancels, and adds monthly retention.</li>
                   <li>When someone cancels, Ryan sends the message and records the reason. Every leaver, every time.</li>
                   <li>At the monthly review, look at the reasons. One that keeps coming up is the next thing to fix.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/5.5-why-people-leave.txt">
-                  <summary><span class="p-id">5.5</span><span class="p-name">Learn why people leave</span><span class="p-use">Leavers tab, a cancel message, and monthly retention</span><span class="chev" aria-hidden="true"></span></summary>
+                  <summary><span class="p-id">5.5</span><span class="p-name">Learn why people leave</span><span class="p-use">Leavers on the retain page, a cancel message, and monthly retention</span><span class="chev" aria-hidden="true"></span></summary>
                   <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.5-why-people-leave.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.5-why-people-leave.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
