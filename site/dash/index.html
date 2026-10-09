@@ -2,128 +2,218 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Bo7 Dashboard</title>
 <link rel="icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: a staff dashboard. Header with gym filter and tabs, then one tab per stage.
-   Capture tab = three columns: where leads come from, new leads to contact, waiting for a consult. */
+/* Bo7 dashboard. Built on the Observatory ("Operator") design system from alfred-workspace:
+   dense, neutral, tool-like. Blue-biased neutrals, one accent (Bo7 gold instead of Observatory blue),
+   semantic status colours, 4px rhythm, Inter with tabular numbers.
+   No colour or size literals outside the tokens. Light on :root, dark via system or [data-theme]. */
 :root {
-  --bg: #0A0A09;
-  --surface: #151411;
-  --sunk: #1E1C18;
-  --raised: #24211C;
-  --fg: #F1ECE1;
-  --muted: #A39C8E;
-  --line: #2E2B25;
-  --gold: #D4A72C;
-  --gold-text: #DDB958;
-  --late: #E5845A;
-  --wa: #25D366;
-  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
-  --body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --bg-page: #F6F7F9; --bg-surface: #FFFFFF; --bg-sunken: #EFF1F4; --bg-raised: #FFFFFF;
+  --bg-hover: #F2F4F7; --bg-active: #E8ECF2;
+  --text-primary: #0F1115; --text-secondary: #545B6B; --text-tertiary: #6E7688; --text-inverse: #FFFFFF;
+  --border: #E2E5EA; --border-strong: #CFD4DC;
+  --accent: #C6951A; --accent-hover: #B1840F; --accent-text: #7D5F05; --accent-subtle: #FBF2DC; --accent-contrast: #1B1608;
+  --border-focus: #B1840F;
+  --status-positive: #0F7B4F; --status-positive-subtle: #E4F4EC;
+  --status-negative: #C2334A; --status-negative-subtle: #FCE9EC;
+  --status-warning: #A35A07; --status-warning-subtle: #FBF0E0;
+  --status-neutral: #5B6373; --status-neutral-subtle: #EDEFF3;
+  --wa: #1DAA52; --wa-contrast: #FFFFFF;
+  --chart-1: #C6951A; --chart-grid: #ECEEF2; --chart-axis: #6E7688; --chart-compare: #A6ADBB;
+  --table-border: #ECEEF2; --row-hover: #F5F7FA;
+  --shadow-pop: 0 1px 2px rgba(15,17,21,.06), 0 8px 24px rgba(15,17,21,.10);
+  --seg-shadow: 0 1px 1px rgba(15,17,21,.06);
+
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-base: 13px; --fs-md: 14px; --fs-lg: 16px; --fs-xl: 20px; --fs-2xl: 24px; --fs-3xl: 30px;
+  --track-tight: -0.014em; --track-wide: 0.06em;
+  --space-1: 2px; --space-2: 4px; --space-3: 6px; --space-4: 8px; --space-5: 12px; --space-6: 16px; --space-7: 20px; --space-8: 24px; --space-9: 32px;
+  --radius-sm: 3px; --radius-md: 5px; --radius-lg: 6px; --radius-full: 999px;
+  --topbar-h: 52px; --content-max: 1560px; --pad-x: 20px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-page: #0B0D11; --bg-surface: #121519; --bg-sunken: #0E1115; --bg-raised: #171B21;
+    --bg-hover: #1A1E25; --bg-active: #232830;
+    --text-primary: #EEF1F6; --text-secondary: #A2AAB8; --text-tertiary: #7F8898; --text-inverse: #0B0D11;
+    --border: #232830; --border-strong: #333A45;
+    --accent: #D4A72C; --accent-hover: #E0B748; --accent-text: #E3BD55; --accent-subtle: #2A2210; --accent-contrast: #14100A;
+    --border-focus: #D4A72C;
+    --status-positive: #3FD08F; --status-positive-subtle: #0F2A20;
+    --status-negative: #FF7B8B; --status-negative-subtle: #331419;
+    --status-warning: #F0B429; --status-warning-subtle: #302209;
+    --status-neutral: #98A1B0; --status-neutral-subtle: #1C2129;
+    --wa: #25D366; --wa-contrast: #06210F;
+    --chart-1: #D4A72C; --chart-grid: #1F242B; --chart-axis: #7F8898; --chart-compare: #5C6472;
+    --table-border: #1F242B; --row-hover: #171B22;
+    --shadow-pop: 0 1px 2px rgba(0,0,0,.5), 0 10px 28px rgba(0,0,0,.55);
+    --seg-shadow: 0 1px 1px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg-page: #0B0D11; --bg-surface: #121519; --bg-sunken: #0E1115; --bg-raised: #171B21;
+  --bg-hover: #1A1E25; --bg-active: #232830;
+  --text-primary: #EEF1F6; --text-secondary: #A2AAB8; --text-tertiary: #7F8898; --text-inverse: #0B0D11;
+  --border: #232830; --border-strong: #333A45;
+  --accent: #D4A72C; --accent-hover: #E0B748; --accent-text: #E3BD55; --accent-subtle: #2A2210; --accent-contrast: #14100A;
+  --border-focus: #D4A72C;
+  --status-positive: #3FD08F; --status-positive-subtle: #0F2A20;
+  --status-negative: #FF7B8B; --status-negative-subtle: #331419;
+  --status-warning: #F0B429; --status-warning-subtle: #302209;
+  --status-neutral: #98A1B0; --status-neutral-subtle: #1C2129;
+  --wa: #25D366; --wa-contrast: #06210F;
+  --chart-1: #D4A72C; --chart-grid: #1F242B; --chart-axis: #7F8898; --chart-compare: #5C6472;
+  --table-border: #1F242B; --row-hover: #171B22;
+  --shadow-pop: 0 1px 2px rgba(0,0,0,.5), 0 10px 28px rgba(0,0,0,.55);
+  --seg-shadow: 0 1px 1px rgba(0,0,0,.4);
   color-scheme: dark;
 }
+
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); padding-inline: 20px; padding-block: 0 48px; }
-.wrap { max-width: 1320px; margin: 0 auto; }
+body { background: var(--bg-page); color: var(--text-primary); font: 400 var(--fs-base)/1.5 var(--font-ui); font-variant-numeric: tabular-nums; overflow-x: clip; }
 button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 1px; }
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
 
-/* Header */
-.top { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; justify-content: space-between; padding-block: 24px 18px; border-bottom: 1px solid var(--line); }
-.brand { display: flex; align-items: center; gap: 14px; }
-.brand img { height: 28px; width: auto; }
-.brand h1 { font: 400 26px/1 var(--display); margin: 0; }
-.sample { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--bg); background: var(--gold); border-radius: 999px; padding: 4px 10px; }
-.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
-.seg button { background: none; border: 0; border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 14px; color: var(--muted); cursor: pointer; }
-.seg button[aria-pressed="true"] { background: var(--raised); color: var(--fg); }
-.updated { color: var(--muted); font-size: 13px; }
+/* Top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg-surface); border-bottom: 1px solid var(--border); }
+.topbar-inner { max-width: var(--content-max); margin: 0 auto; padding-inline: var(--pad-x); min-height: var(--topbar-h); display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; padding-block: var(--space-3); }
+.brand { display: flex; align-items: center; gap: var(--space-4); }
+.logo { width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--text-primary); color: var(--bg-surface); display: grid; place-items: center; font-weight: 700; font-size: var(--fs-sm); letter-spacing: var(--track-tight); }
+.title { font-size: var(--fs-md); font-weight: 600; letter-spacing: var(--track-tight); }
+.sep { width: 1px; height: 18px; background: var(--border); }
+.sub { font-size: var(--fs-sm); color: var(--text-tertiary); }
+.right { margin-left: auto; display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
 
-/* Tabs */
-.tabs { display: flex; gap: 4px; margin-top: 18px; overflow-x: auto; }
-.tab { background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 16px; font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; white-space: nowrap; }
-.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--gold); }
-.tab[disabled] { cursor: default; opacity: .55; }
-.tab small { font-weight: 400; font-size: 12px; margin-left: 6px; }
+.chip { display: inline-flex; align-items: center; gap: var(--space-3); padding: 1px 7px; border-radius: var(--radius-full); font-size: var(--fs-xs); font-weight: 600; background: var(--status-neutral-subtle); color: var(--status-neutral); white-space: nowrap; }
+.chip::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.chip.warn { background: var(--status-warning-subtle); color: var(--status-warning); }
+.chip.bad { background: var(--status-negative-subtle); color: var(--status-negative); }
+.chip.ok { background: var(--status-positive-subtle); color: var(--status-positive); }
+.chip.info { background: var(--accent-subtle); color: var(--accent-text); }
+.chip.mute::before { display: none; }
 
-/* Summary strip */
-.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
-.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
-.kpi b { font: 400 34px/1.1 var(--display); font-variant-numeric: tabular-nums; }
-.kpi span { color: var(--muted); font-size: 13px; }
-.kpi.alert b { color: var(--late); }
-@media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.seg { display: inline-flex; gap: var(--space-1); padding: var(--space-1); background: var(--bg-sunken); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.seg button { border: 0; background: none; padding: 3px 9px; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: 500; color: var(--text-secondary); cursor: pointer; }
+.seg button:hover { color: var(--text-primary); }
+.seg button[aria-pressed="true"] { background: var(--bg-surface); color: var(--text-primary); font-weight: 600; box-shadow: var(--seg-shadow); }
+
+.switch { display: inline-flex; align-items: center; gap: var(--space-4); font-size: var(--fs-sm); color: var(--text-secondary); cursor: pointer; user-select: none; }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.track { width: 28px; height: 16px; border-radius: var(--radius-full); background: var(--border-strong); position: relative; transition: background .15s; flex: none; }
+.track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg-surface); transition: transform .15s; }
+.switch input:checked + .track { background: var(--accent); }
+.switch input:checked + .track::after { transform: translateX(12px); }
+.switch input:focus-visible + .track { outline: 2px solid var(--border-focus); outline-offset: 1px; }
+
+/* Content */
+.content { max-width: var(--content-max); margin: 0 auto; padding: var(--space-6) var(--pad-x) var(--space-9); display: flex; flex-direction: column; gap: var(--space-6); }
+.tabs { display: flex; gap: var(--space-6); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { border: 0; background: none; padding: var(--space-4) 0; margin-bottom: -1px; border-bottom: 2px solid transparent; font-size: var(--fs-md); font-weight: 500; color: var(--text-secondary); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: var(--space-3); }
+.tabs button:hover:not([disabled]) { color: var(--text-primary); }
+.tabs button[aria-selected="true"] { color: var(--text-primary); font-weight: 600; border-bottom-color: var(--accent); }
+.tabs button[disabled] { cursor: default; color: var(--text-tertiary); }
+.scope { font-size: var(--fs-xs); color: var(--text-tertiary); margin: calc(var(--space-6) * -1 + var(--space-4)) 0 0; }
+
+/* KPI strip: one bordered object split by hairlines */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.kpi { background: var(--bg-surface); padding: 11px 12px 10px; display: flex; flex-direction: column; min-width: 0; }
+.eyebrow { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); }
+.kpi-value { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: var(--track-tight); line-height: 1.2; margin-top: var(--space-2); display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap; }
+.kpi-value.bad { color: var(--status-negative); }
+.kpi-secondary { font-size: var(--fs-sm); font-weight: 500; color: var(--text-tertiary); letter-spacing: 0; }
+.kpi-meta { display: flex; align-items: center; gap: var(--space-4); min-height: 17px; margin-top: var(--space-2); }
+.kpi-ly { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.spark { display: block; width: 100%; height: 44px; margin-top: var(--space-4); }
+@media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .kpi-value { font-size: var(--fs-xl); } }
+
+.delta { display: inline-flex; align-items: center; gap: 3px; padding: 1px 5px 1px 4px; border-radius: var(--radius-sm); font-size: var(--fs-xs); font-weight: 600; }
+.delta svg { width: 9px; height: 9px; }
+.delta.good { background: var(--status-positive-subtle); color: var(--status-positive); }
+.delta.bad { background: var(--status-negative-subtle); color: var(--status-negative); }
+.delta.flat { background: var(--status-neutral-subtle); color: var(--status-neutral); }
 
 /* Board */
-.board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1.15fr); gap: 16px; margin-top: 16px; align-items: start; }
-@media (max-width: 1080px) { .board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .col.sources { grid-column: 1 / -1; } }
-@media (max-width: 700px) { .board { grid-template-columns: minmax(0, 1fr); } .col.sources { order: 3; } }
-.tabs { scrollbar-width: none; }
-.tabs::-webkit-scrollbar { display: none; }
-.col { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
-.col-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.col-head h2 { font: 400 22px/1.2 var(--display); margin: 0; }
-.count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
-.col-sub { color: var(--muted); font-size: 13px; margin: -6px 0 0; }
+.board { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) minmax(0, 1.2fr); gap: var(--space-6); align-items: start; }
+@media (max-width: 1240px) { .board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .panel.sources { grid-column: 1 / -1; order: 3; } }
+@media (max-width: 760px) { .board { grid-template-columns: minmax(0, 1fr); } }
 
-/* Sources */
-.src-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.src { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; }
-.src .name { font-weight: 600; font-size: 14px; }
-.src .num { font-variant-numeric: tabular-nums; font-weight: 700; }
-.src .bar { grid-column: 1 / -1; height: 6px; background: var(--sunk); border-radius: 999px; overflow: hidden; }
-.src .bar i { display: block; height: 100%; background: var(--gold); border-radius: 999px; }
-.src .split { grid-column: 1 / -1; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
-.src-total { border-top: 1px solid var(--line); padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; }
+.panel { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); min-width: 0; }
+.panel-head { min-height: 36px; padding: 9px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: var(--space-4); }
+.panel-title { font-size: var(--fs-base); font-weight: 600; letter-spacing: var(--track-tight); }
+.panel-note { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.panel-actions { margin-left: auto; display: flex; align-items: center; gap: var(--space-4); }
+.count { font-size: var(--fs-xs); font-weight: 600; color: var(--text-secondary); background: var(--bg-sunken); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 0 7px; }
 
-/* Cards */
-.group { display: grid; gap: 10px; }
-.group-label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-text); margin: 4px 0 0; }
-.card { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; }
-.card.late { border-left: 3px solid var(--late); }
-.card-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
-.card-top b { font-size: 15px; }
-.wait { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
-.late .wait { color: var(--late); font-weight: 700; }
-.meta { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font-size: 12px; background: var(--sunk); border-radius: 6px; padding: 2px 8px; color: var(--fg); }
-.chip.src-chip { color: var(--gold-text); }
-.note { font-size: 13px; color: var(--muted); margin: 0; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.act { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
-.act:hover { border-color: var(--gold); }
-.act.primary.wa { background: var(--wa); border-color: var(--wa); color: #06210f; }
-.act.primary.call, .act.primary.email { background: var(--gold); border-color: var(--gold); color: #1b1608; }
-.act svg { width: 14px; height: 14px; }
-.prefers { font-size: 12px; color: var(--muted); }
-.when { font-weight: 600; font-size: 13px; }
-.empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+/* Sources: qualifiers left, numbers right, the bar is the aside */
+.src-row { display: grid; grid-template-columns: minmax(0, 1fr) 72px 40px 30px; gap: var(--space-5); align-items: center; padding: 6px 12px; border-bottom: 1px solid var(--table-border); }
+.src-row:last-child { border-bottom: 0; }
+.src-row:hover { background: var(--row-hover); }
+.src-name { color: var(--text-primary); font-weight: 500; min-width: 0; }
+.src-split { display: block; font-size: var(--fs-xs); color: var(--text-tertiary); font-weight: 400; }
+.meter { height: 5px; border-radius: var(--radius-full); background: var(--bg-sunken); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--chart-1); border-radius: var(--radius-full); }
+.src-share { text-align: right; font-size: var(--fs-sm); color: var(--text-tertiary); }
+.src-val { text-align: right; font-weight: 600; }
+.src-head { white-space: nowrap; font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); background: var(--bg-sunken); }
+.src-head:hover { background: var(--bg-sunken); }
+.src-foot { font-weight: 600; background: var(--bg-sunken); }
+.src-foot:hover { background: var(--bg-sunken); }
+.src-delta { justify-self: end; }
 
-.panel[hidden] { display: none; }
-.soon { margin-top: 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 40px 20px; text-align: center; color: var(--muted); }
+/* Lead rows */
+.group-label { padding: var(--space-4) 12px var(--space-2); font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-wide); color: var(--text-tertiary); background: var(--bg-sunken); border-bottom: 1px solid var(--table-border); }
+.lead { padding: 10px 12px; border-bottom: 1px solid var(--table-border); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2) var(--space-5); position: relative; }
+.lead:last-child { border-bottom: 0; }
+.lead:hover { background: var(--row-hover); }
+.lead.late::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--status-negative); }
+.lead-name { font-weight: 600; font-size: var(--fs-base); }
+.lead-when { text-align: right; font-size: var(--fs-sm); color: var(--text-tertiary); white-space: nowrap; }
+.lead-when b { color: var(--text-primary); font-weight: 600; }
+.lead-meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); font-size: var(--fs-sm); color: var(--text-secondary); }
+.dot-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--text-tertiary); }
+.lead-note { grid-column: 1 / -1; font-size: var(--fs-sm); color: var(--text-tertiary); margin: 0; }
+.lead-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: var(--radius-md); font-size: var(--fs-sm); font-weight: 500; border: 1px solid var(--border-strong); background: var(--bg-surface); color: var(--text-primary); cursor: pointer; }
+.btn:hover { background: var(--bg-hover); }
+.btn svg { width: 13px; height: 13px; flex: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); font-weight: 600; }
+.btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn.primary.wa { background: var(--wa); border-color: var(--wa); color: var(--wa-contrast); }
+.btn.ghost { border-color: transparent; background: none; color: var(--text-secondary); }
+.btn.ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
+.empty { padding: 32px 12px; text-align: center; font-size: var(--fs-sm); color: var(--text-tertiary); }
 
-.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--raised); border: 1px solid var(--line); color: var(--fg); padding: 10px 16px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.foot-note { font-size: var(--fs-xs); color: var(--text-tertiary); }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100% - 32px); background: var(--bg-raised); border: 1px solid var(--border); box-shadow: var(--shadow-pop); color: var(--text-primary); padding: 9px 12px; border-radius: var(--radius-lg); font-size: var(--fs-sm); opacity: 0; transition: opacity .15s; pointer-events: none; }
 .toast.show { opacity: 1; }
-@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+@media (max-width: 900px) { :root { --pad-x: 16px; } .sub, .sep { display: none; } }
+@media (max-width: 640px) { :root { --pad-x: 12px; } .right { margin-left: 0; width: 100%; } .topbar { position: static; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <img src="../assets/bo7-logo.png" alt="Bo7">
-      <h1>Dashboard</h1>
-      <span class="sample" title="Names and numbers are made up">Sample data</span>
-    </div>
-    <div class="controls">
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="logo" aria-hidden="true">Bo7</span><span class="title">Capture</span></div>
+    <span class="sep" aria-hidden="true"></span>
+    <span class="sub" id="period-sub">This week · 5 to 11 Oct 2026</span>
+    <span class="chip warn" title="Every name and number on this page is made up, for layout only.">Sample data</span>
+    <div class="right">
       <div class="seg" role="group" aria-label="Gym">
         <button type="button" data-gym="all" aria-pressed="true">Both gyms</button>
         <button type="button" data-gym="Killiney" aria-pressed="false">Killiney</button>
@@ -133,71 +223,89 @@ button { font: inherit; color: inherit; }
         <button type="button" data-period="week" aria-pressed="true">This week</button>
         <button type="button" data-period="month" aria-pressed="false">Last 4 weeks</button>
       </div>
+      <label class="switch"><input type="checkbox" id="compare" checked><span class="track" aria-hidden="true"></span>Versus previous</label>
     </div>
-  </header>
+  </div>
+</header>
 
+<main class="content">
   <nav class="tabs" role="tablist" aria-label="Dashboard sections">
-    <button class="tab" role="tab" aria-selected="true" data-tab="capture">Capture</button>
-    <button class="tab" role="tab" aria-selected="false" disabled>Close<small>soon</small></button>
-    <button class="tab" role="tab" aria-selected="false" disabled>Retain<small>soon</small></button>
-    <button class="tab" role="tab" aria-selected="false" disabled>Reach<small>soon</small></button>
+    <button role="tab" aria-selected="true" type="button">Capture</button>
+    <button role="tab" aria-selected="false" type="button" disabled>Close <span class="chip mute">Soon</span></button>
+    <button role="tab" aria-selected="false" type="button" disabled>Retain <span class="chip mute">Soon</span></button>
+    <button role="tab" aria-selected="false" type="button" disabled>Reach <span class="chip mute">Soon</span></button>
   </nav>
 
-  <section class="panel" id="capture" role="tabpanel">
-    <div class="kpis">
-      <div class="kpi"><b id="k-leads">0</b><span>Leads in</span></div>
-      <div class="kpi alert"><b id="k-late">0</b><span>Waiting over 24 hours</span></div>
-      <div class="kpi"><b id="k-reply">0%</b><span>Answered within 24 hours</span></div>
-      <div class="kpi"><b id="k-consults">0</b><span>Waiting for a consult</span></div>
+  <section class="kpis" aria-label="Summary">
+    <div class="kpi">
+      <span class="eyebrow">Leads in</span>
+      <span class="kpi-value" id="k-leads">0</span>
+      <span class="kpi-meta" id="m-leads"></span>
+      <svg class="spark" id="s-leads" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"></svg>
     </div>
-
-    <div class="board">
-      <section class="col sources" aria-labelledby="h-sources">
-        <div class="col-head"><h2 id="h-sources">Where leads come from</h2><span class="count" id="c-sources"></span></div>
-        <p class="col-sub" id="sub-sources"></p>
-        <ul class="src-list" id="src-list"></ul>
-        <div class="src-total"><span>Total</span><span id="src-total">0</span></div>
-      </section>
-
-      <section class="col" aria-labelledby="h-new">
-        <div class="col-head"><h2 id="h-new">New leads</h2><span class="count" id="c-new"></span></div>
-        <p class="col-sub">Not contacted yet. Oldest first; red means over 24 hours.</p>
-        <div class="group" id="list-new"></div>
-      </section>
-
-      <section class="col" aria-labelledby="h-consult">
-        <div class="col-head"><h2 id="h-consult">Waiting for a consult</h2><span class="count" id="c-consult"></span></div>
-        <p class="col-sub">Contacted and interested. Booked first, then still to book.</p>
-        <div class="group" id="list-consult"></div>
-      </section>
+    <div class="kpi">
+      <span class="eyebrow">Answered within 24 hours</span>
+      <span class="kpi-value" id="k-reply">0%</span>
+      <span class="kpi-meta" id="m-reply"></span>
+      <svg class="spark" id="s-reply" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </div>
+    <div class="kpi">
+      <span class="eyebrow">Waiting over 24 hours</span>
+      <span class="kpi-value bad" id="k-late">0</span>
+      <span class="kpi-meta"><span class="kpi-ly" id="m-late"></span></span>
+    </div>
+    <div class="kpi">
+      <span class="eyebrow">Waiting for a consult</span>
+      <span class="kpi-value" id="k-consult">0</span>
+      <span class="kpi-meta"><span class="kpi-ly" id="m-consult"></span></span>
     </div>
   </section>
 
-  <p class="updated" style="margin-top:20px">Sample data for layout only. The live version reads the Bo7 leads sheet and sits behind the team login.</p>
-</div>
+  <div class="board">
+    <section class="panel sources" aria-labelledby="h-sources">
+      <div class="panel-head"><span class="panel-title" id="h-sources">Where leads come from</span><span class="panel-note" id="n-sources"></span></div>
+      <div id="src-list"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-new">
+      <div class="panel-head"><span class="panel-title" id="h-new">New leads</span><span class="panel-note">Not contacted yet, oldest first</span><span class="panel-actions"><span class="count" id="c-new">0</span></span></div>
+      <div id="list-new"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-consult">
+      <div class="panel-head"><span class="panel-title" id="h-consult">Waiting for a consult</span><span class="panel-note">Contacted and interested</span><span class="panel-actions"><span class="count" id="c-consult">0</span></span></div>
+      <div id="list-consult"></div>
+    </section>
+  </div>
+
+  <p class="foot-note">Sample data for layout only. The live version reads the Bo7 leads sheet and sits behind the team login at team.bo7.ie.</p>
+</main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function () {
-  // ---- Sample data (made up) ----
+  // ---------- Sample data (made up) ----------
   var SOURCES = {
     'walk-in': 'Walk-in', 'phone': 'Phone call', 'whatsapp': 'WhatsApp (direct)', 'website-form': 'Website form',
     'killiney-window': 'Killiney window', 'blackrock-window': 'Blackrock window', 'stand': 'Village Centre stand',
     'referral': 'Referral', 'corporate': 'Corporate', 'instagram': 'Instagram', 'meta-ads': 'Meta ads',
     'google-ads': 'Google ads', 'google-profile': 'Google profile'
   };
-  // [source, gym, this week, earlier in the 4 weeks]
+  // [source, gym, this week, rest of last 4 weeks, previous week, previous 4 weeks]
   var COUNTS = [
-    ['meta-ads', 'Killiney', 4, 9], ['meta-ads', 'Blackrock', 5, 11],
-    ['referral', 'Killiney', 3, 6], ['referral', 'Blackrock', 1, 3],
-    ['google-profile', 'Killiney', 2, 7], ['google-profile', 'Blackrock', 2, 4],
-    ['website-form', 'Killiney', 2, 5], ['website-form', 'Blackrock', 1, 3],
-    ['walk-in', 'Killiney', 2, 3], ['walk-in', 'Blackrock', 3, 6],
-    ['stand', 'Blackrock', 3, 5], ['google-ads', 'Killiney', 1, 4], ['google-ads', 'Blackrock', 2, 3],
-    ['instagram', 'Killiney', 1, 3], ['instagram', 'Blackrock', 1, 2],
-    ['killiney-window', 'Killiney', 1, 2], ['blackrock-window', 'Blackrock', 0, 2],
-    ['corporate', 'Blackrock', 2, 2], ['phone', 'Killiney', 1, 2], ['whatsapp', 'Killiney', 0, 2]
+    ['meta-ads', 'Killiney', 4, 9, 3, 10], ['meta-ads', 'Blackrock', 5, 11, 4, 12],
+    ['referral', 'Killiney', 3, 6, 2, 6], ['referral', 'Blackrock', 1, 3, 1, 2],
+    ['google-profile', 'Killiney', 2, 7, 3, 7], ['google-profile', 'Blackrock', 2, 4, 1, 4],
+    ['website-form', 'Killiney', 2, 5, 2, 6], ['website-form', 'Blackrock', 1, 3, 1, 3],
+    ['walk-in', 'Killiney', 2, 3, 1, 4], ['walk-in', 'Blackrock', 3, 6, 2, 5],
+    ['stand', 'Blackrock', 3, 5, 3, 2], ['google-ads', 'Killiney', 1, 4, 2, 3], ['google-ads', 'Blackrock', 2, 3, 1, 3],
+    ['instagram', 'Killiney', 1, 3, 1, 3], ['instagram', 'Blackrock', 1, 2, 1, 2],
+    ['killiney-window', 'Killiney', 1, 2, 0, 1], ['blackrock-window', 'Blackrock', 0, 2, 1, 1],
+    ['corporate', 'Blackrock', 2, 2, 0, 1], ['phone', 'Killiney', 1, 2, 1, 3], ['whatsapp', 'Killiney', 0, 2, 0, 1]
   ];
+  // Weekly totals for both gyms, oldest first; the last value is this week.
+  var WEEKLY_LEADS = [22, 25, 24, 27, 26, 28, 30, 37];
+  var WEEKLY_REPLY = [72, 75, 74, 79, 77, 80, 79, 86];
   var NEW = [
     { name: 'Aoife Brennan', source: 'meta-ads', gym: 'Blackrock', prefers: 'whatsapp', hours: 31, note: 'Wants to get stronger after having a baby' },
     { name: 'Declan Murphy', source: 'google-profile', gym: 'Killiney', prefers: 'phone', hours: 27, note: 'Asked about early morning sessions' },
@@ -209,14 +317,13 @@ button { font: inherit; color: inherit; }
     { name: 'Paul Keane', source: 'google-ads', gym: 'Killiney', prefers: 'whatsapp', hours: 1, note: '' }
   ];
   var CONSULT = [
-    { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today, 18:30', booked: true },
-    { name: 'Mark Nolan', source: 'referral', gym: 'Blackrock', prefers: 'phone', when: 'Tomorrow, 07:00', booked: true },
-    { name: 'Laura Quinn', source: 'google-profile', gym: 'Blackrock', prefers: 'whatsapp', when: 'Thu, 12:15', booked: true },
-    { name: 'Tom Gallagher', source: 'walk-in', gym: 'Killiney', prefers: 'phone', when: 'Sat, 10:00', booked: true },
-    { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', when: 'Asked for evenings', booked: false },
-    { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', when: 'Away until next week', booked: false }
+    { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today', time: '18:30', booked: true },
+    { name: 'Mark Nolan', source: 'referral', gym: 'Blackrock', prefers: 'phone', when: 'Tomorrow', time: '07:00', booked: true },
+    { name: 'Laura Quinn', source: 'google-profile', gym: 'Blackrock', prefers: 'whatsapp', when: 'Thu', time: '12:15', booked: true },
+    { name: 'Tom Gallagher', source: 'walk-in', gym: 'Killiney', prefers: 'phone', when: 'Sat', time: '10:00', booked: true },
+    { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', when: 'Asked for evenings', time: '', booked: false },
+    { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', when: 'Away until next week', time: '', booked: false }
   ];
-  var REPLY_RATE = { week: 86, month: 81 };
 
   var ICON = {
     whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.3.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.2.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 .9c.3.1.5.2.5.4.1.1.1.7-.2 1.4Z"/></svg>',
@@ -224,63 +331,134 @@ button { font: inherit; color: inherit; }
     email: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm18 2-10 7L2 6"/></svg>'
   };
   var LABEL = { whatsapp: 'WhatsApp', phone: 'Call', email: 'Email' };
-  var PREF = { whatsapp: 'Prefers WhatsApp', phone: 'Prefers a call', email: 'Prefers email' };
+  var PREF = { whatsapp: 'prefers WhatsApp', phone: 'prefers a call', email: 'prefers email' };
 
-  var state = { gym: 'all', period: 'week' };
-  function byGym(x) { return state.gym === 'all' || x.gym === state.gym; }
+  var state = { gym: 'all', period: 'week', compare: true };
+  function byGym(x) { return state.gym === 'all' || (x.gym || x[1]) === state.gym; }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
+  // ---------- Delta badge: colour from "good" direction, not the arrow ----------
+  function delta(cur, prev, unit, good) {
+    if (prev === null || prev === undefined) return '<span class="kpi-ly" title="No comparison period">—</span>';
+    var v = unit === 'pt' ? cur - prev : (prev === 0 ? null : (cur - prev) / prev * 100);
+    if (v === null) return '<span class="kpi-ly" title="Nothing to compare against">—</span>';
+    var dir = v > 0 ? 'up' : v < 0 ? 'down' : 'flat';
+    var tone = dir === 'flat' ? 'flat' : (dir === good ? 'good' : 'bad');
+    var arrow = dir === 'up' ? '<path d="M5 1l4 6H1z"/>' : dir === 'down' ? '<path d="M5 9L1 3h8z"/>' : '';
+    var txt = Math.abs(v).toFixed(unit === 'pt' ? 0 : 0) + (unit === 'pt' ? 'pt' : '%');
+    return '<span class="delta ' + tone + '">' + (arrow ? '<svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">' + arrow + '</svg>' : '') + txt + '</span>';
+  }
+
+  // ---------- Sparkline: monotone cubic (Fritsch-Carlson), shared y-scale with comparison ----------
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function monotonePath(pts) {
+    var n = pts.length; if (n < 2) return '';
+    var dx = [], m = [], t = [];
+    for (var i = 0; i < n - 1; i++) { dx[i] = pts[i + 1][0] - pts[i][0]; m[i] = (pts[i + 1][1] - pts[i][1]) / dx[i]; }
+    t[0] = m[0]; t[n - 1] = m[n - 2];
+    for (i = 1; i < n - 1; i++) t[i] = (m[i - 1] * m[i] <= 0) ? 0 : (m[i - 1] + m[i]) / 2;
+    for (i = 0; i < n - 1; i++) {
+      if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; }
+      var a = t[i] / m[i], b = t[i + 1] / m[i], h = a * a + b * b;
+      if (h > 9) { var k = 3 / Math.sqrt(h); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; }
+    }
+    var d = 'M' + pts[0][0].toFixed(2) + ',' + pts[0][1].toFixed(2);
+    for (i = 0; i < n - 1; i++) {
+      var x0 = pts[i][0], y0 = pts[i][1], x1 = pts[i + 1][0], y1 = pts[i + 1][1], s = dx[i] / 3;
+      d += ' C' + (x0 + s).toFixed(2) + ',' + (y0 + t[i] * s).toFixed(2) + ' ' + (x1 - s).toFixed(2) + ',' + (y1 - t[i + 1] * s).toFixed(2) + ' ' + x1.toFixed(2) + ',' + y1.toFixed(2);
+    }
+    return d;
+  }
+  function spark(el, cur, prev) {
+    var all = cur.concat(state.compare && prev ? prev : []);
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all), pad = (hi - lo) * 0.15 || 1;
+    lo -= pad; hi += pad;
+    function pts(vals) { return vals.map(function (v, i) { return [i / (vals.length - 1) * 300, 40 - (v - lo) / (hi - lo) * 40]; }); }
+    var c = css('--chart-1'), id = el.id + '-g';
+    var p = pts(cur), line = monotonePath(p);
+    var html = '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c + '" stop-opacity=".18"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></linearGradient></defs>';
+    if (state.compare && prev) html += '<path d="' + monotonePath(pts(prev)) + '" fill="none" stroke="' + css('--chart-compare') + '" stroke-width="1.5" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>';
+    html += '<path d="' + line + ' L300,40 L0,40 Z" fill="url(#' + id + ')"/>';
+    html += '<path d="' + line + '" fill="none" stroke="' + c + '" stroke-width="2" vector-effect="non-scaling-stroke"/>';
+    el.innerHTML = html;
+  }
+
+  // ---------- Render ----------
   function actions(p) {
     var order = [p.prefers].concat(['whatsapp', 'phone', 'email'].filter(function (k) { return k !== p.prefers; }));
-    return '<div class="actions">' + order.map(function (k, i) {
-      return '<button type="button" class="act' + (i === 0 ? ' primary ' + (k === 'whatsapp' ? 'wa' : k === 'phone' ? 'call' : 'email') : '') + '" data-act="' + k + '">' + ICON[k] + LABEL[k] + '</button>';
+    return '<div class="lead-actions">' + order.map(function (k, i) {
+      var cls = i === 0 ? 'btn primary' + (k === 'whatsapp' ? ' wa' : '') : 'btn ghost';
+      return '<button type="button" class="' + cls + '" data-act="' + k + '" data-name="' + esc(p.name) + '">' + ICON[k] + LABEL[k] + '</button>';
     }).join('') + '</div>';
   }
-  function chips(p) {
-    return '<div class="meta"><span class="chip src-chip">' + esc(SOURCES[p.source]) + '</span><span class="chip">' + esc(p.gym) + '</span><span class="prefers">' + PREF[p.prefers] + '</span></div>';
+  function meta(p) {
+    return '<div class="lead-meta"><span class="chip info">' + esc(SOURCES[p.source]) + '</span><span>' + esc(p.gym) + '</span><span class="dot-sep" aria-hidden="true"></span><span>' + PREF[p.prefers] + '</span></div>';
   }
-  function ago(h) { return h < 24 ? h + 'h ago' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h ago'; }
+  function waited(h) { return h < 24 ? h + 'h' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h'; }
 
   function render() {
+    var wk = state.period === 'week';
+    document.getElementById('period-sub').textContent = wk ? 'This week · 5 to 11 Oct 2026' : 'Last 4 weeks · 14 Sep to 11 Oct 2026';
+
     // Sources
-    var totals = {}, split = {};
+    var cur = {}, prev = {}, split = {};
     COUNTS.filter(byGym).forEach(function (r) {
-      var n = state.period === 'week' ? r[2] : r[2] + r[3];
-      totals[r[0]] = (totals[r[0]] || 0) + n;
-      split[r[0]] = split[r[0]] || { Killiney: 0, Blackrock: 0 };
-      split[r[0]][r[1]] += n;
+      var c = wk ? r[2] : r[2] + r[3], p = wk ? r[4] : r[5];
+      cur[r[0]] = (cur[r[0]] || 0) + c; prev[r[0]] = (prev[r[0]] || 0) + p;
+      split[r[0]] = split[r[0]] || { Killiney: 0, Blackrock: 0 }; split[r[0]][r[1]] += c;
     });
-    var rows = Object.keys(totals).filter(function (k) { return totals[k] > 0; }).map(function (k) { return [k, totals[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
-    var max = rows.length ? rows[0][1] : 1, sum = rows.reduce(function (t, r) { return t + r[1]; }, 0);
-    document.getElementById('src-list').innerHTML = rows.map(function (r) {
-      var sp = state.gym === 'all' ? '<span class="split">Killiney ' + split[r[0]].Killiney + ' · Blackrock ' + split[r[0]].Blackrock + '</span>' : '';
-      return '<li class="src"><span class="name">' + esc(SOURCES[r[0]]) + '</span><span class="num">' + r[1] + '</span><span class="bar"><i style="width:' + (max ? Math.round(r[1] / max * 100) : 0) + '%"></i></span>' + sp + '</li>';
-    }).join('') || '<li class="empty">No leads in this period.</li>';
-    document.getElementById('src-total').textContent = sum;
-    document.getElementById('c-sources').textContent = rows.length + ' sources';
-    document.getElementById('sub-sources').textContent = state.period === 'week' ? 'Leads this week, by source.' : 'Leads in the last 4 weeks, by source.';
-
-    // New leads
-    var nl = NEW.filter(byGym).sort(function (a, b) { return b.hours - a.hours; });
-    document.getElementById('list-new').innerHTML = nl.map(function (p) {
-      return '<article class="card' + (p.hours > 24 ? ' late' : '') + '"><div class="card-top"><b>' + esc(p.name) + '</b><span class="wait">' + ago(p.hours) + '</span></div>' + chips(p) + (p.note ? '<p class="note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
-    }).join('') || '<p class="empty">Nobody waiting. Nice.</p>';
-    document.getElementById('c-new').textContent = nl.length;
-
-    // Waiting for consult
-    var cl = CONSULT.filter(byGym), booked = cl.filter(function (p) { return p.booked; }), tobook = cl.filter(function (p) { return !p.booked; });
-    function consultCard(p) { return '<article class="card"><div class="card-top"><b>' + esc(p.name) + '</b><span class="when">' + esc(p.when) + '</span></div>' + chips(p) + actions(p) + '</article>'; }
-    document.getElementById('list-consult').innerHTML =
-      (booked.length ? '<p class="group-label">Booked</p>' + booked.map(consultCard).join('') : '') +
-      (tobook.length ? '<p class="group-label">Still to book</p>' + tobook.map(consultCard).join('') : '') ||
-      '<p class="empty">No consults waiting.</p>';
-    document.getElementById('c-consult').textContent = cl.length;
+    var rows = Object.keys(cur).filter(function (k) { return cur[k] > 0; }).sort(function (a, b) { return cur[b] - cur[a]; });
+    var total = rows.reduce(function (t, k) { return t + cur[k]; }, 0);
+    var totalPrev = Object.keys(prev).reduce(function (t, k) { return t + prev[k]; }, 0);
+    var max = rows.length ? cur[rows[0]] : 1;
+    var cols = state.compare ? 'minmax(0,1fr) 56px 36px 36px 56px' : 'minmax(0,1fr) 72px 40px 36px';
+    var head = '<div class="src-row src-head" style="grid-template-columns:' + cols + '"><span>Source</span><span></span><span class="src-share">Share</span><span class="src-val">Leads</span>' + (state.compare ? '<span class="src-delta">vs prev</span>' : '') + '</div>';
+    var body = rows.map(function (k) {
+      var sp = state.gym === 'all' ? '<span class="src-split">Killiney ' + split[k].Killiney + ' · Blackrock ' + split[k].Blackrock + '</span>' : '';
+      return '<div class="src-row" style="grid-template-columns:' + cols + '"><span class="src-name">' + esc(SOURCES[k]) + sp + '</span><span class="meter"><i style="width:' + Math.round(cur[k] / max * 100) + '%"></i></span><span class="src-share">' + Math.round(cur[k] / total * 100) + '%</span><span class="src-val">' + cur[k] + '</span>' + (state.compare ? '<span class="src-delta">' + delta(cur[k], prev[k], '%', 'up') + '</span>' : '') + '</div>';
+    }).join('');
+    var foot = '<div class="src-row src-foot" style="grid-template-columns:' + cols + '"><span>Total</span><span></span><span class="src-share">100%</span><span class="src-val">' + total + '</span>' + (state.compare ? '<span class="src-delta">' + delta(total, totalPrev, '%', 'up') + '</span>' : '') + '</div>';
+    document.getElementById('src-list').innerHTML = rows.length ? head + body + foot : '<div class="empty">No leads for this period.</div>';
+    document.getElementById('n-sources').textContent = rows.length + ' sources';
 
     // KPIs
-    document.getElementById('k-leads').textContent = sum;
-    document.getElementById('k-late').textContent = nl.filter(function (p) { return p.hours > 24; }).length;
-    document.getElementById('k-reply').textContent = REPLY_RATE[state.period] + '%';
-    document.getElementById('k-consults').textContent = cl.length;
+    var share = total / (COUNTS.reduce(function (t, r) { return t + (wk ? r[2] : r[2] + r[3]); }, 0) || 1);
+    var seriesLeads = WEEKLY_LEADS.map(function (v) { return Math.round(v * share); });
+    document.getElementById('k-leads').textContent = total;
+    document.getElementById('m-leads').innerHTML = state.compare ? delta(total, totalPrev, '%', 'up') + '<span class="kpi-ly">' + (wk ? 'Last week ' : 'Previous 4 weeks ') + totalPrev + '</span>' : '';
+    spark(document.getElementById('s-leads'), seriesLeads.slice(4), seriesLeads.slice(0, 4));
+
+    var reply = wk ? 86 : 81, replyPrev = wk ? 79 : 76;
+    document.getElementById('k-reply').textContent = reply + '%';
+    document.getElementById('m-reply').innerHTML = state.compare ? delta(reply, replyPrev, 'pt', 'up') + '<span class="kpi-ly">' + (wk ? 'Last week ' : 'Previous 4 weeks ') + replyPrev + '%</span>' : '';
+    spark(document.getElementById('s-reply'), WEEKLY_REPLY.slice(4), WEEKLY_REPLY.slice(0, 4));
+
+    var nl = NEW.filter(byGym).sort(function (a, b) { return b.hours - a.hours; });
+    var late = nl.filter(function (p) { return p.hours > 24; });
+    document.getElementById('k-late').innerHTML = late.length + '<span class="kpi-secondary">of ' + nl.length + ' new</span>';
+    document.getElementById('k-late').classList.toggle('bad', late.length > 0);
+    document.getElementById('m-late').textContent = late.length ? 'Oldest waiting ' + waited(late[0].hours) : 'Nobody waiting over 24 hours';
+
+    var cl = CONSULT.filter(byGym), booked = cl.filter(function (p) { return p.booked; }), tobook = cl.filter(function (p) { return !p.booked; });
+    document.getElementById('k-consult').textContent = cl.length;
+    document.getElementById('m-consult').textContent = booked.length + ' booked · ' + tobook.length + ' still to book';
+
+    // New leads
+    document.getElementById('list-new').innerHTML = nl.map(function (p) {
+      return '<article class="lead' + (p.hours > 24 ? ' late' : '') + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + (p.hours > 24 ? '<span class="chip bad">' + waited(p.hours) + '</span>' : 'waiting <b>' + waited(p.hours) + '</b>') + '</span>' + meta(p) + (p.note ? '<p class="lead-note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
+    }).join('') || '<div class="empty">Nobody waiting. Every lead has had a reply.</div>';
+    document.getElementById('c-new').textContent = nl.length;
+
+    // Waiting for a consult
+    function consultRow(p) {
+      var when = p.booked ? '<b>' + esc(p.when) + '</b> ' + esc(p.time) : esc(p.when);
+      return '<article class="lead"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + when + '</span>' + meta(p) + actions(p) + '</article>';
+    }
+    document.getElementById('list-consult').innerHTML =
+      (booked.length ? '<div class="group-label">Booked · ' + booked.length + '</div>' + booked.map(consultRow).join('') : '') +
+      (tobook.length ? '<div class="group-label">Still to book · ' + tobook.length + '</div>' + tobook.map(consultRow).join('') : '') ||
+      '<div class="empty">No consults waiting.</div>';
+    document.getElementById('c-consult').textContent = cl.length;
   }
 
   function wireSeg(attr, key) {
@@ -294,15 +472,19 @@ button { font: inherit; color: inherit; }
   }
   wireSeg('gym', 'gym');
   wireSeg('period', 'period');
+  document.getElementById('compare').addEventListener('change', function (e) { state.compare = e.target.checked; render(); });
 
   var toast = document.getElementById('toast'), tt;
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-act]');
     if (!b) return;
-    toast.textContent = 'Sample data: in the live board this opens ' + LABEL[b.dataset.act].toLowerCase() + ' with the right message ready.';
+    toast.textContent = 'Sample data. In the live board this opens ' + LABEL[b.dataset.act] + ' for ' + b.dataset.name + ' with the right message ready.';
     toast.classList.add('show');
-    clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+    clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 2800);
   });
+  // Restyle sparklines if the theme changes.
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   render();
 })();
