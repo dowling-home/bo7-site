@@ -277,6 +277,7 @@ textarea.input { resize: vertical; min-height: 72px; }
 .add-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); }
 .field > span i { font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; }
 .field .err { font-size: var(--fs-xs); font-style: normal; color: var(--status-negative); }
+.field .fnote { font-size: var(--fs-xs); font-style: normal; color: var(--text-tertiary); }
 .field .seg { flex-wrap: wrap; align-self: flex-start; }
 .field select.input { appearance: auto; }
 .field[hidden], #add-dupe:empty { display: none; }
@@ -626,6 +627,12 @@ textarea.input { resize: vertical; min-height: 72px; }
   <div class="add-body">
     <div class="field"><span>Logged by</span><div class="seg" role="group" aria-label="Logged by" id="add-by"></div><em class="err" id="add-by-err" hidden>Pick who took this lead.</em></div>
     <div class="field"><span>How they got in touch</span><div class="seg" role="group" aria-label="How they got in touch" id="add-how"></div></div>
+    <label class="field" id="add-ref-wrap" hidden><span>Referred by</span>
+      <input class="input" id="add-ref" list="add-ref-list" autocomplete="off" placeholder="Start typing the member's name">
+      <datalist id="add-ref-list"></datalist>
+      <em class="err" id="add-ref-err" hidden>Pick the member from the list.</em>
+      <em class="fnote">In the live version you can also search by the number they messaged from.</em>
+    </label>
     <label class="field" id="add-match-wrap" hidden><span>Their opening message matched <i>(optional)</i></span>
       <select class="input" id="add-match"></select>
     </label>
@@ -1039,8 +1046,8 @@ textarea.input { resize: vertical; min-height: 72px; }
   // ---------- Add a lead: walk-ins, calls, WhatsApps and emails ----------
   var adlg = document.getElementById('add-dlg'), GYM_KEY = 'bo7-dash-add-gym', BY_KEY = 'bo7-dash-add-by', nextId = 0;
   var STAFF = ['Ryan', 'Coach B', 'Coach C'];
-  var HOW = [['walk-in', 'Walked in'], ['phone', 'Phoned'], ['whatsapp', 'WhatsApp'], ['email', 'Email'], ['other', 'Other']];
-  var HOW_PREF = { 'walk-in': 'whatsapp', phone: 'phone', whatsapp: 'whatsapp', email: 'email', other: 'whatsapp' };
+  var HOW = [['walk-in', 'Walked in'], ['phone', 'Phoned'], ['whatsapp', 'WhatsApp'], ['email', 'Email'], ['referral', 'Referral'], ['other', 'Other']];
+  var HOW_PREF = { 'walk-in': 'whatsapp', phone: 'phone', whatsapp: 'whatsapp', email: 'email', referral: 'whatsapp', other: 'whatsapp' };
   var MATCH = ['meta-ads', 'google-ads', 'google-profile', 'instagram', 'killiney-window', 'blackrock-window', 'stand', 'referral', 'corporate'];
   var add = {};
   function lastBy() { try { return localStorage.getItem(BY_KEY) || null; } catch (e) { return null; } }
@@ -1051,6 +1058,12 @@ textarea.input { resize: vertical; min-height: 72px; }
     document.getElementById('add-gym').innerHTML = segHtml([['Killiney', 'Killiney'], ['Blackrock', 'Blackrock']], add.gym, 'agym');
     document.getElementById('add-pref').innerHTML = segHtml([['whatsapp', 'WhatsApp'], ['phone', 'Call'], ['email', 'Email']], add.pref, 'apref');
     document.getElementById('add-match-wrap').hidden = add.how !== 'whatsapp';
+    document.getElementById('add-ref-wrap').hidden = add.how !== 'referral';
+  }
+  function members() {
+    var seen = {}, out = [];
+    REFERRERS.concat(SLOWING, RISK).forEach(function (m) { if (!seen[m.name]) { seen[m.name] = 1; out.push({ name: m.name, gym: m.gym, coach: m.coach }); } });
+    return out.sort(function (a, b) { return a.name < b.name ? -1 : 1; });
   }
   function findSame(name) {
     var n = name.trim().toLowerCase(); if (n.length < 3) return null;
@@ -1073,6 +1086,8 @@ textarea.input { resize: vertical; min-height: 72px; }
     document.getElementById('add-consent').checked = false;
     document.getElementById('add-match').innerHTML = '<option value="">No, a direct message</option>' + MATCH.map(function (k) { return '<option value="' + k + '">' + esc(SOURCES[k]) + '</option>'; }).join('');
     document.getElementById('add-dupe').innerHTML = '';
+    document.getElementById('add-ref').value = ''; document.getElementById('add-ref').removeAttribute('aria-invalid'); document.getElementById('add-ref-err').hidden = true;
+    document.getElementById('add-ref-list').innerHTML = members().map(function (m) { return '<option value="' + esc(m.name) + '">' + esc(m.gym) + '</option>'; }).join('');
     drawAdd();
     adlg.showModal();
     document.getElementById('add-name').focus();
@@ -1088,6 +1103,10 @@ textarea.input { resize: vertical; min-height: 72px; }
     else if ((b = e.target.closest('[data-aopen]'))) { adlg.close(); openLead(b.dataset.aopen); }
   });
   document.getElementById('add-name').addEventListener('input', drawDupe);
+  document.getElementById('add-ref').addEventListener('change', function (e) {
+    var m = members().filter(function (x) { return x.name.toLowerCase() === e.target.value.trim().toLowerCase(); })[0];
+    if (m) { add.gym = m.gym; document.getElementById('add-ref-err').hidden = true; e.target.removeAttribute('aria-invalid'); drawAdd(); }
+  });
   document.getElementById('add-close').addEventListener('click', function () { adlg.close(); });
   document.getElementById('add-cancel').addEventListener('click', function () { adlg.close(); });
   document.getElementById('add-form').addEventListener('submit', function (e) {
@@ -1098,14 +1117,25 @@ textarea.input { resize: vertical; min-height: 72px; }
       if (bad) { x[0].setAttribute('aria-invalid', 'true'); if (ok) x[0].focus(); ok = false; } else x[0].removeAttribute('aria-invalid');
     });
     if (!add.by) { document.getElementById('add-by-err').hidden = false; if (ok) document.getElementById('add-by').scrollIntoView({ block: 'nearest' }); ok = false; }
+    var refEl = document.getElementById('add-ref'), referrer = null;
+    if (add.how === 'referral') {
+      referrer = members().filter(function (m) { return m.name.toLowerCase() === refEl.value.trim().toLowerCase(); })[0] || null;
+      document.getElementById('add-ref-err').hidden = !!referrer;
+      if (!referrer) { refEl.setAttribute('aria-invalid', 'true'); if (ok) refEl.focus(); ok = false; } else refEl.removeAttribute('aria-invalid');
+    }
     if (!ok) return;
     var match = document.getElementById('add-match').value;
     var source = add.how === 'whatsapp' && match ? match : add.how;
     var interested = document.getElementById('add-int').value.trim();
     var consent = document.getElementById('add-consent').checked;
-    var p = { id: 'A' + (nextId++), name: name.value.trim(), source: source, gym: add.gym, prefers: add.pref, hours: 0, note: interested, consent: consent, loggedBy: add.by, notes: [] };
-    p.notes.push({ by: add.by, at: 'Just now', text: 'Logged by ' + add.by + ': ' + HOW.filter(function (h) { return h[0] === add.how; })[0][1].toLowerCase() + (source !== add.how ? ', from ' + SOURCES[source] : '') + '. ' + (consent ? 'Happy to be contacted (9 Oct 2026).' : 'Did not agree to be contacted yet.') + (interested ? ' Interested in: ' + interested : '') });
+    var p = { id: 'A' + (nextId++), name: name.value.trim(), source: source, gym: add.gym, prefers: add.pref, hours: 0, note: referrer ? 'Referred by a member (' + referrer.name + ')' + (interested ? '. ' + interested : '') : interested, consent: consent, loggedBy: add.by, referredBy: referrer && referrer.name, notes: [] };
+    p.notes.push({ by: add.by, at: 'Just now', text: 'Logged by ' + add.by + ': ' + HOW.filter(function (h) { return h[0] === add.how; })[0][1].toLowerCase() + (source !== add.how ? ', from ' + SOURCES[source] : '') + (referrer ? ', referred by ' + referrer.name : '') + '. ' + (consent ? 'Happy to be contacted (9 Oct 2026).' : 'Did not agree to be contacted yet.') + (interested ? ' Interested in: ' + interested : '') });
     NEW.push(p);
+    if (referrer) {
+      var r = REFERRERS.filter(function (m) { return m.name === referrer.name; })[0];
+      if (!r) { r = { id: 'R' + REFERRERS.length, name: referrer.name, gym: referrer.gym, coach: referrer.coach, since: 'Member', friends: [] }; REFERRERS.push(r); }
+      r.friends.push({ name: p.name, status: 'new', when: 'Today' });
+    }
     var row = COUNTS.filter(function (r) { return r[0] === source && r[1] === add.gym; })[0];
     if (row) row[2]++; else COUNTS.push([source, add.gym, 1, 0, 0, 0]);
     try { localStorage.setItem(GYM_KEY, add.gym); localStorage.setItem(BY_KEY, add.by); } catch (err) {}
