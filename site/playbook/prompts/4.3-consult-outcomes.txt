@@ -1,0 +1,11 @@
+Run this in Claude Code with the Google Drive connector and Claude in Chrome connected.
+
+Add consult outcomes to the "Bo7 leads" Google Sheet (its README.md is in this project), so we can see show rate, join rate and why people don't join.
+
+Rules: I sign in to Google myself; never type a password. Show me each change before you save it.
+
+1. Add a column "Reason not joined" after "Joined", as a dropdown: Price, Timing or schedule, Location, Not ready yet, Chose somewhere else, Wanted one-to-one, Other. Add a column "Follow up on" (a date) after it.
+2. On the Summary tab, add for each month and each gym: consults booked, showed up (and show rate), joined (and join rate as a share of those who showed), and a count of each "Reason not joined".
+3. Update README.md in this project with the new columns.
+
+Don't change or delete any existing data.

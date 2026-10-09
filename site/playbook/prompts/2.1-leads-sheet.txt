@@ -1,0 +1,35 @@
+Run this in Claude Code with Claude in Chrome connected.
+
+Build Bo7's central lead list: one Google Sheet where every enquiry lands, from every source, so we can see where leads come from and what happens to them. Bo7 is a semi-private personal training gym with two locations in south Dublin, Killiney and Blackrock.
+
+Rules: I sign in to Google myself; never type a password. Show me the sheet before you share it with anyone.
+
+First, check that the Google Drive connector is connected to the Bo7 Google account. If it isn't, stop and tell me how to connect it. Use the connector wherever it can do the job, and my Chrome browser for anything it can't (dropdowns, protected header, colours).
+
+In my Chrome, in the Bo7 Google Drive, create a Google Sheet called "Bo7 leads" with three tabs:
+
+1. Leads. One row per enquiry. Columns:
+   Date and time | Name | Phone | Email | Gym | Source | Source detail | Interested in | Logged by | Consent to contact | First reply (date and time) | Consult booked (date) | Showed up | Joined | Status | Notes
+   - Gym: dropdown, Killiney or Blackrock.
+   - Source: dropdown, using the list on the Sources tab.
+   - Source detail: free text, for example which company, who referred them, which ad.
+   - Consent to contact, Showed up, Joined: dropdown, Yes or No.
+   - Status: dropdown: New, Contacted, Consult booked, Joined, Not now, Lost.
+   - Freeze the header row and protect it so nobody renames the columns by accident.
+   - Colour each row by Status so new leads stand out.
+
+2. Sources. The list the Source dropdown uses, one per row, with a one-line description:
+   walk-in, phone, whatsapp, website-form, killiney-window, blackrock-window, stand, referral, corporate, instagram, meta-ads, google-ads, google-profile-killiney, google-profile-blackrock, other.
+   Adding a row here adds it to the dropdown.
+
+3. Summary. Built from formulas, so it updates itself:
+   - Leads per source per month (sources down, months across), for the last 6 months.
+   - For each source: leads, consults booked, showed up, joined, and joined as a share of leads.
+   - Leads still on "New" for more than 24 hours, with their name and source.
+
+Then:
+- Add two example rows marked EXAMPLE so I can see how it works, and tell me to delete them before we go live.
+- Tell me who should get edit access (Ryan, the coaches) and share it only when I say so.
+- Save a short README.md in this project describing the sheet, its columns and the source list, so other prompts can follow it.
+
+Don't invent any leads, names or numbers.

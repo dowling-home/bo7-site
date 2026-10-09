@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/favicon.ico">
+<title>Bo7 Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: one reading column of numbered steps, each collapsible; detail (questions, prompts) folds inside.
+   Single black look in every theme, like the gym's own black-and-gold. */
+:root {
+  --bg: #0A0A09;
+  --surface: #151411;
+  --sunk: #1E1C18;
+  --fg: #F1ECE1;
+  --muted: #A39C8E;
+  --line: #2E2B25;
+  --gold: #D4A72C;
+  --gold-text: #DDB958;
+  --code-bg: #000000;
+  --code-fg: #EDE6D6;
+  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9.5l6 6 6-6' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 17px/1.6 var(--body);
+  padding-inline: 20px; padding-block: 0 80px;
+}
+.wrap { max-width: 860px; margin: 0 auto; }
+
+/* Header */
+.top { padding-block: 56px 32px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-text); margin: 0; }
+h1 { font: 400 clamp(40px, 6vw, 64px)/1.04 var(--display); margin: 0; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--muted); max-width: 40em; margin: 0; }
+.tools { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.btn {
+  font: 600 14px/1 var(--body); color: var(--fg); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; cursor: pointer;
+}
+.btn:hover { border-color: var(--gold); }
+.btn:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+main { min-width: 0; display: grid; gap: 20px; padding-top: 40px; }
+
+/* Chapters */
+details.step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+details.step > summary {
+  list-style: none; cursor: pointer; padding: 22px 26px;
+  display: grid; grid-template-columns: auto 1fr auto auto; gap: 18px; align-items: center;
+}
+details.step > summary::-webkit-details-marker { display: none; }
+.step-n { font: 400 40px/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; min-width: 1.2em; }
+.step-title { display: grid; gap: 2px; min-width: 0; }
+.step-title h2 { font: 400 28px/1.15 var(--display); margin: 0; text-wrap: balance; }
+.step-title span { color: var(--muted); font-size: 15px; }
+.chev {
+  width: 22px; height: 22px; flex: none; justify-self: end; background: var(--muted);
+  -webkit-mask: var(--chev) center / contain no-repeat; mask: var(--chev) center / contain no-repeat;
+  transition: transform .25s cubic-bezier(.16,1,.3,1), background-color .15s;
+}
+summary:hover > .chev { background: var(--gold); }
+details[open] > summary > .chev { transform: rotate(180deg); }
+details.task .chev, details.prompt .chev { width: 18px; height: 18px; }
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+.pill { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+.step-body { padding: 0 26px 28px; display: grid; gap: 18px; max-width: 760px; }
+.step-body > * { margin: 0; }
+.step-body h3 { font: 700 13px/1.3 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-text); margin-top: 14px; }
+.step-body p, .step-body li { max-width: 65ch; }
+.step-body ul, .step-body ol { padding-left: 1.3em; display: grid; gap: 6px; }
+.done { border-top: 1px solid var(--line); padding-top: 16px; }
+.soon-body { color: var(--muted); }
+
+/* Rules */
+.rules { counter-reset: r; list-style: none; padding: 0 !important; }
+.rules li { counter-increment: r; display: grid; grid-template-columns: 34px 1fr; gap: 10px; }
+.rules li::before { content: counter(r); font: 400 26px/1 var(--display); color: var(--gold); }
+
+/* Tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; vertical-align: top; border-top: 1px solid var(--line); }
+th { background: var(--sunk); font-weight: 700; border-top: 0; }
+
+/* Tasks: a numbered list of collapsible tasks inside a step. Ticking one collapses it. */
+.progress { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.progress b { color: var(--gold-text); }
+.tasks { display: grid; gap: 10px; }
+details.task { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.task > summary {
+  cursor: pointer; list-style: none; padding: 14px 16px;
+  display: grid; grid-template-columns: 30px 1fr auto auto; gap: 12px; align-items: center;
+}
+details.task > summary::-webkit-details-marker { display: none; }
+.t-n { font-weight: 700; color: var(--gold-text); font-variant-numeric: tabular-nums; }
+.t-title { display: grid; gap: 1px; min-width: 0; }
+.t-title b { font-weight: 600; }
+.t-title span { color: var(--muted); font-size: 14px; }
+.tick {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font: 600 13px/1 var(--body); color: var(--muted); background: transparent;
+  border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px 7px 8px; white-space: nowrap;
+}
+.tick::before {
+  content: ""; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--muted); flex: none;
+}
+.tick:hover { border-color: var(--gold); color: var(--fg); }
+.tick:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.is-done .tick { color: var(--gold-text); border-color: var(--gold); }
+.is-done .tick::before {
+  background: var(--gold); border-color: var(--gold);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%230A0A09' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.is-done .t-title b { color: var(--muted); text-decoration: line-through; }
+.is-done .t-n { color: var(--muted); }
+.task-body { padding: 0 16px 18px 58px; display: grid; gap: 14px; }
+.task-body > * { margin: 0; }
+.task-foot { display: flex; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 14px; }
+@media (max-width: 560px) {
+  details.task > summary { grid-template-columns: 24px 1fr auto; }
+  details.task > summary .tick { grid-column: 2; grid-row: 2; justify-self: start; }
+  details.task > summary > .chev { grid-column: 3; grid-row: 1; }
+  .task-body { padding-left: 16px; }
+  .tick-label { display: none; }
+}
+
+/* Questionnaire */
+.qs { list-style: none; padding: 0 !important; counter-reset: q; gap: 14px !important; }
+.qs li { counter-increment: q; display: grid; grid-template-columns: 30px 1fr; gap: 4px 8px; }
+.qs li::before { content: counter(q); grid-row: span 2; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--gold-text); }
+.qs .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.qs .opts span { font-size: 13px; background: var(--sunk); border-radius: 6px; padding: 3px 8px; }
+.qs .tag { color: var(--muted); font-size: 14px; }
+
+blockquote { margin: 0; padding: 14px 18px; border-left: 3px solid var(--gold); background: var(--sunk); border-radius: 0 8px 8px 0; }
+
+/* Prompts */
+details.prompt { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.prompt > summary { cursor: pointer; list-style: none; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 12px; align-items: baseline; }
+details.prompt > summary > .chev { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+details.prompt > summary::-webkit-details-marker { display: none; }
+.p-id { font: 700 13px/1 var(--mono); color: var(--gold-text); }
+.p-name { font-weight: 600; }
+.p-use { grid-column: 2; color: var(--muted); font-size: 14px; }
+.p-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 0 16px 12px; }
+.p-bar .file { font: 13px var(--mono); color: var(--muted); }
+.p-bar a { color: var(--gold-text); font-size: 14px; }
+pre {
+  margin: 0 16px 16px; padding: 16px; background: var(--code-bg); color: var(--code-fg);
+  border-radius: 8px; font: 13.5px/1.55 var(--mono); white-space: pre-wrap; overflow-x: auto; max-height: 460px; overflow-y: auto;
+}
+.status { font-size: 13px; color: var(--muted); }
+a { color: var(--gold-text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Bo7 · Killiney and Blackrock</p>
+    <h1>The Bo7 Playbook</h1>
+    <p class="lead">Practical steps for growing Bo7, each with the Claude prompts that do the legwork. Open a step to see what to do; open a prompt to copy it.</p>
+    <div class="tools">
+      <button class="btn" id="expand-all" type="button">Expand all</button>
+      <button class="btn" id="collapse-all" type="button">Collapse all</button>
+    </div>
+  </header>
+
+    <main>
+      <!-- How to use -->
+      <details class="step" id="how">
+        <summary>
+          <span class="step-n">·</span>
+          <span class="step-title"><h2>How to use this playbook</h2><span>Two rules, and one setup step</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>Each step has what to do, who does it, and the prompts to paste into Claude.</p>
+          <ol class="rules">
+            <li><span><b>Every prompt starts from the Bo7 brand position.</b> Paste it in, or keep it in a Claude Project, so every output sounds like Bo7 and not a generic gym.</span></li>
+            <li><span><b>A person approves anything before it is sent.</b> Claude drafts; Ryan and the coaches decide and send.</span></li>
+          </ol>
+          <p><b>Setup:</b> the prompts are written for Claude Code in the Claude desktop app, with the Claude in Chrome extension connected. That lets Claude work in your own browser: clicking through settings pages like DNS, Google profiles, Google Forms and ad accounts while you watch.</p>
+          <ul>
+            <li>Connect Google Drive to Claude with the Bo7 Google account (Settings, Connectors). Claude can then read and update the leads sheet, survey results and other Bo7 files directly.</li>
+            <li>You sign in to every site yourself. Claude never types a password.</li>
+            <li>Claude shows you what it is about to change and waits for your OK before it saves, sends or deletes anything.</li>
+            <li>Keep everything in one Bo7 folder that Claude Code works in (the bo7-site project is a good home): the brand position, the scorecard and any exports. Then a prompt can say "using the project files" instead of pasting everything in.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Step 1 -->
+      <details class="step" id="step-1">
+        <summary>
+          <span class="step-n">01</span>
+          <span class="step-title"><h2>Position</h2><span>Ask members why they chose Bo7, then write the brand position</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>Ask members why they chose Bo7, in their own words, and build the brand position from what they say, plus your Google reviews and the owners' own view. The result is one page that every later step works from. Allow two weeks.</p>
+          <p class="progress" data-progress="step-1"></p>
+
+          <div class="tasks">
+            <!-- 1.1 -->
+            <details class="task" id="t1-1">
+              <summary>
+                <span class="t-n">1</span>
+                <span class="t-title"><b>Check the survey questions</b><span>13 questions, about 4 minutes</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Read the questions and change anything that doesn't sound like Bo7. Every question is multiple choice with an "Other" box, except question 12, which stays open because members' exact words are the point of it. Anonymous unless they opt in at the end.</p>
+                <ol class="qs">
+                  <li><span>Which gym do you train at?</span><span class="opts"><span>Killiney</span><span>Blackrock</span><span>Both</span></span></li>
+                  <li><span>How long have you been a member?</span><span class="opts"><span>Under 3 months</span><span>3 to 12 months</span><span>1 to 2 years</span><span>Over 2 years</span></span></li>
+                  <li><span>Your gender <span class="tag">optional</span></span><span class="opts"><span>Woman</span><span>Man</span><span>Non-binary</span><span>Prefer not to say</span><span>Other</span></span></li>
+                  <li><span>Your age range <span class="tag">optional</span></span><span class="opts"><span>Under 25</span><span>25 to 34</span><span>35 to 44</span><span>45 to 54</span><span>55 to 64</span><span>65 or over</span></span></li>
+                  <li><span>Before Bo7, what were you doing for exercise? <span class="tag">pick up to 3</span></span><span class="opts"><span>Gym membership</span><span>Classes (spin, HIIT, CrossFit)</span><span>One-to-one PT</span><span>Pilates or yoga</span><span>Sport or running</span><span>Home workouts or an app</span><span>Nothing regular</span><span>Other</span></span></li>
+                  <li><span>What made you start looking for something new? <span class="tag">pick up to 3</span></span><span class="opts"><span>Wanted to get stronger</span><span>Wanted to lose weight</span><span>Injury, pain or stiffness</span><span>Advice from a doctor or physio</span><span>Getting older and want to stay strong</span><span>Lost motivation training on my own</span><span>Life change (new baby, new job, retirement, moved)</span><span>Other</span></span></li>
+                  <li><span>How did you first hear about Bo7?</span><span class="opts"><span>Friend or family</span><span>Instagram</span><span>Google search</span><span>Walked or drove past</span><span>Through work</span><span>Other</span></span></li>
+                  <li><span>What else did you consider before choosing Bo7? <span class="tag">pick up to 3</span></span><span class="opts"><span>Another gym</span><span>Classes</span><span>One-to-one PT</span><span>Pilates or yoga</span><span>Home workouts or an app</span><span>Nothing else</span><span>Other</span></span></li>
+                  <li><span>Why did you pick Bo7 in the end? <span class="tag">pick up to 3</span></span><span class="opts"><span>Small groups</span><span>The coaching and attention</span><span>A programme built around me</span><span>Close to home or work</span><span>The people and community</span><span>Someone recommended it</span><span>Price</span><span>The free consultation</span><span>Other</span></span></li>
+                  <li><span>Was there anything that nearly stopped you joining?</span><span class="opts"><span>Price</span><span>Nervous about my fitness level</span><span>Finding the time</span><span>Not sure it was for me</span><span>Location or opening hours</span><span>Nothing</span><span>Other</span></span></li>
+                  <li><span>What has changed for you since you started? <span class="tag">pick up to 3</span></span><span class="opts"><span>Stronger</span><span>Fitter</span><span>Weight</span><span>Less pain</span><span>Moving better</span><span>More confident</span><span>More energy or better sleep</span><span>Better mood</span><span>Made friends</span><span>Other</span></span></li>
+                  <li><span>How would you describe Bo7 to a friend, in one sentence?</span><span class="tag">Open text</span></li>
+                  <li><span>How likely are you to recommend Bo7 to a friend?</span><span class="tag">0 to 10 scale</span></li>
+                </ol>
+                <p>Then two opt-ins: "Happy for us to quote your answer with your first name?" and "Would you be up for telling your story on video?", each with a box for a name or phone number.</p>
+                <p>Gender and age together find the groups worth talking to directly, such as women in their 40s and 50s, which is where perimenopause usually sits. Don't ask about menopause or other health conditions: that's health data, which needs extra care under GDPR.</p>
+                <p>If you change a question, change it in prompt 1.2 too (next task), so the form matches.</p>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+
+            <!-- 1.2 -->
+            <details class="task" id="t1-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Build the form</b><span>Google Forms, about 10 minutes, with prompt 1.2</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Claude writes a short Google Apps Script that builds the whole form in one go, with every option, "Other" box and "pick up to 3" limit set, then runs it in your browser. Google Forms is free with no response limit; Typeform's free plan stops at 10 responses a month.</p>
+                <ol>
+                  <li>Sign in to the Bo7 Google account (not a personal one), so the form and results belong to the business.</li>
+                  <li>Paste prompt 1.2 below into Claude Code. It writes the script, opens script.google.com in your Chrome, pastes it in and runs it.</li>
+                  <li>Google asks you for permission to create a form and a spreadsheet. Approve that screen yourself. It shows an "unverified app" warning because the script is your own: Advanced, then Go to project.</li>
+                  <li>Claude reports the form link and the results sheet link. Check the form on your phone.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/1.2-build-form.txt">
+                  <summary><span class="p-id">1.2</span><span class="p-name">Build the form</span><span class="p-use">Returns a Google Apps Script that creates the survey and its results sheet</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/1.2-build-form.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/1.2-build-form.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <p>Answers land in a Google Sheet called "Bo7 member survey: responses" in the Bo7 Drive. That sheet is the only copy; Ryan owns it.</p>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+
+            <!-- 1.3 -->
+            <details class="task" id="t1-3">
+              <summary>
+                <span class="t-n">3</span>
+                <span class="t-title"><b>Send it to members</b><span>WhatsApp group, open for seven days</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Ryan posts the link in the community WhatsApp group with the message below.</li>
+                  <li>Coaches mention it at the end of sessions that week.</li>
+                  <li>Ryan posts a reminder in the group after three days.</li>
+                  <li>After seven days, close the form: Responses tab, turn off "Accepting responses".</li>
+                </ol>
+                <p>A draft message for Ryan (edit to his voice):</p>
+                <blockquote>Quick favour. We're working on how we tell people about Bo7, and nobody explains it better than you. Four minutes, mostly tick boxes, anonymous unless you say otherwise: [link]. Thanks a million. Ryan</blockquote>
+                <p>Whether to add a thank-you (a prize draw, a free PT session) is your call.</p>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+
+            <!-- 1.4 -->
+            <details class="task" id="t1-4">
+              <summary>
+                <span class="t-n">4</span>
+                <span class="t-title"><b>Mine the Google reviews</b><span>Both gyms, with prompt 1.4</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Do this while the survey is open. Reviews are unprompted praise in members' own words, already public.</p>
+                <ol>
+                  <li>Copy every Google review for Killiney and Blackrock into one document.</li>
+                  <li>Paste prompt 1.4 into Claude, then the reviews underneath it.</li>
+                  <li>Keep that conversation open: tasks 5 and 6 continue in it.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/1.4-mine-reviews.txt">
+                  <summary><span class="p-id">1.4</span><span class="p-name">Mine the Google reviews</span><span class="p-use">Paste all reviews for both gyms after the prompt</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/1.4-mine-reviews.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/1.4-mine-reviews.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+
+            <!-- 1.5 -->
+            <details class="task" id="t1-5">
+              <summary>
+                <span class="t-n">5</span>
+                <span class="t-title"><b>Analyse the survey</b><span>Once the form closes, with prompt 1.5</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Open the results sheet: File, Download, CSV.</li>
+                  <li>In the same Claude conversation as task 4, paste prompt 1.5 and attach the CSV.</li>
+                  <li>Delete the downloaded CSV afterwards. The sheet stays the only copy.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/1.5-analyse-survey.txt">
+                  <summary><span class="p-id">1.5</span><span class="p-name">Analyse the survey</span><span class="p-use">Attach the CSV export of the results sheet</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/1.5-analyse-survey.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/1.5-analyse-survey.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <p>Names and phone numbers only exist for people who opted in. Once the stories are booked, delete those columns from the sheet.</p>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+
+            <!-- 1.6 -->
+            <details class="task" id="t1-6">
+              <summary>
+                <span class="t-n">6</span>
+                <span class="t-title"><b>Write and agree the brand position</b><span>With prompt 1.6 and the owners' notes</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Write up Ryan and the team's answers from Sunday: who you want more of, why people pick Bo7, who else they consider.</li>
+                  <li>In the same Claude conversation, paste prompt 1.6 with those notes underneath.</li>
+                  <li>Ryan and the team read the draft and correct it.</li>
+                  <li>Save the agreed page as brand-position.md in the Bo7 project folder. Every later step uses it.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/1.6-draft-brand-position.txt">
+                  <summary><span class="p-id">1.6</span><span class="p-name">Draft the brand position</span><span class="p-use">Same conversation as 1.4 and 1.5, plus the owners' notes</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/1.6-draft-brand-position.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/1.6-draft-brand-position.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+
+      <!-- Steps still to write -->
+      <details class="step" id="step-2">
+        <summary>
+          <span class="step-n">02</span>
+          <span class="step-title"><h2>Capture</h2><span>One lead list, the website on bo7.ie, WhatsApp and email, a reply within 24 hours</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>Before chasing new people, make sure every enquiry is caught and answered. One lead list, the website moved to bo7.ie, WhatsApp and email set up, and a reply from a real person within 24 hours. Then Step 3 brings people in.</p>
+          <p class="progress" data-progress="step-2"></p>
+
+          <div class="tasks">
+            <details class="task" id="t2-1">
+              <summary>
+                <span class="t-n">1</span>
+                <span class="t-title"><b>Build the Bo7 leads sheet</b><span>One list for every enquiry, with prompt 2.1</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Every later task writes into this sheet, so it comes first. One row per enquiry, whatever the source, followed through to joined or not. Its Summary tab shows leads, consults and joiners per source each month, which is what tells you where to spend.</p>
+                <ol>
+                  <li>Connect Google Drive to Claude, signed in with the Bo7 Google account (in Claude: Settings, Connectors, Google Drive). Claude can then find and read the sheet directly for reports and later prompts, without opening a browser each time.</li>
+                  <li>Paste prompt 2.1 into Claude Code. It builds the "Bo7 leads" sheet in the Bo7 Google Drive in your browser: a Leads tab with dropdowns, a Sources tab and a Summary tab that updates itself.</li>
+                  <li>Look through it with the two example rows, then delete them.</li>
+                  <li>Share it with Ryan and the coaches who answer enquiries (edit access). Nobody else.</li>
+                  <li>From today, every enquiry gets a row: WhatsApp messages, calls, walk-ins, and leads from the website form in Glofox. Step 3 adds the source tags that fill the Source column.</li>
+                  <li>Decide how long you keep leads who don't join: [__ months]. Personal details shouldn't sit there forever.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.1-leads-sheet.txt">
+                  <summary><span class="p-id">2.1</span><span class="p-name">Build the leads sheet</span><span class="p-use">Run in Claude Code with Chrome: Leads, Sources and Summary tabs</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.1-leads-sheet.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.1-leads-sheet.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Move bo7.ie to the new website</b><span>Off Squarespace onto a site you own, plus a staff-only team area</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>The new site replaces the Squarespace one. It is plain files in a GitHub project, hosted free on GitHub Pages, and edited by asking Claude in plain English. No template, no monthly website fee, and every ad, QR code and Google profile can point at pages built for them.</p>
+                <h3>Accounts (Bo7 owns all of them)</h3>
+                <ol>
+                  <li>Ryan creates a GitHub account for Bo7 with a Bo7 email address he controls, and turns on two-factor sign-in. Claude doesn't create accounts or handle passwords, so this one is by hand.</li>
+                  <li>A Claude plan that includes Claude Code, on the same Bo7 email. Install the Claude desktop app and the Claude in Chrome extension.</li>
+                  <li>A free Cloudflare account on the same Bo7 email. Ryan creates this one too. bo7.ie's settings (DNS) move there, which is what makes the staff-only login possible.</li>
+                  <li>Eoin transfers the bo7-site project from his GitHub to Bo7's and Ryan accepts it. Do this when you are ready to switch: the preview address, bo7.thedowlings.co, stops working once it moves.</li>
+                </ol>
+                <h3>Get the site ready</h3>
+                <ol>
+                  <li>Open the bo7-site project in Claude Code and run prompt 2.2a. It creates a Killiney page and a Blackrock page (copies of the homepage for now, ready to tailor later), adds tracking, sends the old Squarespace addresses to the right new pages, and lists what still blocks launch.</li>
+                  <li>Decide the open items it reports: prices, Blackrock photos, a cookie banner (the maps, YouTube and tracking set cookies), and what replaces the Squarespace shop and gift vouchers.</li>
+                  <li>Read the finished site on a phone and a laptop before going any further.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.2a-site-ready.txt">
+                  <summary><span class="p-id">2.2a</span><span class="p-name">Get the site ready for bo7.ie</span><span class="p-use">Run in Claude Code: tracking, old-address redirects, launch blockers</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2a-site-ready.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2a-site-ready.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>Point bo7.ie at it</h3>
+                <p>Claude Code does this in your browser with prompt 2.2b: it finds where bo7.ie is registered, records every DNS setting before touching it, moves the DNS to Cloudflare, points the website at GitHub, and tests the result. You sign in and approve each change.</p>
+                <p><b>Watch the email records.</b> If Bo7 uses @bo7.ie email, its records must stay exactly as they are, or email stops. The prompt tells Claude to leave them alone and to save a copy of every record first.</p>
+                <ol>
+                  <li>Paste prompt 2.2b into Claude Code. Fill in the Bo7 GitHub account name first.</li>
+                  <li>Sign in to Squarespace (or wherever bo7.ie is registered), Cloudflare and GitHub when Claude asks.</li>
+                  <li>Check each change Claude shows you before saying OK. Moving the DNS usually takes effect within a few hours, sometimes up to a day.</li>
+                  <li>Send a test email to an @bo7.ie address once it is live.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.2b-domain-switch.txt">
+                  <summary><span class="p-id">2.2b</span><span class="p-name">Point bo7.ie at the new site</span><span class="p-use">Run in Claude Code with Chrome: DNS switch, HTTPS and checks</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2b-domain-switch.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2b-domain-switch.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>Set up the team area: team.bo7.ie</h3>
+                <p>A staff-only part of the site for Bo7's own tools: the walk-in page (task 7), the leads board (Step 4) and, later, reporting dashboards. Cloudflare asks for a @bo7.ie email address and sends a login code to it; nobody else gets in.</p>
+                <ol>
+                  <li>Check that Ryan and every coach who will use the tools has a @bo7.ie email address they can read on their phone: [list]. If not, set them up first.</li>
+                  <li>Run prompt 2.2c in Claude Code. In your browser it creates a private bo7-team project, publishes it at team.bo7.ie, puts the Cloudflare login in front of it, and gives it secure access to the leads sheet. You sign in and approve each step.</li>
+                  <li>Test it in a private browser window: a @bo7.ie address gets in, anything else is refused.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.2c-team-area.txt">
+                  <summary><span class="p-id">2.2c</span><span class="p-name">Set up team.bo7.ie</span><span class="p-use">Run in Claude Code with Chrome: private project, Cloudflare login for @bo7.ie, access to the leads sheet</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.2c-team-area.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.2c-team-area.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>Then close Squarespace</h3>
+                <ol>
+                  <li>Keep Squarespace for two weeks after launch in case anything was missed.</li>
+                  <li>If bo7.ie is registered through Squarespace, keep the domain (it is billed separately) or move it to another registrar first. Cancel only the website plan.</li>
+                  <li>Export anything still needed from Squarespace first: shop orders, customer emails, form entries.</li>
+                </ol>
+                <h3>Changing the site from now on</h3>
+                <p>Open the project in Claude Code and ask in plain words. Claude reads the project notes, makes the change, shows phone and desktop screenshots, and publishes when you say so. For example:</p>
+                <blockquote>Add a pricing section under the locations: Killiney and Blackrock, [prices]. Same style as the rest of the page. Show me phone and desktop screenshots before you publish.</blockquote>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-3">
+              <summary>
+                <span class="t-n">3</span>
+                <span class="t-title"><b>Set up WhatsApp Business</b><span>Instant greeting, away message, quick replies, with prompt 2.3</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>WhatsApp is the first option everywhere: the website, the QR codes and the ads. Set it up so nobody who messages hears nothing.</p>
+                <ol>
+                  <li>Make sure 085 241 3999 runs the WhatsApp Business app, not ordinary WhatsApp. If it doesn't, switch it over (chats are kept).</li>
+                  <li>Connect WhatsApp Business to the Bo7 Facebook Page (in the app: Settings, Business tools, Facebook and Instagram). The Meta ads in Step 3 need this for their WhatsApp button.</li>
+                  <li>Run prompt 2.3. Claude writes the business profile, a greeting message, an away message, quick replies and a set of labels.</li>
+                  <li>Put them into the app: Settings, then Business tools. This part is by hand on the phone; the prompt gives step-by-step instructions.</li>
+                  <li>Use the labels on every chat (New lead, Replied, Consult booked, Joined, Not now, Member), so the phone and the leads sheet tell the same story.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.3-whatsapp-setup.txt">
+                  <summary><span class="p-id">2.3</span><span class="p-name">WhatsApp Business setup</span><span class="p-use">Profile, greeting, away message, quick replies and labels</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.3-whatsapp-setup.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.3-whatsapp-setup.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-4">
+              <summary>
+                <span class="t-n">4</span>
+                <span class="t-title"><b>One email address for enquiries</b><span>For people who would rather write</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Pick one address for enquiries, for example hello@bo7.ie: [address]. Use it on the website, Glofox, both Google profiles and Instagram.</li>
+                  <li>Make sure whoever answers enquiries sees it, on their phone as well as a laptop.</li>
+                  <li>Turn on an automatic reply that says a person will get back within 24 hours, with the WhatsApp number for anyone in a hurry.</li>
+                  <li>Every enquiry email gets a row in the leads sheet, like any other source.</li>
+                </ol>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-5">
+              <summary>
+                <span class="t-n">5</span>
+                <span class="t-title"><b>Write the reply scripts</b><span>First replies and follow-ups, with prompt 2.5</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>The greeting is automatic; the first proper reply always comes from a person. Scripts make it quick to send a good one, and they all lead to the same place: a free consultation.</p>
+                <ol>
+                  <li>Run prompt 2.5. Claude writes a first reply for each source, a day 2 and day 5 follow-up, a friendly "not now" close, and a consult confirmation.</li>
+                  <li>Edit them until they sound like Ryan and the coaches.</li>
+                  <li>Save the ones you use most as WhatsApp quick replies (task 3), and keep the full set in the project folder.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.5-reply-scripts.txt">
+                  <summary><span class="p-id">2.5</span><span class="p-name">Reply scripts</span><span class="p-use">First reply per source, follow-ups, not-now close, consult confirmation</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.5-reply-scripts.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.5-reply-scripts.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-6">
+              <summary>
+                <span class="t-n">6</span>
+                <span class="t-title"><b>Agree who answers, and when</b><span>Every lead answered by a person within 24 hours</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Decide who answers WhatsApp and the enquiry email on each day, weekends included: [rota].</li>
+                  <li>The promise: every enquiry gets a reply from a person within 24 hours. An automatic greeting doesn't count.</li>
+                  <li>Whoever replies fills in First reply, Status and Gym in the leads sheet straight away.</li>
+                  <li>If someone is off sick or on holiday, the cover person is named in advance, not on the day.</li>
+                </ol>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-7">
+              <summary>
+                <span class="t-n">7</span>
+                <span class="t-title"><b>Build the walk-in page</b><span>team.bo7.ie/walkin for coaches, with prompt 2.7</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Anyone who walks in or phones is a lead too. A page in the team area lets a coach log them in seconds, tagged walk-in or phone, straight into the leads sheet.</p>
+                <ol>
+                  <li>Paste prompt 2.7 into Claude Code. It builds team.bo7.ie/walkin, behind the Cloudflare login, where a coach enters anyone who walks in or phones. Submit saves them to the leads sheet tagged walk-in or phone, with the coach's name, so they are counted like every other source.</li>
+                  <li>Each coach opens team.bo7.ie/walkin on their phone once, logs in with their @bo7.ie email, and adds it to their home screen. Anyone who comes in asking about training gets logged there and then.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.7-walkin-page.txt">
+                  <summary><span class="p-id">2.7</span><span class="p-name">Build the walk-in page</span><span class="p-use">Run in Claude Code: team.bo7.ie/walkin, saving to the Bo7 leads sheet</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.7-walkin-page.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.7-walkin-page.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-8">
+              <summary>
+                <span class="t-n">8</span>
+                <span class="t-title"><b>Bring website form leads into the sheet</b><span>Glofox leads, with prompt 2.8</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>People who fill in the form on the website land in Glofox, not the leads sheet. Copy them across every day so they get the same 24-hour reply and show up in the numbers.</p>
+                <ol>
+                  <li>Run prompt 2.8 in Claude Code. It reads the Glofox leads list in your browser and adds any new ones to the sheet, tagged website-form. It changes nothing in Glofox.</li>
+                  <li>Run it every morning, before the team works the leads board. Claude Code can do this on a schedule; ask it to set one up.</li>
+                  <li>Fix the Blackrock form in Glofox: it has no consent boxes, so all web leads currently go through the Killiney branch and get sorted by hand.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.8-glofox-sync.txt">
+                  <summary><span class="p-id">2.8</span><span class="p-name">Copy Glofox leads to the sheet</span><span class="p-use">Run in Claude Code with Chrome and Drive: new website leads into the sheet</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.8-glofox-sync.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.8-glofox-sync.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>Later: pull leads through the Glofox API</h3>
+                <p>Reading the Glofox screens works without anyone's approval, so start there. Glofox also has an API (run by its parent company, ABC Fitness), but access has to be requested. If they grant it, Claude can write a small script that copies new leads into the sheet every morning, more reliably than reading screens.</p>
+                <ol>
+                  <li>Ryan asks his Glofox account rep for API access for Bo7, for both branches (Killiney and Blackrock). Glofox's API team can also be emailed directly; ask the rep which address to use.</li>
+                  <li>Ask these questions:
+                    <ul>
+                      <li>Can the API list leads created since a given date, for each branch?</li>
+                      <li>Does each lead include name, phone, email, branch, created date and the consent answers from the form?</li>
+                      <li>Can it send a notification (a webhook) when a new lead comes in, or only for members?</li>
+                      <li>Is there a cost, and does it need a particular Glofox plan?</li>
+                    </ul>
+                  </li>
+                  <li>If the answers are yes: keep the API key and token somewhere private (never in the website project, which is public), and ask Claude Code to replace the daily browser copy with a script that uses them. Same sheet, same columns, same 24-hour check.</li>
+                  <li>If they're no: carry on with prompt 2.8.</li>
+                </ol>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t2-9">
+              <summary>
+                <span class="t-n">9</span>
+                <span class="t-title"><b>Monday lead report</b><span>How each source performed last week, with prompt 2.9</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>The leads board (Step 4) is for working leads day to day. This is the weekly view: which sources brought leads, how fast they were answered, and which ones turned into consults and members.</p>
+                <ol>
+                  <li>Run prompt 2.9 in Claude Code every Monday. It reads the leads sheet and changes nothing.</li>
+                  <li>Ask Claude Code to run it on a schedule, first thing every Monday.</li>
+                  <li>Act on what it shows: a source that has gone quiet, slow replies, or rows missing their source.</li>
+                  <li>Bring the numbers to the monthly review.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/2.9-weekly-report.txt">
+                  <summary><span class="p-id">2.9</span><span class="p-name">Monday lead report</span><span class="p-use">Leads, replies, consults and joins by source, compared with the last 4 weeks</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/2.9-weekly-report.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/2.9-weekly-report.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+      <details class="step" id="step-3">
+        <summary>
+          <span class="step-n">03</span>
+          <span class="step-title"><h2>Reach</h2><span>Organic, referral, corporate and paid, every lead tagged</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>Get Bo7 in front of the right people, and tag every lead so you know which way in actually works. Tagging first, then the free ways in, and paid ads last.</p>
+          <p class="progress" data-progress="step-3"></p>
+
+          <div class="tasks">
+            <details class="task" id="t3-1">
+              <summary>
+                <span class="t-n">1</span>
+                <span class="t-title"><b>Tag every lead with its source</b><span>Links and QR codes, with prompt 3.1</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Each way in gets its own pre-typed WhatsApp message and its own website link, so you can count which one brings people in.</p>
+                <ol>
+                  <li>Paste prompt 3.1 into Claude Code with the bo7-site project open. It returns a table of opening messages, WhatsApp links and website links for every source, and builds the bo7.ie/go/ addresses for the QR codes.</li>
+                  <li>Tap each WhatsApp link on a phone to check it opens the Bo7 chat with the right message.</li>
+                  <li>Make a QR code for each printed source (each window, the stand, referral cards) from its bo7.ie/go/ address, not the WhatsApp link, so scans are counted and the destination can change without reprinting. In Chrome: open the address, click the share icon in the address bar, then Create QR code.</li>
+                  <li>Whoever answers WhatsApp logs the source from the opening message in the same Bo7 leads sheet.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.1-tagged-links.txt">
+                  <summary><span class="p-id">3.1</span><span class="p-name">Make the tagged links</span><span class="p-use">Every source with its message and links, plus the QR addresses on the site</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.1-tagged-links.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.1-tagged-links.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t3-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Get both Google profiles right</b><span>Killiney and Blackrock, with prompt 3.2</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>People searching nearby see the Google profile before the website. Both gyms have one; Killiney has 99 reviews, Blackrock 15.</p>
+                <ol>
+                  <li>Ryan confirms he owns and manages both listings at business.google.com.</li>
+                  <li>Check hours, category, phone number and photos for each. Blackrock needs its own photos; every current shot is Killiney.</li>
+                  <li>Set each profile's website link to its tagged link from prompt 3.1.</li>
+                  <li>Use prompt 3.2 for the descriptions, six weeks of posts and review replies. Claude Code can then put them into both profiles in your browser; you approve each save.</li>
+                  <li>Post once a week and reply to every new review.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.2-google-profiles.txt">
+                  <summary><span class="p-id">3.2</span><span class="p-name">Google profile copy</span><span class="p-use">Descriptions, six weekly posts and review replies for both gyms</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.2-google-profiles.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.2-google-profiles.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t3-3">
+              <summary>
+                <span class="t-n">3</span>
+                <span class="t-title"><b>Windows and the Village Centre stand</b><span>Walk-by traffic, with prompt 3.3</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Agree a spot and times for a stand with Blackrock Village Centre management.</li>
+                  <li>Use prompt 3.3 for the window graphics, banner, stand script and flyer.</li>
+                  <li>Print the QR codes from task 1 on the windows, banner and flyers: each with its own source.</li>
+                  <li>The QR codes run a test: half the scans go straight to WhatsApp, half go to the gym's page, where people can read more and then book. Leave it running for six weeks.</li>
+                  <li>Staff the stand at the Centre's busiest times: [days and hours].</li>
+                  <li>After each stand session, count the WhatsApp messages tagged "stand" that week.</li>
+                  <li>After six weeks, compare leads per scan for each half. Send every scan to the winner from then on (one line in the website, no reprinting). With only a handful of leads, keep it running longer before deciding.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.3-window-and-stand.txt">
+                  <summary><span class="p-id">3.3</span><span class="p-name">Window and stand copy</span><span class="p-use">Window graphics, banner, stand script and an A6 flyer</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.3-window-and-stand.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.3-window-and-stand.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t3-4">
+              <summary>
+                <span class="t-n">4</span>
+                <span class="t-title"><b>Launch a referral reward</b><span>Members bring friends, with prompt 3.4</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Ryan and the team decide the reward: one for the member who refers, one for the friend.</li>
+                  <li>Use prompt 3.4 for the WhatsApp announcement, referral card, coach script and thank-you message.</li>
+                  <li>Ryan posts it in the community WhatsApp group; coaches mention it after sessions.</li>
+                  <li>Every new enquiry gets asked "who sent you?", and the answer goes in the lead list.</li>
+                  <li>Thank the member as soon as their friend joins.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.4-referral.txt">
+                  <summary><span class="p-id">3.4</span><span class="p-name">Referral launch</span><span class="p-use">Announcement, card, coach script and thank-you message</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.4-referral.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.4-referral.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t3-5">
+              <summary>
+                <span class="t-n">5</span>
+                <span class="t-title"><b>Build corporate deals</b><span>Company group rates, with prompt 3.5</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Write down what exists today: which companies, the discount, how many members came through each.</li>
+                  <li>Use prompt 3.5 for the one-page offer, the emails and a message for a staff champion.</li>
+                  <li>Approach five local employers to start. Offer a free team taster session.</li>
+                  <li>Give each company its own tagged link, so you can count members per deal.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.5-corporate.txt">
+                  <summary><span class="p-id">3.5</span><span class="p-name">Corporate offer</span><span class="p-use">One-page offer, outreach emails and a champion message</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.5-corporate.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.5-corporate.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t3-6">
+              <summary>
+                <span class="t-n">6</span>
+                <span class="t-title"><b>Run Meta ads</b><span>Facebook and Instagram, with prompts 3.6a and 3.6b</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Start ads last. Before spending, Step 2 needs to be in place (every lead answered by a person within 24 hours), and the website needs its tracking tags.</p>
+                <h3>Connect Claude to Meta (about 5 minutes)</h3>
+                <ol>
+                  <li>In Claude: Settings, Connectors, add Meta Ads.</li>
+                  <li>Sign in with the Facebook profile that manages Bo7, and pick the Bo7 ad account when asked.</li>
+                </ol>
+                <h3>Check the Meta side is ready (an hour, or a few days if tangled)</h3>
+                <p>Small businesses often have the Page, Instagram or ad account hanging off someone's personal profile. Prompt 3.6a checks everything and lists what to fix, without changing anything.</p>
+                <ol>
+                  <li>Run prompt 3.6a in Claude Code.</li>
+                  <li>Fix what it reports, with Claude talking you through it in your browser. The usual ones: a Meta business account that Bo7 owns, holding the Facebook Page, Instagram (@bo7_gym) and the ad account; a payment method; WhatsApp Business connected to the Page (Step 2, task 3), so the "Send WhatsApp message" button works; and Meta's tracking on bo7.ie, added through Google Tag Manager.</li>
+                  <li>Run 3.6a again until everything says Ready.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.6a-meta-setup.txt">
+                  <summary><span class="p-id">3.6a</span><span class="p-name">Check the Meta setup</span><span class="p-use">Run in Claude Code: reports what is ready and what to fix, changes nothing</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.6a-meta-setup.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.6a-meta-setup.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>Build and run the ads</h3>
+                <ol>
+                  <li>Decide a test budget for four weeks: [€__ a week]. One campaign covers both gyms: they are a few miles apart, so one budget learns faster than two half-budgets. Split later only if one gym needs filling more than the other.</li>
+                  <li>Run prompt 3.6b. Claude writes ad text and video ideas from the survey and the brand position; you pick the ones you like.</li>
+                  <li>Claude builds the campaign in the Bo7 ad account through the connector: WhatsApp button, people living near either gym, your budget. Everything is created switched off. The person picks their gym in the WhatsApp chat; record it in the leads sheet.</li>
+                  <li>Review the campaign in Ads Manager and switch it on yourself. Claude never starts spending.</li>
+                  <li>After four weeks, compare cost per consultation booked against the other sources in the leads sheet.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.6b-meta-ads.txt">
+                  <summary><span class="p-id">3.6b</span><span class="p-name">Write and build the Meta ads</span><span class="p-use">Ad text, video ideas, then one campaign for both gyms, built switched off</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.6b-meta-ads.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.6b-meta-ads.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t3-7">
+              <summary>
+                <span class="t-n">7</span>
+                <span class="t-title"><b>Run Google ads</b><span>One search campaign for both gyms, with prompts 3.7a and 3.7b</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Same rule as task 6: only once leads are answered within 24 hours and the site is tracking visits.</p>
+                <p>Google has no official Claude connector for Google Ads, so Claude works in your browser at ads.google.com instead. Nothing to install beyond Claude in Chrome.</p>
+                <h3>Check the Google side is ready</h3>
+                <ol>
+                  <li>Run prompt 3.7a in Claude Code. It checks the account and lists what to fix, without changing anything.</li>
+                  <li>Fix what it reports, with Claude talking you through it in your browser. The usual ones: a Google Ads account owned by the Bo7 Google account; Expert mode rather than Smart mode (Google pushes new accounts into Smart mode, which hides the keywords); billing; both Google profiles linked; and conversion tracking for WhatsApp clicks and form bookings on bo7.ie.</li>
+                  <li>Run 3.7a again until everything says Ready.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.7a-google-setup.txt">
+                  <summary><span class="p-id">3.7a</span><span class="p-name">Check the Google Ads setup</span><span class="p-use">Run in Claude Code with Chrome: reports what is ready and what to fix, changes nothing</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.7a-google-setup.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.7a-google-setup.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <h3>Build and run the ads</h3>
+                <ol>
+                  <li>Decide a test budget for four weeks: [€__ a day]. Like Meta, one campaign covers both gyms.</li>
+                  <li>Run prompt 3.7b. Claude writes the plan first. Searches naming Blackrock go to the Blackrock page, searches naming Killiney or nearby go to the Killiney page, and general searches go to the homepage, where people pick their gym. You approve it.</li>
+                  <li>Claude builds the campaign in your browser, showing you each screen before it saves. It is created paused.</li>
+                  <li>Review it in Google Ads and switch it on yourself. Claude never starts spending.</li>
+                  <li>After four weeks, compare cost per consultation booked against Meta and the free sources in the leads sheet.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/3.7b-google-ads.txt">
+                  <summary><span class="p-id">3.7b</span><span class="p-name">Write and build the Google ads</span><span class="p-use">The plan, then one campaign for both gyms, built paused</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/3.7b-google-ads.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/3.7b-google-ads.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+      <details class="step" id="step-4">
+        <summary>
+          <span class="step-n">04</span>
+          <span class="step-title"><h2>Close</h2><span>Work the leads daily, get people to the consult, follow up, welcome</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>The consultation is already Bo7's strength. This step makes sure every lead reaches it and nothing is lost after it: a board the team works every morning, people turning up, outcomes recorded, the not-yets followed up, and new members welcomed.</p>
+          <p class="progress" data-progress="step-4"></p>
+
+          <div class="tasks">
+            <details class="task" id="t4-1">
+              <summary>
+                <span class="t-n">1</span>
+                <span class="t-title"><b>Build the leads board, and work it every morning</b><span>Every lead in play and a one-tap reply, with prompt 4.1</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>One page that shows every lead by stage, where they came from, how long they have waited, and buttons to WhatsApp, call or email them. Working through it every morning is how nobody slips through.</p>
+                <ol>
+                  <li>Run prompt 4.1. Claude builds the board at team.bo7.ie/leads, on top of the leads sheet. It sits behind the Cloudflare login, so only @bo7.ie email addresses get in, because it shows personal details.</li>
+                  <li>Each coach opens team.bo7.ie/leads once, logs in with their @bo7.ie email, and adds it to their phone's home screen.</li>
+                  <li>Every morning: start with anyone waiting over 24 hours, then follow-ups due today, then upcoming consults. The WhatsApp button opens the chat with the right script already typed.</li>
+                  <li>Update the card as you go (Contacted, Consult booked, Showed up, Joined, Not yet). It writes straight back to the sheet, so the numbers stay right without extra typing.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/4.1-leads-board.txt">
+                  <summary><span class="p-id">4.1</span><span class="p-name">Build the leads board</span><span class="p-use">Run in Claude Code: team.bo7.ie/leads, with WhatsApp, call and email buttons</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.1-leads-board.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.1-leads-board.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t4-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Get people to turn up</b><span>Confirmation and reminders, with prompt 4.2</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>A booked consult only counts if they show up. A confirmation and two short reminders, from a real person, make the difference.</p>
+                <ol>
+                  <li>Run prompt 4.2 for the booking confirmation (with Ryan's 44-second welcome video), a day-before reminder, a morning-of reminder, and messages for no-shows and cancellations.</li>
+                  <li>Decide where Ryan's video lives so it opens well on a phone. The prompt sets out the options.</li>
+                  <li>Send the confirmation as soon as a consult is booked, and the reminders on time. The leads board (task 1) shows consults in the next two days.</li>
+                  <li>Save the reminders as WhatsApp quick replies.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/4.2-reminders.txt">
+                  <summary><span class="p-id">4.2</span><span class="p-name">Confirmation and reminders</span><span class="p-use">Booking confirmation, two reminders, no-show and cancellation replies</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.2-reminders.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.2-reminders.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t4-3">
+              <summary>
+                <span class="t-n">3</span>
+                <span class="t-title"><b>Record what happens at every consult</b><span>Show rate, join rate and why not, with prompt 4.3</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Run prompt 4.3. Claude adds a "Reason not joined" dropdown and a "Follow up on" date to the leads sheet, and adds show rate and join rate per gym to the Summary tab.</li>
+                  <li>After every consult, whoever ran it fills in Showed up, Joined, and the reason if they didn't join. Same day.</li>
+                  <li>Each month, look at the reasons. If one keeps coming up (price, timing), that is the thing to fix.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/4.3-consult-outcomes.txt">
+                  <summary><span class="p-id">4.3</span><span class="p-name">Add consult outcomes to the sheet</span><span class="p-use">Run in Claude Code: new columns and show and join rates</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.3-consult-outcomes.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.3-consult-outcomes.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t4-4">
+              <summary>
+                <span class="t-n">4</span>
+                <span class="t-title"><b>Follow up the "not yets"</b><span>Messages at one week, one month, three months, with prompt 4.4</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Most people who don't join on the day aren't saying no forever. A few kind messages, matched to their reason, bring some of them back. Only for people who agreed to hear from you.</p>
+                <ol>
+                  <li>Run prompt 4.4. Claude writes a short sequence for each reason (price, timing, location, not ready, and so on): one week, one month and three months after.</li>
+                  <li>When a consult ends without joining, set the "Follow up on" date in the sheet to one week later.</li>
+                  <li>Send each message when the leads board shows it's due, then move the date on. After three months, stop unless they reply.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/4.4-not-yet-followups.txt">
+                  <summary><span class="p-id">4.4</span><span class="p-name">Follow-ups for the not-yets</span><span class="p-use">A sequence for each reason, at one week, one month and three months</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.4-not-yet-followups.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.4-not-yet-followups.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t4-5">
+              <summary>
+                <span class="t-n">5</span>
+                <span class="t-title"><b>Welcome new members</b><span>Their first two weeks, with prompt 4.5</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>The sale isn't finished until they come back for session two. The first two weeks set the habit, and hand over to Step 5.</p>
+                <ol>
+                  <li>Run prompt 4.5 for a welcome message from Ryan, an introduction for the community WhatsApp group, a check-in after the first session and another at the end of week two, plus a one-page "your first month" note.</li>
+                  <li>Send the welcome the day they join, and add them to the community WhatsApp group (with their permission).</li>
+                  <li>Mark them Joined in the leads sheet. From here, Step 5 keeps them coming.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/4.5-welcome.txt">
+                  <summary><span class="p-id">4.5</span><span class="p-name">Welcome new members</span><span class="p-use">Welcome, group intro, first-session and week-two check-ins, first-month note</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.5-welcome.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.5-welcome.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+      <details class="step" id="step-5">
+        <summary>
+          <span class="step-n">05</span>
+          <span class="step-title"><h2>Retain</h2><span>Spot members slipping, step in early, celebrate the milestones</span></span>
+          <span class="chev" aria-hidden="true"></span>
+        </summary>
+        <div class="step-body">
+          <p>Keeping a member is cheaper than finding a new one, and members who stay are the ones who bring friends. This step spots people drifting before they leave, gives coaches the right message to send, and learns from the ones who go.</p>
+          <p class="progress" data-progress="step-5"></p>
+
+          <div class="tasks">
+            <details class="task" id="t5-1">
+              <summary>
+                <span class="t-n">1</span>
+                <span class="t-title"><b>Pull attendance into a members sheet</b><span>Who is training and who is drifting, with prompt 5.1</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Every session is booked in Glofox, so the warning signs are already there: someone who used to come three times a week and hasn't been in for ten days. This task gets that into one sheet, refreshed every week.</p>
+                <ol>
+                  <li>Run prompt 5.1 in Claude Code. In your browser it finds Glofox's member and attendance reports for both gyms, and builds a "Bo7 members" sheet: last visit, visits in the last four weeks against the four before, milestones, and a Flags column. It changes nothing in Glofox.</li>
+                  <li>Check the coach column. Where Glofox doesn't record who coaches whom, fill it in once by hand.</li>
+                  <li>Schedule it to refresh every Monday morning. If Glofox grants API access (task 2.8), the refresh can use that instead.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/5.1-members-sheet.txt">
+                  <summary><span class="p-id">5.1</span><span class="p-name">Build the members sheet</span><span class="p-use">Run in Claude Code with Chrome and Drive: attendance from Glofox into one sheet, with flags</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.1-members-sheet.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.1-members-sheet.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t5-2">
+              <summary>
+                <span class="t-n">2</span>
+                <span class="t-title"><b>Agree when to step in</b><span>The rules that flag a member</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>These are the starting rules. Change the numbers to suit how Bo7 members actually train, then write the agreed version to retention-rules.md in the project folder so every prompt uses it.</p>
+                <div class="tbl">
+                  <table>
+                    <tr><th>When this happens</th><th>Bo7 does this</th><th>Sent by</th></tr>
+                    <tr><td>No visit for 10 days</td><td>A personal WhatsApp offering to hold a spot</td><td>Their coach</td></tr>
+                    <tr><td>Visits drop by half over a month</td><td>A short call about schedule and goals</td><td>Their coach</td></tr>
+                    <tr><td>First month done</td><td>A progress note: one real thing they've improved</td><td>Their coach</td></tr>
+                    <tr><td>10th, 50th, 100th visit</td><td>A shout-out in the community group, with permission</td><td>Coach or Ryan</td></tr>
+                    <tr><td>One year as a member</td><td>A thank-you</td><td>Ryan</td></tr>
+                    <tr><td>Back after a gap</td><td>A warm welcome back</td><td>Their coach</td></tr>
+                  </table>
+                </div>
+                <ol>
+                  <li>Ryan and the coaches agree the rules and numbers: [changes].</li>
+                  <li>Agree who owns each member: their regular coach, or Ryan if they don't have one.</li>
+                  <li>Check whether Glofox can send automatic emails or app notifications for milestones (first visit, 10th class and so on). If it can, use it for the milestone and anniversary messages, and keep the "not seen" and "dropping" messages personal.</li>
+                </ol>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t5-3">
+              <summary>
+                <span class="t-n">3</span>
+                <span class="t-title"><b>Write the messages</b><span>Personal, short, never guilt, with prompt 5.3</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <ol>
+                  <li>Run prompt 5.3. Claude writes each message in a few versions, a guide for the coach's five-minute check-in call, and a kind reply for anyone asking to pause or cancel.</li>
+                  <li>Each coach rewrites the "missed you" messages in their own words. Members can tell a template from a person.</li>
+                  <li>Keep the final set in the project folder; the members board uses it.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/5.3-retention-messages.txt">
+                  <summary><span class="p-id">5.3</span><span class="p-name">Retention messages</span><span class="p-use">Missed-you, dropping, first month, milestones, anniversary, pause or cancel</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.3-retention-messages.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.3-retention-messages.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t5-4">
+              <summary>
+                <span class="t-n">4</span>
+                <span class="t-title"><b>Build the members board, and work it every Monday</b><span>team.bo7.ie/members, with prompt 5.4</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>The same idea as the leads board: one page, behind the Cloudflare login, listing the members who need a message this week, with the right message ready to send in one tap.</p>
+                <ol>
+                  <li>Run prompt 5.4 in Claude Code. It builds the board at team.bo7.ie/members on top of the members sheet.</li>
+                  <li>Every Monday, after the refresh, each coach works through their own members: send the message or make the call, then tap Done with a short note.</li>
+                  <li>Ryan checks the top line each week: how many were flagged, how many were contacted, and how many members trained compared with last week.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/5.4-members-board.txt">
+                  <summary><span class="p-id">5.4</span><span class="p-name">Build the members board</span><span class="p-use">Run in Claude Code: team.bo7.ie/members, flagged members with one-tap messages</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.4-members-board.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.4-members-board.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+            <details class="task" id="t5-5">
+              <summary>
+                <span class="t-n">5</span>
+                <span class="t-title"><b>Find out why people leave</b><span>A reason for every leaver, with prompt 5.5</span></span>
+                <button class="tick" type="button" aria-pressed="false"><span class="tick-label">Complete</span></button>
+                <span class="chev" aria-hidden="true"></span>
+              </summary>
+              <div class="task-body">
+                <p>Some people will always move away. The useful reasons are the ones Bo7 can fix: schedule, not seeing results, not feeling part of it.</p>
+                <ol>
+                  <li>Run prompt 5.5. Claude adds a Leavers tab to the members sheet with a reason dropdown, writes Ryan's message for when someone cancels, and adds a monthly retention figure.</li>
+                  <li>When someone cancels, Ryan sends the message and records the reason. Every leaver, every time.</li>
+                  <li>At the monthly review, look at the reasons. One that keeps coming up is the next thing to fix.</li>
+                </ol>
+                <details class="prompt" data-src="prompts/5.5-why-people-leave.txt">
+                  <summary><span class="p-id">5.5</span><span class="p-name">Learn why people leave</span><span class="p-use">Leavers tab, a cancel message, and monthly retention</span><span class="chev" aria-hidden="true"></span></summary>
+                  <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/5.5-why-people-leave.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/5.5-why-people-leave.txt</span><span class="status" aria-live="polite"></span></div>
+                  <pre>Loading…</pre>
+                </details>
+                <div class="task-foot"><button class="tick" type="button" aria-pressed="false">Mark complete</button></div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+      <details class="step" id="step-6">
+        <summary><span class="step-n">06</span><span class="step-title"><h2>Refer</h2><span>Turn happy members into the next ones</span></span><span class="pill">Next</span><span class="chev" aria-hidden="true"></span></summary>
+        <div class="step-body"><p class="soon-body">To come: review and referral asks at the right moment, and member story videos. With prompts for each ask.</p></div>
+      </details>
+      <details class="step" id="monthly">
+        <summary><span class="step-n">·</span><span class="step-title"><h2>Monthly review</h2><span>30 minutes on the scorecard</span></span><span class="pill">To write</span><span class="chev" aria-hidden="true"></span></summary>
+        <div class="step-body"><p class="soon-body">To come: the scorecard, one number per step, and a prompt that reads the month's exports and names the worst number to fix first.</p></div>
+      </details>
+    </main>
+</div>
+
+<script>
+(function () {
+  // Load each prompt from its published file so the page and the files never drift apart.
+  document.querySelectorAll('details.prompt').forEach(function (d) {
+    var pre = d.querySelector('pre');
+    fetch(d.dataset.src).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.text();
+    }).then(function (t) { pre.textContent = t.trim(); })
+      .catch(function () { pre.textContent = 'This prompt could not load. Open the file instead: ' + d.dataset.src; });
+
+    var btn = d.querySelector('.copy'), status = d.querySelector('.status');
+    btn.addEventListener('click', function () {
+      var text = pre.textContent;
+      function selectIt() {
+        var range = document.createRange(); range.selectNodeContents(pre);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+        status.textContent = 'Selected. Press Ctrl+C or Cmd+C to copy.';
+      }
+      try {
+        navigator.clipboard.writeText(text).then(function () {
+          status.textContent = 'Copied';
+          setTimeout(function () { status.textContent = ''; }, 2000);
+        }, selectIt);
+      } catch (e) { selectIt(); }
+    });
+  });
+
+  // Expand / collapse everything.
+  function setAll(open) { document.querySelectorAll('details').forEach(function (d) { d.open = open; }); }
+  document.getElementById('expand-all').addEventListener('click', function () { setAll(true); });
+  document.getElementById('collapse-all').addEventListener('click', function () { setAll(false); });
+
+  // A link to #step-1 etc. opens that step.
+  if (location.hash) { var h = document.querySelector(location.hash); if (h && h.tagName === 'DETAILS') h.open = true; }
+
+  // Tasks: "Complete" ticks a task, collapses it and updates the step's progress.
+  // Remembered in this browser only.
+  var KEY = 'bo7-playbook-tasks';
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function progress() {
+    document.querySelectorAll('[data-progress]').forEach(function (p) {
+      var step = document.getElementById(p.dataset.progress);
+      var all = step.querySelectorAll('details.task'), n = step.querySelectorAll('details.task.is-done').length;
+      p.innerHTML = '<b>' + n + ' of ' + all.length + '</b> tasks complete';
+    });
+  }
+  function setDone(task, isDone, collapse) {
+    task.classList.toggle('is-done', isDone);
+    task.querySelectorAll('.tick').forEach(function (t) {
+      t.setAttribute('aria-pressed', String(isDone));
+      var label = t.querySelector('.tick-label') || t;
+      label.textContent = isDone ? 'Completed' : (t.closest('.task-foot') ? 'Mark complete' : 'Complete');
+    });
+    if (collapse) {
+      task.open = !isDone;
+      if (isDone) {
+        var next = task.nextElementSibling;
+        while (next && next.classList.contains('is-done')) next = next.nextElementSibling;
+        if (next) { next.open = true; }
+        task.scrollIntoView({ block: 'nearest' });
+      }
+    }
+    progress();
+  }
+  document.querySelectorAll('details.task').forEach(function (task) {
+    if (done[task.id]) { setDone(task, true, false); task.open = false; }
+    task.querySelectorAll('.tick').forEach(function (t) {
+      t.addEventListener('click', function (e) {
+        e.preventDefault(); // keep the summary from toggling; we decide open/closed
+        var now = !task.classList.contains('is-done');
+        done[task.id] = now;
+        try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (err) {}
+        setDone(task, now, true);
+      });
+    });
+  });
+  progress();
+})();
+</script>
+</body>
+</html>

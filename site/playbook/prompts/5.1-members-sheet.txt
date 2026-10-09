@@ -1,0 +1,15 @@
+Run this in Claude Code with Claude in Chrome and the Google Drive connector connected.
+
+Build a weekly picture of who is training at Bo7 and who is drifting, from Glofox's booking and attendance data. Bo7 is a semi-private personal training gym with two locations in south Dublin, Killiney and Blackrock; members book sessions in the Glofox app.
+
+Rules: I sign in to Glofox and Google myself; never type a password. Don't change anything in Glofox. Member data is personal: it stays in the Bo7 Google Drive and this project, nowhere else. Delete any downloaded files once their data is in the sheet.
+
+1. In my Chrome, open the Glofox dashboard and find the reports that show, for both branches: active members (name, phone, email, membership, start date) and attendance (who checked in or attended, and when). Tell me which reports you found and what each contains. Download them for the last 13 weeks.
+2. In the Bo7 Google Drive, create (or update) a Google Sheet called "Bo7 members" with one row per active member:
+   Name | Phone | Email | Gym | Coach | Membership | Joined on | Last visit | Days since last visit | Visits, last 4 weeks | Visits, the 4 weeks before | Total visits | Consent to contact | Next milestone | Notes
+   Use formulas where possible so the sheet keeps itself right when new data is pasted in. Leave Coach blank where Glofox doesn't record it.
+3. Add a "Flags" column that applies the rules in retention-rules.md in this project (if that file doesn't exist yet, use: no visit for 10 days; visits in the last 4 weeks less than half of the 4 weeks before; first month complete this week; 10th, 50th or 100th visit this week; one year as a member this week).
+4. Save a README.md for the sheet in this project (columns, where the data comes from, how to refresh it).
+5. Tell me how to refresh it each week, and set it up as a scheduled Monday task if I agree.
+
+Finish with: how many members are flagged and for what, as a short list. Don't message anyone.

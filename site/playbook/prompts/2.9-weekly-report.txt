@@ -1,0 +1,12 @@
+Run this in Claude Code with the Google Drive connector connected, every Monday.
+
+Read the "Bo7 leads" Google Sheet (its README.md is in this project) and give me the weekly lead report. Don't change the sheet.
+
+For the last 7 days, and the 4 weeks before for comparison:
+1. Leads by source: how many came in from each source, and from each gym.
+2. Replies: the share answered by a person within 24 hours, and anyone who waited longer (name and source).
+3. Consults: booked, showed up, and joined, by source.
+4. What changed: anything that moved a lot week on week, in one or two plain sentences. For example, a source that has gone quiet, or one that brings leads who rarely book.
+5. Gaps: rows with no Source, no Gym or no Consent recorded, so they can be fixed.
+
+Keep it short: a few lines per section, names and numbers, no padding. If a section is empty, say "None".

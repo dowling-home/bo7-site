@@ -1,0 +1,19 @@
+Run this in Claude Code with the bo7-team project open (prompt 2.2c).
+
+Build a members board at team.bo7.ie/members: the page coaches open every Monday to see which members need a message this week, and send it in one tap. It sits behind the Cloudflare login (only @bo7.ie email addresses) and reads from and writes to the "Bo7 members" Google Sheet (its README.md is in this project). Share the "Bo7 members" sheet with the team area's service account first if it isn't already.
+
+Rules: never put a password, key or token in the code. Member data is personal: nothing about members goes anywhere except this page and the sheet.
+
+How it works: a small server-side function in the bo7-team project reads and updates the sheet using the service account, and only answers requests that came through the Cloudflare login. The page talks only to that function.
+
+What the board shows:
+1. This week's list, grouped by flag: Not seen in 10 days, Visits dropping, First month done, Milestone, Anniversary, Back after a gap. Each group shows how many.
+2. Each member is a card: name, gym, coach, days since last visit, visits in the last 4 weeks against the 4 weeks before, and how long they've been a member.
+3. On each card: a WhatsApp button that opens the chat with the right message from the retention messages already typed (a different version each time where there are several), a Call button, and the number shown as text.
+4. A "Done" button with a short note ("messaged", "spoke to them", "on holiday", "injured"), which writes the date, the note and the logged-in coach to the sheet's Notes, and hides the card until the member is flagged again.
+5. Filters: gym, and "my members" (cards where Coach matches the logged-in coach).
+6. At the top: how many members are flagged, how many are done this week, and how many members trained this week compared with last.
+
+Make it work well on a phone. Use the Bo7 website's colours and fonts. Add the board to the team.bo7.ie home page.
+
+Test it with two example members, show me the board and the sheet updating, then delete the examples. Commit and push. Finish with the address and what each coach needs to do (open it, log in with their @bo7.ie email, add it to their home screen).

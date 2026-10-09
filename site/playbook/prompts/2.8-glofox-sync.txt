@@ -1,0 +1,13 @@
+Run this in Claude Code with Claude in Chrome and the Google Drive connector connected.
+
+Copy new leads from Glofox into the "Bo7 leads" Google Sheet (its README.md is in this project), so website enquiries are tracked like every other source.
+
+Rules: I sign in to Glofox and Google myself; never type a password. Don't change anything in Glofox.
+
+1. In my Chrome, open the Glofox dashboard and find the leads list for both branches, Killiney and Blackrock.
+2. List every lead created since the last sync. The date of the last sync is in glofox-sync.md in this project; if that file doesn't exist, use the last 14 days.
+3. For each lead, check whether it is already in the Leads tab (match on phone number or email). Add the ones that aren't: date and time, name, phone, email, gym (the Glofox branch it came in on, unless their message says otherwise), Source "website-form", Logged by "Glofox sync", Status "New", and whatever Glofox recorded about consent.
+4. Show me the rows before adding them.
+5. Update glofox-sync.md with today's date and how many leads you added.
+
+Finish by listing any new lead that is more than 24 hours old with no reply yet, so someone contacts them today.

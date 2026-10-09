@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Bo7 Dashboard</title>
+<link rel="icon" href="../assets/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: a staff dashboard. Header with gym filter and tabs, then one tab per stage.
+   Capture tab = three columns: where leads come from, new leads to contact, waiting for a consult. */
+:root {
+  --bg: #0A0A09;
+  --surface: #151411;
+  --sunk: #1E1C18;
+  --raised: #24211C;
+  --fg: #F1ECE1;
+  --muted: #A39C8E;
+  --line: #2E2B25;
+  --gold: #D4A72C;
+  --gold-text: #DDB958;
+  --late: #E5845A;
+  --wa: #25D366;
+  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); padding-inline: 20px; padding-block: 0 48px; }
+.wrap { max-width: 1320px; margin: 0 auto; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Header */
+.top { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; justify-content: space-between; padding-block: 24px 18px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand img { height: 28px; width: auto; }
+.brand h1 { font: 400 26px/1 var(--display); margin: 0; }
+.sample { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--bg); background: var(--gold); border-radius: 999px; padding: 4px 10px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.seg button { background: none; border: 0; border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 14px; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--raised); color: var(--fg); }
+.updated { color: var(--muted); font-size: 13px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-top: 18px; overflow-x: auto; }
+.tab { background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 16px; font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--gold); }
+.tab[disabled] { cursor: default; opacity: .55; }
+.tab small { font-weight: 400; font-size: 12px; margin-left: 6px; }
+
+/* Summary strip */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
+.kpi b { font: 400 34px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.kpi span { color: var(--muted); font-size: 13px; }
+.kpi.alert b { color: var(--late); }
+@media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Board */
+.board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1.15fr); gap: 16px; margin-top: 16px; align-items: start; }
+@media (max-width: 1080px) { .board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .col.sources { grid-column: 1 / -1; } }
+@media (max-width: 700px) { .board { grid-template-columns: minmax(0, 1fr); } .col.sources { order: 3; } }
+.tabs { scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.col { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.col-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.col-head h2 { font: 400 22px/1.2 var(--display); margin: 0; }
+.count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+.col-sub { color: var(--muted); font-size: 13px; margin: -6px 0 0; }
+
+/* Sources */
+.src-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.src { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; }
+.src .name { font-weight: 600; font-size: 14px; }
+.src .num { font-variant-numeric: tabular-nums; font-weight: 700; }
+.src .bar { grid-column: 1 / -1; height: 6px; background: var(--sunk); border-radius: 999px; overflow: hidden; }
+.src .bar i { display: block; height: 100%; background: var(--gold); border-radius: 999px; }
+.src .split { grid-column: 1 / -1; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.src-total { border-top: 1px solid var(--line); padding-top: 10px; display: flex; justify-content: space-between; font-weight: 700; }
+
+/* Cards */
+.group { display: grid; gap: 10px; }
+.group-label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-text); margin: 4px 0 0; }
+.card { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; }
+.card.late { border-left: 3px solid var(--late); }
+.card-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.card-top b { font-size: 15px; }
+.wait { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+.late .wait { color: var(--late); font-weight: 700; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; background: var(--sunk); border-radius: 6px; padding: 2px 8px; color: var(--fg); }
+.chip.src-chip { color: var(--gold-text); }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.act { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.act:hover { border-color: var(--gold); }
+.act.primary.wa { background: var(--wa); border-color: var(--wa); color: #06210f; }
+.act.primary.call, .act.primary.email { background: var(--gold); border-color: var(--gold); color: #1b1608; }
+.act svg { width: 14px; height: 14px; }
+.prefers { font-size: 12px; color: var(--muted); }
+.when { font-weight: 600; font-size: 13px; }
+.empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+
+.panel[hidden] { display: none; }
+.soon { margin-top: 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 40px 20px; text-align: center; color: var(--muted); }
+
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--raised); border: 1px solid var(--line); color: var(--fg); padding: 10px 16px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <img src="../assets/bo7-logo.png" alt="Bo7">
+      <h1>Dashboard</h1>
+      <span class="sample" title="Names and numbers are made up">Sample data</span>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Gym">
+        <button type="button" data-gym="all" aria-pressed="true">Both gyms</button>
+        <button type="button" data-gym="Killiney" aria-pressed="false">Killiney</button>
+        <button type="button" data-gym="Blackrock" aria-pressed="false">Blackrock</button>
+      </div>
+      <div class="seg" role="group" aria-label="Period">
+        <button type="button" data-period="week" aria-pressed="true">This week</button>
+        <button type="button" data-period="month" aria-pressed="false">Last 4 weeks</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+    <button class="tab" role="tab" aria-selected="true" data-tab="capture">Capture</button>
+    <button class="tab" role="tab" aria-selected="false" disabled>Close<small>soon</small></button>
+    <button class="tab" role="tab" aria-selected="false" disabled>Retain<small>soon</small></button>
+    <button class="tab" role="tab" aria-selected="false" disabled>Reach<small>soon</small></button>
+  </nav>
+
+  <section class="panel" id="capture" role="tabpanel">
+    <div class="kpis">
+      <div class="kpi"><b id="k-leads">0</b><span>Leads in</span></div>
+      <div class="kpi alert"><b id="k-late">0</b><span>Waiting over 24 hours</span></div>
+      <div class="kpi"><b id="k-reply">0%</b><span>Answered within 24 hours</span></div>
+      <div class="kpi"><b id="k-consults">0</b><span>Waiting for a consult</span></div>
+    </div>
+
+    <div class="board">
+      <section class="col sources" aria-labelledby="h-sources">
+        <div class="col-head"><h2 id="h-sources">Where leads come from</h2><span class="count" id="c-sources"></span></div>
+        <p class="col-sub" id="sub-sources"></p>
+        <ul class="src-list" id="src-list"></ul>
+        <div class="src-total"><span>Total</span><span id="src-total">0</span></div>
+      </section>
+
+      <section class="col" aria-labelledby="h-new">
+        <div class="col-head"><h2 id="h-new">New leads</h2><span class="count" id="c-new"></span></div>
+        <p class="col-sub">Not contacted yet. Oldest first; red means over 24 hours.</p>
+        <div class="group" id="list-new"></div>
+      </section>
+
+      <section class="col" aria-labelledby="h-consult">
+        <div class="col-head"><h2 id="h-consult">Waiting for a consult</h2><span class="count" id="c-consult"></span></div>
+        <p class="col-sub">Contacted and interested. Booked first, then still to book.</p>
+        <div class="group" id="list-consult"></div>
+      </section>
+    </div>
+  </section>
+
+  <p class="updated" style="margin-top:20px">Sample data for layout only. The live version reads the Bo7 leads sheet and sits behind the team login.</p>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  // ---- Sample data (made up) ----
+  var SOURCES = {
+    'walk-in': 'Walk-in', 'phone': 'Phone call', 'whatsapp': 'WhatsApp (direct)', 'website-form': 'Website form',
+    'killiney-window': 'Killiney window', 'blackrock-window': 'Blackrock window', 'stand': 'Village Centre stand',
+    'referral': 'Referral', 'corporate': 'Corporate', 'instagram': 'Instagram', 'meta-ads': 'Meta ads',
+    'google-ads': 'Google ads', 'google-profile': 'Google profile'
+  };
+  // [source, gym, this week, earlier in the 4 weeks]
+  var COUNTS = [
+    ['meta-ads', 'Killiney', 4, 9], ['meta-ads', 'Blackrock', 5, 11],
+    ['referral', 'Killiney', 3, 6], ['referral', 'Blackrock', 1, 3],
+    ['google-profile', 'Killiney', 2, 7], ['google-profile', 'Blackrock', 2, 4],
+    ['website-form', 'Killiney', 2, 5], ['website-form', 'Blackrock', 1, 3],
+    ['walk-in', 'Killiney', 2, 3], ['walk-in', 'Blackrock', 3, 6],
+    ['stand', 'Blackrock', 3, 5], ['google-ads', 'Killiney', 1, 4], ['google-ads', 'Blackrock', 2, 3],
+    ['instagram', 'Killiney', 1, 3], ['instagram', 'Blackrock', 1, 2],
+    ['killiney-window', 'Killiney', 1, 2], ['blackrock-window', 'Blackrock', 0, 2],
+    ['corporate', 'Blackrock', 2, 2], ['phone', 'Killiney', 1, 2], ['whatsapp', 'Killiney', 0, 2]
+  ];
+  var NEW = [
+    { name: 'Aoife Brennan', source: 'meta-ads', gym: 'Blackrock', prefers: 'whatsapp', hours: 31, note: 'Wants to get stronger after having a baby' },
+    { name: 'Declan Murphy', source: 'google-profile', gym: 'Killiney', prefers: 'phone', hours: 27, note: 'Asked about early morning sessions' },
+    { name: 'Sinead Kavanagh', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', hours: 19, note: 'Met at the stand, nervous about fitness level' },
+    { name: 'Ciaran Doyle', source: 'website-form', gym: 'Killiney', prefers: 'email', hours: 14, note: '' },
+    { name: 'Niamh O’Sullivan', source: 'referral', gym: 'Killiney', prefers: 'whatsapp', hours: 9, note: 'Referred by a member (Orla)' },
+    { name: 'Rory Fitzgerald', source: 'corporate', gym: 'Blackrock', prefers: 'email', hours: 6, note: 'Via the company deal, wants lunchtime' },
+    { name: 'Grainne Walsh', source: 'walk-in', gym: 'Blackrock', prefers: 'phone', hours: 3, note: 'Walked in Saturday, back injury history' },
+    { name: 'Paul Keane', source: 'google-ads', gym: 'Killiney', prefers: 'whatsapp', hours: 1, note: '' }
+  ];
+  var CONSULT = [
+    { name: 'Emma Byrne', source: 'meta-ads', gym: 'Killiney', prefers: 'whatsapp', when: 'Today, 18:30', booked: true },
+    { name: 'Mark Nolan', source: 'referral', gym: 'Blackrock', prefers: 'phone', when: 'Tomorrow, 07:00', booked: true },
+    { name: 'Laura Quinn', source: 'google-profile', gym: 'Blackrock', prefers: 'whatsapp', when: 'Thu, 12:15', booked: true },
+    { name: 'Tom Gallagher', source: 'walk-in', gym: 'Killiney', prefers: 'phone', when: 'Sat, 10:00', booked: true },
+    { name: 'Claire Dunne', source: 'website-form', gym: 'Killiney', prefers: 'email', when: 'Asked for evenings', booked: false },
+    { name: 'Jack Moran', source: 'stand', gym: 'Blackrock', prefers: 'whatsapp', when: 'Away until next week', booked: false }
+  ];
+  var REPLY_RATE = { week: 86, month: 81 };
+
+  var ICON = {
+    whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.3.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.2.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 .9c.3.1.5.2.5.4.1.1.1.7-.2 1.4Z"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>',
+    email: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm18 2-10 7L2 6"/></svg>'
+  };
+  var LABEL = { whatsapp: 'WhatsApp', phone: 'Call', email: 'Email' };
+  var PREF = { whatsapp: 'Prefers WhatsApp', phone: 'Prefers a call', email: 'Prefers email' };
+
+  var state = { gym: 'all', period: 'week' };
+  function byGym(x) { return state.gym === 'all' || x.gym === state.gym; }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function actions(p) {
+    var order = [p.prefers].concat(['whatsapp', 'phone', 'email'].filter(function (k) { return k !== p.prefers; }));
+    return '<div class="actions">' + order.map(function (k, i) {
+      return '<button type="button" class="act' + (i === 0 ? ' primary ' + (k === 'whatsapp' ? 'wa' : k === 'phone' ? 'call' : 'email') : '') + '" data-act="' + k + '">' + ICON[k] + LABEL[k] + '</button>';
+    }).join('') + '</div>';
+  }
+  function chips(p) {
+    return '<div class="meta"><span class="chip src-chip">' + esc(SOURCES[p.source]) + '</span><span class="chip">' + esc(p.gym) + '</span><span class="prefers">' + PREF[p.prefers] + '</span></div>';
+  }
+  function ago(h) { return h < 24 ? h + 'h ago' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h ago'; }
+
+  function render() {
+    // Sources
+    var totals = {}, split = {};
+    COUNTS.filter(byGym).forEach(function (r) {
+      var n = state.period === 'week' ? r[2] : r[2] + r[3];
+      totals[r[0]] = (totals[r[0]] || 0) + n;
+      split[r[0]] = split[r[0]] || { Killiney: 0, Blackrock: 0 };
+      split[r[0]][r[1]] += n;
+    });
+    var rows = Object.keys(totals).filter(function (k) { return totals[k] > 0; }).map(function (k) { return [k, totals[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
+    var max = rows.length ? rows[0][1] : 1, sum = rows.reduce(function (t, r) { return t + r[1]; }, 0);
+    document.getElementById('src-list').innerHTML = rows.map(function (r) {
+      var sp = state.gym === 'all' ? '<span class="split">Killiney ' + split[r[0]].Killiney + ' · Blackrock ' + split[r[0]].Blackrock + '</span>' : '';
+      return '<li class="src"><span class="name">' + esc(SOURCES[r[0]]) + '</span><span class="num">' + r[1] + '</span><span class="bar"><i style="width:' + (max ? Math.round(r[1] / max * 100) : 0) + '%"></i></span>' + sp + '</li>';
+    }).join('') || '<li class="empty">No leads in this period.</li>';
+    document.getElementById('src-total').textContent = sum;
+    document.getElementById('c-sources').textContent = rows.length + ' sources';
+    document.getElementById('sub-sources').textContent = state.period === 'week' ? 'Leads this week, by source.' : 'Leads in the last 4 weeks, by source.';
+
+    // New leads
+    var nl = NEW.filter(byGym).sort(function (a, b) { return b.hours - a.hours; });
+    document.getElementById('list-new').innerHTML = nl.map(function (p) {
+      return '<article class="card' + (p.hours > 24 ? ' late' : '') + '"><div class="card-top"><b>' + esc(p.name) + '</b><span class="wait">' + ago(p.hours) + '</span></div>' + chips(p) + (p.note ? '<p class="note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
+    }).join('') || '<p class="empty">Nobody waiting. Nice.</p>';
+    document.getElementById('c-new').textContent = nl.length;
+
+    // Waiting for consult
+    var cl = CONSULT.filter(byGym), booked = cl.filter(function (p) { return p.booked; }), tobook = cl.filter(function (p) { return !p.booked; });
+    function consultCard(p) { return '<article class="card"><div class="card-top"><b>' + esc(p.name) + '</b><span class="when">' + esc(p.when) + '</span></div>' + chips(p) + actions(p) + '</article>'; }
+    document.getElementById('list-consult').innerHTML =
+      (booked.length ? '<p class="group-label">Booked</p>' + booked.map(consultCard).join('') : '') +
+      (tobook.length ? '<p class="group-label">Still to book</p>' + tobook.map(consultCard).join('') : '') ||
+      '<p class="empty">No consults waiting.</p>';
+    document.getElementById('c-consult').textContent = cl.length;
+
+    // KPIs
+    document.getElementById('k-leads').textContent = sum;
+    document.getElementById('k-late').textContent = nl.filter(function (p) { return p.hours > 24; }).length;
+    document.getElementById('k-reply').textContent = REPLY_RATE[state.period] + '%';
+    document.getElementById('k-consults').textContent = cl.length;
+  }
+
+  function wireSeg(attr, key) {
+    document.querySelectorAll('[data-' + attr + ']').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('[data-' + attr + ']').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        state[key] = b.getAttribute('data-' + attr);
+        render();
+      });
+    });
+  }
+  wireSeg('gym', 'gym');
+  wireSeg('period', 'period');
+
+  var toast = document.getElementById('toast'), tt;
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]');
+    if (!b) return;
+    toast.textContent = 'Sample data: in the live board this opens ' + LABEL[b.dataset.act].toLowerCase() + ' with the right message ready.';
+    toast.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
