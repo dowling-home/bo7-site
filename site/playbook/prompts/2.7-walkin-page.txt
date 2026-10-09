@@ -10,6 +10,7 @@ Rules: never put a password, key or token in the code. The Google service accoun
 
 3. The page, /walkin. Mobile-first, in the Bo7 website's style, quick to fill in at the front desk:
    - Name (required) and phone (required), email (optional)
+   - Best way to reach them: WhatsApp (default), Call or Email
    - Gym: Killiney or Blackrock (remember the last choice on this device)
    - How they got in touch: Walked in (default) or Phoned
    - Interested in (short text)

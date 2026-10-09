@@ -1,23 +1,35 @@
 Run this in Claude Code with the bo7-team project open (prompt 2.2c).
 
-Build a leads board at team.bo7.ie/leads: one web page the Bo7 team opens every morning to see every lead in play, where each one came from, and a one-tap way to get back to them. It sits behind the Cloudflare login (only @bo7.ie email addresses), and reads from and writes to the "Bo7 leads" Google Sheet (its README.md describes the columns).
+Build a leads board at team.bo7.ie/leads: one web page the Bo7 team opens every morning to see every lead in play, get back to them in one tap, book them in for a free consultation, and keep notes. It sits behind the Cloudflare login (only @bo7.ie email addresses).
 
-Rules: never put a password, key or token in the code. The Google service account key is already stored as an encrypted secret in the Cloudflare Pages project. Leads are personal data: nothing about them goes anywhere except this page and the sheet.
+Where the data lives:
+- The "Bo7 leads" Google Sheet (its README.md describes the tabs): the Leads tab for each lead, the Notes tab for notes, the Consult hours tab for when each coach takes consults.
+- The shared "Bo7 consultations" Google Calendar for bookings. The calendar decides what is free, so two people can never book the same slot.
 
-How it works: a small server-side function in the bo7-team project reads and updates the sheet using the service account, and only answers requests that came through the Cloudflare login. The page talks only to that function.
+Rules: never put a password, key or token in the code. The Google service account key is already stored as an encrypted secret in the Cloudflare Pages project, and the service account can edit both the sheet and the calendar. Leads are personal data: nothing about them goes anywhere except this page, the sheet and the calendar.
 
-What the board shows:
-1. A column per stage, left to right: New (no reply yet), Contacted, Consult booked, Showed up, Not yet (following up). Joined and Lost are hidden by default, with a toggle to show them.
-2. Each lead is a card: name, gym, source and source detail, how long since they got in touch (or since the last contact), and the next step due. Cards waiting over 24 hours for a first reply are clearly marked at the top of New.
-3. On each card, three buttons:
-   - WhatsApp: opens WhatsApp to their number with the first-reply script for their source already typed (scripts are in the project; ask me for the file if you can't find it). Later stages use the matching follow-up or reminder message.
-   - Call: dials their number.
-   - Email: opens an email to them, if we have an address.
-   Show the number and email as text too, in case a button doesn't work on someone's device.
-4. Quick updates on each card: Contacted, Consult booked (with date and time), Showed up, Joined, Not yet (with reason and follow-up date), Lost. Each one writes back to the sheet, fills in First reply the first time a lead is marked Contacted, and notes the logged-in coach's email.
-5. Filters at the top: gym, source, and "only mine".
-6. A one-line summary at the top: waiting for a reply, follow-ups due today, consults in the next two days.
+How it works: a small server-side function in the bo7-team project reads and updates the sheet and the calendar using the service account, and only answers requests that came through the Cloudflare login. The page talks only to that function. Every change records the logged-in coach's email.
 
-Make it work well on a phone, since most replies are sent from one. Use the Bo7 website's colours and fonts. Add the board to the team.bo7.ie home page.
+Design: match the dashboard mockup at site/dash/index.html in the bo7-site project (live at bo7.thedowlings.co/dash): the same layout, components, colours, light and dark themes, and the same lead dialog. Replace its sample data with the real sheet and calendar.
 
-Test it with two example leads, show me the board and the sheet updating, then delete the examples. Commit and push. Finish with the board's address and what each coach needs to do once (open it, log in with their @bo7.ie email, add it to their home screen).
+The board:
+1. A summary strip: leads in this week by source, share answered within 24 hours, waiting over 24 hours, waiting for a consult.
+2. Where leads come from: count per source for the week or the last 4 weeks, with a gym filter.
+3. New leads (no reply yet), oldest first, anyone over 24 hours marked. Each card shows name, gym, source, preferred contact and how long they've waited, with WhatsApp, Call and Email buttons; the preferred one stands out. WhatsApp opens the chat with the first-reply script for their source already typed (scripts are in the project; ask me for the file if you can't find it). Show the number and email as text too, in case a button doesn't work.
+4. Waiting for a consult: booked first (by date and time, with the coach), then contacted but not yet booked.
+5. Filters for gym, and "only mine" (leads the signed-in coach logged or is booked with).
+
+The lead dialog (opens when someone clicks a lead):
+6. The lead's details, contact buttons, and quick status updates: Contacted, Showed up, Joined, Not yet (with reason and follow-up date), Lost. Marking Contacted the first time fills in First reply.
+7. Book a consultation:
+   - Pick the gym (defaults to the lead's), a coach or "any coach", and a day in the next 14 days.
+   - Free times = the Consult hours tab for that coach, gym and day, in slots of the consult length, minus anything already on the Bo7 consultations calendar for that coach. Hide times in the past.
+   - Booking creates an event on the Bo7 consultations calendar: title "Consult: [lead name], [gym], with [coach]", the gym's address as the location, and the lead's phone, source and a link back to the board in the description. Don't add the lead or coach as invited guests.
+   - It then writes to the sheet: Status "Consult booked", Consult (date and time), Consult coach, Calendar event. And it adds a note: "Consult booked for [day, time] with [coach]".
+   - Once booked, show a button to send the confirmation on WhatsApp, with the booking confirmation message (prompt 4.2) already typed, including day, time, gym, address and coach.
+   - For a booked lead, show the booking and let the coach move it (update the same event) or cancel it (delete the event, clear the consult fields, add a note).
+8. Notes: the lead's notes from the Notes tab, newest first, with who wrote each and when, and a box to add one. Adding a note writes a new row to the Notes tab.
+
+Make it work well on a phone, since most replies are sent from one. Add the board to the team.bo7.ie home page.
+
+Test it with two example leads: book one, move it, cancel it, and add notes. Show me the calendar and the sheet updating each time, then delete the examples and their events. Commit and push. Finish with the board's address and what each coach needs to do once (open it, log in with their @bo7.ie email, add it to their home screen, and add the Bo7 consultations calendar to their phone's calendar).

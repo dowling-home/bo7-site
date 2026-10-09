@@ -6,30 +6,45 @@ Rules: I sign in to Google myself; never type a password. Show me the sheet befo
 
 First, check that the Google Drive connector is connected to the Bo7 Google account. If it isn't, stop and tell me how to connect it. Use the connector wherever it can do the job, and my Chrome browser for anything it can't (dropdowns, protected header, colours).
 
-In my Chrome, in the Bo7 Google Drive, create a Google Sheet called "Bo7 leads" with three tabs:
+In my Chrome, in the Bo7 Google Drive, create a Google Sheet called "Bo7 leads" with five tabs:
 
 1. Leads. One row per enquiry. Columns:
-   Date and time | Name | Phone | Email | Gym | Source | Source detail | Interested in | Logged by | Consent to contact | First reply (date and time) | Consult booked (date) | Showed up | Joined | Status | Notes
+   Lead ID | Date and time | Name | Phone | Email | Preferred contact | Gym | Source | Source detail | Interested in | Logged by | Consent to contact | First reply (date and time) | Consult (date and time) | Consult coach | Calendar event | Showed up | Joined | Status
+   - Lead ID: filled in automatically for each new row (L-0001, L-0002 and so on). It never changes, and the Notes tab uses it.
+   - Preferred contact: dropdown, WhatsApp, Call or Email.
    - Gym: dropdown, Killiney or Blackrock.
    - Source: dropdown, using the list on the Sources tab.
    - Source detail: free text, for example which company, who referred them, which ad.
+   - Consult coach: dropdown, using the coaches on the Consult hours tab.
+   - Calendar event: left for the leads board to fill in (the ID of the booking on the Bo7 consultations calendar).
    - Consent to contact, Showed up, Joined: dropdown, Yes or No.
    - Status: dropdown: New, Contacted, Consult booked, Joined, Not now, Lost.
    - Freeze the header row and protect it so nobody renames the columns by accident.
    - Colour each row by Status so new leads stand out.
 
-2. Sources. The list the Source dropdown uses, one per row, with a one-line description:
+2. Notes. One row per note, so the full history is kept:
+   Lead ID | Date and time | Written by | Note
+   - Lead ID matches the Leads tab. Add a column showing the lead's name, looked up from the Lead ID, so the tab is readable.
+   - Notes are only ever added, never edited or deleted, except to remove personal details on request.
+
+3. Consult hours. When each coach can take a free consultation:
+   Coach | Coach email | Gym | Day | From | To
+   - One row per coach, gym and day, for example: [coach] | [email] | Killiney | Monday | 18:00 | 20:00.
+   - Add a setting at the top: consult length in minutes [__].
+   - Leave the rows for me to fill in; don't invent coaches or hours.
+
+4. Sources. The list the Source dropdown uses, one per row, with a one-line description:
    walk-in, phone, whatsapp, website-form, killiney-window, blackrock-window, stand, referral, corporate, instagram, meta-ads, google-ads, google-profile-killiney, google-profile-blackrock, other.
    Adding a row here adds it to the dropdown.
 
-3. Summary. Built from formulas, so it updates itself:
+5. Summary. Built from formulas, so it updates itself:
    - Leads per source per month (sources down, months across), for the last 6 months.
    - For each source: leads, consults booked, showed up, joined, and joined as a share of leads.
    - Leads still on "New" for more than 24 hours, with their name and source.
 
 Then:
-- Add two example rows marked EXAMPLE so I can see how it works, and tell me to delete them before we go live.
+- Add two example leads, each with a note, marked EXAMPLE so I can see how it works, and tell me to delete them before we go live.
 - Tell me who should get edit access (Ryan, the coaches) and share it only when I say so.
-- Save a short README.md in this project describing the sheet, its columns and the source list, so other prompts can follow it.
+- Save a short README.md in this project describing the sheet, every tab and column, and the source list, so other prompts can follow it.
 
-Don't invent any leads, names or numbers.
+Don't invent any leads, names, coaches or numbers.

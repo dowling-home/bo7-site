@@ -393,7 +393,8 @@ a { color: var(--gold-text); }
                 <p>Every later task writes into this sheet, so it comes first. One row per enquiry, whatever the source, followed through to joined or not. Its Summary tab shows leads, consults and joiners per source each month, which is what tells you where to spend.</p>
                 <ol>
                   <li>Connect Google Drive to Claude, signed in with the Bo7 Google account (in Claude: Settings, Connectors, Google Drive). Claude can then find and read the sheet directly for reports and later prompts, without opening a browser each time.</li>
-                  <li>Paste prompt 2.1 into Claude Code. It builds the "Bo7 leads" sheet in the Bo7 Google Drive in your browser: a Leads tab with dropdowns, a Sources tab and a Summary tab that updates itself.</li>
+                  <li>Paste prompt 2.1 into Claude Code. It builds the "Bo7 leads" sheet in the Bo7 Google Drive in your browser: a Leads tab with dropdowns (including how each person prefers to be contacted), a Notes tab that keeps every note, a Consult hours tab, a Sources tab and a Summary tab that updates itself.</li>
+                  <li>Fill in the Consult hours tab: which coach takes free consultations at which gym, on which days and times, and how long a consult lasts. The leads board (Step 4) uses it to offer free times.</li>
                   <li>Look through it with the two example rows, then delete them.</li>
                   <li>Share it with Ryan and the coaches who answer enquiries (edit access). Nobody else.</li>
                   <li>From today, every enquiry gets a row: WhatsApp messages, calls, walk-ins, and leads from the website form in Glofox. Step 3 adds the source tags that fill the Source column.</li>
@@ -452,7 +453,8 @@ a { color: var(--gold-text); }
                 <p>A staff-only part of the site for Bo7's own tools: the walk-in page (task 7), the leads board (Step 4) and, later, reporting dashboards. Cloudflare asks for a @bo7.ie email address and sends a login code to it; nobody else gets in.</p>
                 <ol>
                   <li>Check that Ryan and every coach who will use the tools has a @bo7.ie email address they can read on their phone: [list]. If not, set them up first.</li>
-                  <li>Run prompt 2.2c in Claude Code. In your browser it creates a private bo7-team project, publishes it at team.bo7.ie, puts the Cloudflare login in front of it, and gives it secure access to the leads sheet. You sign in and approve each step.</li>
+                  <li>Run prompt 2.2c in Claude Code. In your browser it creates a private bo7-team project, publishes it at team.bo7.ie, puts the Cloudflare login in front of it, and gives it secure access to the leads sheet. It also creates a shared "Bo7 consultations" Google Calendar, which every consult gets booked into. You sign in and approve each step.</li>
+                  <li>Each coach adds the Bo7 consultations calendar to the calendar app on their phone, so their consults show up alongside everything else.</li>
                   <li>Test it in a private browser window: a @bo7.ie address gets in, anything else is refused.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/2.2c-team-area.txt">
@@ -865,15 +867,18 @@ a { color: var(--gold-text); }
                 <span class="chev" aria-hidden="true"></span>
               </summary>
               <div class="task-body">
-                <p>One page that shows every lead by stage, where they came from, how long they have waited, and buttons to WhatsApp, call or email them. Working through it every morning is how nobody slips through.</p>
+                <p>One page that shows every lead by stage, where they came from, how long they have waited, and buttons to WhatsApp, call or email them. Open a lead to book their consult and keep notes. Working through it every morning is how nobody slips through.</p>
+                <p>The design is already mocked up with sample data at <a href="https://bo7.thedowlings.co/dash/" target="_blank" rel="noopener">bo7.thedowlings.co/dash</a>; click a lead there to see the booking dialog. Prompt 4.1 builds the real version to match.</p>
                 <ol>
                   <li>Run prompt 4.1. Claude builds the board at team.bo7.ie/leads, on top of the leads sheet. It sits behind the Cloudflare login, so only @bo7.ie email addresses get in, because it shows personal details.</li>
                   <li>Each coach opens team.bo7.ie/leads once, logs in with their @bo7.ie email, and adds it to their phone's home screen.</li>
                   <li>Every morning: start with anyone waiting over 24 hours, then follow-ups due today, then upcoming consults. The WhatsApp button opens the chat with the right script already typed.</li>
-                  <li>Update the card as you go (Contacted, Consult booked, Showed up, Joined, Not yet). It writes straight back to the sheet, so the numbers stay right without extra typing.</li>
+                  <li>To book a consult, open the lead: pick the gym, a coach (or any coach) and one of the free times. It goes straight into the Bo7 consultations calendar and the leads sheet, and adds a note. Then tap the WhatsApp button to send the confirmation, already written.</li>
+                  <li>Add a note whenever you speak to someone: goals, injuries, best times to reach them. Every note is kept, with who wrote it and when.</li>
+                  <li>Update the lead as you go (Contacted, Showed up, Joined, Not yet). It writes straight back to the sheet, so the numbers stay right without extra typing.</li>
                 </ol>
                 <details class="prompt" data-src="prompts/4.1-leads-board.txt">
-                  <summary><span class="p-id">4.1</span><span class="p-name">Build the leads board</span><span class="p-use">Run in Claude Code: team.bo7.ie/leads, with WhatsApp, call and email buttons</span><span class="chev" aria-hidden="true"></span></summary>
+                  <summary><span class="p-id">4.1</span><span class="p-name">Build the leads board</span><span class="p-use">Run in Claude Code: team.bo7.ie/leads, with contact buttons, consult booking and notes</span><span class="chev" aria-hidden="true"></span></summary>
                   <div class="p-bar"><button class="btn copy" type="button">Copy prompt</button><a href="prompts/4.1-leads-board.txt" target="_blank" rel="noopener">Open file</a><span class="file">prompts/4.1-leads-board.txt</span><span class="status" aria-live="polite"></span></div>
                   <pre>Loading…</pre>
                 </details>
