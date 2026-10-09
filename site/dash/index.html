@@ -254,8 +254,10 @@ button { font: inherit; color: inherit; }
 .note { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; }
 .note-meta { font-size: var(--fs-xs); color: var(--text-tertiary); }
 .note p { margin: 2px 0 0; font-size: var(--fs-sm); white-space: pre-wrap; }
-textarea.input { font: inherit; font-size: var(--fs-base); color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 6px 8px; resize: vertical; min-height: 72px; }
-textarea.input:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 2px var(--accent-subtle); }
+.input { font: inherit; font-size: var(--fs-base); color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 6px 8px; min-width: 0; width: 100%; }
+textarea.input { resize: vertical; min-height: 72px; }
+.input:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 2px var(--accent-subtle); }
+.input[aria-invalid="true"] { border-color: var(--status-negative); }
 .dlg-foot { display: flex; align-items: center; gap: var(--space-4); padding: 10px 16px; border-top: 1px solid var(--border); background: var(--bg-surface); }
 .dlg-foot .hint { font-size: var(--fs-xs); color: var(--text-tertiary); margin-right: auto; }
 .btn.lg { padding: 5px 11px; font-size: var(--fs-base); }
@@ -267,6 +269,27 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
 @media (max-width: 640px) {
   .dlg { width: 100%; max-width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
   .days { grid-template-columns: repeat(7, minmax(44px, 1fr)); overflow-x: auto; }
+}
+
+/* Add-a-lead form: one column, quick to fill in at the front desk */
+.dlg.add { width: min(560px, calc(100% - 32px)); }
+.add-body { padding: 14px 16px; display: flex; flex-direction: column; gap: var(--space-6); overflow: auto; flex: 1; }
+.add-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); }
+.field > span i { font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; }
+.field .err { font-size: var(--fs-xs); font-style: normal; color: var(--status-negative); }
+.field .seg { flex-wrap: wrap; align-self: flex-start; }
+.field select.input { appearance: auto; }
+.field[hidden], #add-dupe:empty { display: none; }
+.consent { display: flex; gap: var(--space-4); align-items: flex-start; font-size: var(--fs-base); cursor: pointer; }
+.consent input { margin: 3px 0 0; width: 15px; height: 15px; accent-color: var(--accent); flex: none; }
+.consent small { display: block; font-size: var(--fs-xs); color: var(--text-tertiary); }
+.dupe { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-sunken); padding: 8px 10px; font-size: var(--fs-sm); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); }
+.dupe b { font-weight: 600; }
+@media (max-width: 640px) {
+  .add-row { grid-template-columns: minmax(0, 1fr); }
+  .dlg.add { width: 100%; }
+  .dlg.add .dlg-foot .btn.primary { flex: 1; justify-content: center; padding: 10px 12px; font-size: var(--fs-md); }
+  .dlg.add .input { font-size: 16px; }
 }
 
 /* Remove-from-board panel */
@@ -463,7 +486,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     </section>
 
     <section class="panel" aria-labelledby="h-new">
-      <div class="panel-head"><span class="panel-title" id="h-new">Leads</span><span class="panel-note">Not booked yet. Open a lead to book or add notes</span><span class="panel-actions"><span class="count" id="c-new">0</span></span></div>
+      <div class="panel-head"><span class="panel-title" id="h-new">Leads</span><span class="panel-note">Not booked yet. Open a lead to book or add notes</span><span class="panel-actions"><span class="count" id="c-new">0</span><button type="button" class="btn primary" id="add-open"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>Add lead</button></span></div>
       <div id="list-new"></div>
     </section>
 
@@ -556,6 +579,40 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     <button type="button" class="btn primary lg" id="dlg-book" disabled>Book consult</button>
   </div>
 </dialog>
+<dialog class="dlg add" id="add-dlg" aria-labelledby="add-title">
+  <form id="add-form" novalidate style="display:contents">
+  <div class="dlg-head">
+    <div style="min-width:0">
+      <h2 class="dlg-title" id="add-title">Add a lead</h2>
+      <p class="panel-note" style="margin:2px 0 0">Walk-ins, calls, WhatsApps and emails. Add them there and then.</p>
+    </div>
+    <button type="button" class="icon-btn" id="add-close" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  </div>
+  <div class="add-body">
+    <div class="field"><span>How they got in touch</span><div class="seg" role="group" aria-label="How they got in touch" id="add-how"></div></div>
+    <label class="field" id="add-match-wrap" hidden><span>Their opening message matched <i>(optional)</i></span>
+      <select class="input" id="add-match"></select>
+    </label>
+    <div class="add-row">
+      <label class="field"><span>Name</span><input class="input" id="add-name" autocomplete="off" autocapitalize="words"><em class="err" id="add-name-err" hidden>Add their name.</em></label>
+      <label class="field"><span>Mobile</span><input class="input" id="add-phone" type="tel" inputmode="tel" autocomplete="off" placeholder="08x xxx xxxx"><em class="err" id="add-phone-err" hidden>Add a mobile number.</em></label>
+    </div>
+    <div id="add-dupe"></div>
+    <label class="field"><span>Email <i>(optional)</i></span><input class="input" id="add-email" type="email" inputmode="email" autocomplete="off"></label>
+    <div class="add-row">
+      <div class="field"><span>Gym</span><div class="seg" role="group" aria-label="Gym" id="add-gym"></div></div>
+      <div class="field"><span>Best way to reach them</span><div class="seg" role="group" aria-label="Best way to reach them" id="add-pref"></div></div>
+    </div>
+    <label class="field"><span>Interested in <i>(optional)</i></span><input class="input" id="add-int" autocomplete="off" placeholder="Goals, injuries, best times..."></label>
+    <label class="consent"><input type="checkbox" id="add-consent"><span>Happy for Bo7 to contact them about training<small>Ask them. Saved with today's date.</small></span></label>
+  </div>
+  <div class="dlg-foot">
+    <span class="hint">Sample data. Nothing is saved or sent.</span>
+    <button type="button" class="btn ghost lg" id="add-cancel">Cancel</button>
+    <button type="submit" class="btn primary lg" id="add-save">Save lead</button>
+  </div>
+  </form>
+</dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -565,7 +622,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
     'walk-in': 'Walk-in', 'phone': 'Phone call', 'whatsapp': 'WhatsApp (direct)', 'website-form': 'Website form',
     'killiney-window': 'Killiney window', 'blackrock-window': 'Blackrock window', 'stand': 'Village Centre stand',
     'referral': 'Referral', 'corporate': 'Corporate', 'instagram': 'Instagram', 'meta-ads': 'Meta ads',
-    'google-ads': 'Google ads', 'google-profile': 'Google profile'
+    'google-ads': 'Google ads', 'google-profile': 'Google profile', 'email': 'Email (direct)', 'other': 'Other'
   };
   // [source, gym, this week, rest of last 4 weeks, previous week, previous 4 weeks]
   var COUNTS = [
@@ -690,7 +747,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   function meta(p) {
     return '<div class="lead-meta"><span class="chip info">' + esc(SOURCES[p.source]) + '</span><span>' + esc(p.gym) + '</span><span class="dot-sep" aria-hidden="true"></span><span>' + PREF[p.prefers] + '</span></div>';
   }
-  function waited(h) { return h < 24 ? h + 'h' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h'; }
+  function waited(h) { return h < 1 ? 'under 1h' : h < 24 ? h + 'h' : Math.floor(h / 24) + 'd ' + (h % 24) + 'h'; }
 
   function render() {
     var wk = state.period === 'week';
@@ -940,6 +997,81 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
   });
   document.addEventListener('keydown', function (e) {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-lead]')) { e.preventDefault(); openLead(e.target.dataset.lead); }
+  });
+
+  // ---------- Add a lead: walk-ins, calls, WhatsApps and emails ----------
+  var adlg = document.getElementById('add-dlg'), GYM_KEY = 'bo7-dash-add-gym', nextId = 0;
+  var HOW = [['walk-in', 'Walked in'], ['phone', 'Phoned'], ['whatsapp', 'WhatsApp'], ['email', 'Email'], ['other', 'Other']];
+  var HOW_PREF = { 'walk-in': 'whatsapp', phone: 'phone', whatsapp: 'whatsapp', email: 'email', other: 'whatsapp' };
+  var MATCH = ['meta-ads', 'google-ads', 'google-profile', 'instagram', 'killiney-window', 'blackrock-window', 'stand', 'referral', 'corporate'];
+  var add = {};
+  function lastGym() { try { return localStorage.getItem(GYM_KEY) || 'Killiney'; } catch (e) { return 'Killiney'; } }
+  function drawAdd() {
+    document.getElementById('add-how').innerHTML = segHtml(HOW, add.how, 'ahow');
+    document.getElementById('add-gym').innerHTML = segHtml([['Killiney', 'Killiney'], ['Blackrock', 'Blackrock']], add.gym, 'agym');
+    document.getElementById('add-pref').innerHTML = segHtml([['whatsapp', 'WhatsApp'], ['phone', 'Call'], ['email', 'Email']], add.pref, 'apref');
+    document.getElementById('add-match-wrap').hidden = add.how !== 'whatsapp';
+  }
+  function findSame(name) {
+    var n = name.trim().toLowerCase(); if (n.length < 3) return null;
+    var pools = [[NEW, 'is already a lead'], [CONSULT.filter(function (p) { return p.booked; }), 'has a consult booked'], [PARKED, 'was parked to try again'], [EARLIER, 'had a consult already']];
+    for (var i = 0; i < pools.length; i++) {
+      var hit = pools[i][0].filter(function (p) { return p.name.toLowerCase() === n; })[0];
+      if (hit) return { p: hit, what: pools[i][1] };
+    }
+    return null;
+  }
+  function drawDupe() {
+    var d = findSame(document.getElementById('add-name').value), box = document.getElementById('add-dupe');
+    box.innerHTML = d ? '<div class="dupe"><span class="chip warn">Already on file</span><span><b>' + esc(d.p.name) + '</b> ' + d.what + (d.p.gym ? ' (' + esc(d.p.gym) + ')' : '') + '. Add a note to that lead instead of a second one.</span>' +
+      (d.p.id && findLead(d.p.id) ? '<button type="button" class="btn" data-aopen="' + d.p.id + '">Open their lead</button>' : '') + '</div>' : '';
+  }
+  function openAdd() {
+    add = { how: 'walk-in', gym: lastGym(), pref: 'whatsapp', prefSet: false };
+    ['add-name', 'add-phone', 'add-email', 'add-int'].forEach(function (id) { var el = document.getElementById(id); el.value = ''; el.removeAttribute('aria-invalid'); });
+    document.getElementById('add-name-err').hidden = document.getElementById('add-phone-err').hidden = true;
+    document.getElementById('add-consent').checked = false;
+    document.getElementById('add-match').innerHTML = '<option value="">No, a direct message</option>' + MATCH.map(function (k) { return '<option value="' + k + '">' + esc(SOURCES[k]) + '</option>'; }).join('');
+    document.getElementById('add-dupe').innerHTML = '';
+    drawAdd();
+    adlg.showModal();
+    document.getElementById('add-name').focus();
+  }
+  document.getElementById('add-open').addEventListener('click', openAdd);
+  adlg.addEventListener('click', function (e) {
+    if (e.target === adlg) { adlg.close(); return; }
+    var b;
+    if ((b = e.target.closest('[data-ahow]'))) { add.how = b.dataset.ahow; if (!add.prefSet) add.pref = HOW_PREF[add.how]; drawAdd(); }
+    else if ((b = e.target.closest('[data-agym]'))) { add.gym = b.dataset.agym; drawAdd(); }
+    else if ((b = e.target.closest('[data-apref]'))) { add.pref = b.dataset.apref; add.prefSet = true; drawAdd(); }
+    else if ((b = e.target.closest('[data-aopen]'))) { adlg.close(); openLead(b.dataset.aopen); }
+  });
+  document.getElementById('add-name').addEventListener('input', drawDupe);
+  document.getElementById('add-close').addEventListener('click', function () { adlg.close(); });
+  document.getElementById('add-cancel').addEventListener('click', function () { adlg.close(); });
+  document.getElementById('add-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('add-name'), phone = document.getElementById('add-phone'), ok = true;
+    [[name, 'add-name-err'], [phone, 'add-phone-err']].forEach(function (x) {
+      var bad = !x[0].value.trim(); document.getElementById(x[1]).hidden = !bad;
+      if (bad) { x[0].setAttribute('aria-invalid', 'true'); if (ok) x[0].focus(); ok = false; } else x[0].removeAttribute('aria-invalid');
+    });
+    if (!ok) return;
+    var match = document.getElementById('add-match').value;
+    var source = add.how === 'whatsapp' && match ? match : add.how;
+    var interested = document.getElementById('add-int').value.trim();
+    var consent = document.getElementById('add-consent').checked;
+    var p = { id: 'A' + (nextId++), name: name.value.trim(), source: source, gym: add.gym, prefers: add.pref, hours: 0, note: interested, consent: consent, notes: [] };
+    p.notes.push({ by: 'You', at: 'Just now', text: 'Added by you: ' + HOW.filter(function (h) { return h[0] === add.how; })[0][1].toLowerCase() + (source !== add.how ? ', from ' + SOURCES[source] : '') + '. ' + (consent ? 'Happy to be contacted (9 Oct 2026).' : 'Did not agree to be contacted yet.') + (interested ? ' Interested in: ' + interested : '') });
+    NEW.push(p);
+    var row = COUNTS.filter(function (r) { return r[0] === source && r[1] === add.gym; })[0];
+    if (row) row[2]++; else COUNTS.push([source, add.gym, 1, 0, 0, 0]);
+    try { localStorage.setItem(GYM_KEY, add.gym); } catch (err) {}
+    if (state.gym !== 'all' && state.gym !== add.gym) document.querySelector('[data-gym="all"]').click();
+    adlg.close(); render();
+    var card = document.querySelector('[data-lead="' + p.id + '"]');
+    if (card) card.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+    showToast('Saved ' + p.name + ' as a new lead, ' + SOURCES[source] + ', ' + add.gym + '. In the live version this goes into the Bo7 database and onto the board for everyone.');
   });
 
   // ---------- Consult tab ----------

@@ -4,7 +4,7 @@ Build an add-a-lead page at team.bo7.ie/add (with team.bo7.ie/walkin as a second
 
 Rules: never put a password, key or token in the code. Save through the team area's API (see README.md), never straight to the database from the page.
 
-1. The page. Mobile-first, in the style of the dashboard mockup (site/dash/index.html in the bo7-site project), quick to fill in at the front desk:
+1. The page. Mobile-first and quick to fill in at the front desk. Match the "Add a lead" form in the dashboard mockup (the Add lead button on the Leads tab of site/dash/index.html in the bo7-site project, live at bo7.thedowlings.co/dash): the same fields, order and layout. Also put the same Add lead button on the live leads board (prompt 3.1) so it opens this form.
    - Name (required) and phone (required), email (optional)
    - Best way to reach them: WhatsApp (default), Call or Email
    - Gym: Killiney or Blackrock (remember the last choice on this device)
