@@ -1,7 +1,7 @@
 Bo7 is launching a member referral reward:
 - The member who refers gets: [describe]
 - The friend gets: [describe]
-- The friend's pre-typed WhatsApp link (from prompt 3.1): [paste]
+- The friend's pre-typed WhatsApp link (from prompt 4.1): [paste]
 
 Using the Bo7 brand position in the project files, write:
 1. The announcement for the Bo7 community WhatsApp group, from Ryan.

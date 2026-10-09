@@ -26,7 +26,7 @@ The lead dialog (opens when someone clicks a lead):
    - Free times = consult_hours for that coach, gym and day, in slots of the consult length, minus anything already on the Bo7 consultations calendar for that coach. Hide times in the past.
    - Booking creates an event on the calendar: title "Consult: [lead name], [gym], with [coach]", the gym's address as the location, and the lead's phone, source and a link back to the board in the description. Don't add the lead or coach as invited guests.
    - It then creates the consult row, sets the lead's status to consult_booked, and adds a note: "Consult booked for [day, time] with [coach]".
-   - Once booked, show a button to send the confirmation on WhatsApp, with the booking confirmation message (prompt 4.2) already typed, including day, time, gym, address and coach.
+   - Once booked, show a button to send the confirmation on WhatsApp, with the booking confirmation message (prompt 3.2) already typed, including day, time, gym, address and coach.
    - For a booked lead, show the booking and let the coach move it (update the same event) or cancel it (delete the event, mark the consult cancelled, set the lead back to contacted, add a note).
 10. Notes: the lead's notes, newest first, with who wrote each and when, and a box to add one.
 

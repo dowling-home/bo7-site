@@ -9,6 +9,6 @@ Using the Bo7 brand position in the project files, help Bo7 get more Google revi
    Each one names the moment, asks in a sentence, and includes the right gym's link. No incentives for reviews: Google doesn't allow them.
 3. A one-line script for coaches to ask in person at the end of a session.
 4. A QR code for each gym's review link, sized for a card at the front desk.
-5. Replies: a reminder that every new review gets a reply within a few days, using the reply templates from prompt 3.2.
+5. Replies: a reminder that every new review gets a reply within a few days, using the reply templates from prompt 4.2.
 
 Warm, short, never pushy. Don't invent anything about Bo7.

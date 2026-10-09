@@ -1045,7 +1045,7 @@ textarea.input:focus { outline: none; border-color: var(--border-focus); box-sha
           (o.showed === 'yes' ? '<div class="field"><span>Result</span><div class="chips">' + tog('ores', 'joined', 'Joined', o.result === 'joined', ' big good') + tog('ores', 'thinking', 'Thinking it over', o.result === 'thinking', ' big') + tog('ores', 'notyet', 'Not yet', o.result === 'notyet', ' big') + '</div></div>' : '') +
           (o.showed === 'yes' && o.result === 'notyet' ? '<div class="field"><span>Why not yet</span><div class="chips">' + REASONS_NJ.map(function (r) { return tog('oreason', r, r, o.reason === r); }).join('') + '</div></div>' : '') +
           (o.showed === 'yes' && o.result === 'thinking' ? '<div class="field"><span>Follow up in</span><div class="chips">' + ['3 days', '1 week', '2 weeks'].map(function (r) { return tog('ofollow', r, r, o.follow === r); }).join('') + '</div></div>' : '') +
-          (o.showed === 'yes' && o.result === 'joined' ? '<p class="hint-text">Next: Ryan\u2019s welcome message and the community WhatsApp group (Step 4, task 5).</p>' : '') +
+          (o.showed === 'yes' && o.result === 'joined' ? '<p class="hint-text">Next: Ryan\u2019s welcome message and the community WhatsApp group (Step 3, task 5).</p>' : '') +
           (o.showed === 'no' ? '<p class="hint-text">They move back to Contacted on the Leads tab, with a no-show message ready to send.</p>' : '') +
         '</section>' +
       '</div>' +

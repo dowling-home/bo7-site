@@ -1,4 +1,4 @@
-Run this in Claude Code with Claude in Chrome connected. Run prompt 3.7a first; everything it lists must be Ready.
+Run this in Claude Code with Claude in Chrome connected. Run prompt 4.7a first; everything it lists must be Ready.
 
 Using the Bo7 brand position in the project files, write a Google Search ads plan for Bo7: one campaign covering both gyms, Killiney (4 Military Road, Ballybrack) and Blackrock (Blackrock Village Centre). They are a few miles apart, so one budget serves both.
 
@@ -14,7 +14,7 @@ For the plan, give me:
 4. Sitelinks and callouts.
 5. A suggested targeting radius around each gym, with your reasoning.
 
-Every landing page uses the Google ads tracked link from prompt 3.1.
+Every landing page uses the Google ads tracked link from prompt 4.1.
 Do not suggest a budget; we will set it. Do not invent prices, numbers or claims.
 
 Once I have approved the plan, build it in my Chrome at ads.google.com, in the Bo7 account:
