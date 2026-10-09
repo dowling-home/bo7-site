@@ -589,6 +589,7 @@ textarea.input { resize: vertical; min-height: 72px; }
     <button type="button" class="icon-btn" id="add-close" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
   </div>
   <div class="add-body">
+    <div class="field"><span>Logged by <i>(gets the credit if they join)</i></span><div class="seg" role="group" aria-label="Logged by" id="add-by"></div><em class="err" id="add-by-err" hidden>Pick who took this lead.</em></div>
     <div class="field"><span>How they got in touch</span><div class="seg" role="group" aria-label="How they got in touch" id="add-how"></div></div>
     <label class="field" id="add-match-wrap" hidden><span>Their opening message matched <i>(optional)</i></span>
       <select class="input" id="add-match"></select>
@@ -804,7 +805,7 @@ textarea.input { resize: vertical; min-height: 72px; }
       return '<article class="lead clickable' + (p.hours > 24 ? ' late' : '') + '" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">' + (p.hours > 24 ? '<span class="chip bad">' + waited(p.hours) + '</span>' : 'waiting <b>' + waited(p.hours) + '</b>') + '</span>' + meta(p) + (p.note ? '<p class="lead-note">' + esc(p.note) + '</p>' : '') + actions(p) + '</article>';
     }
     function talkingRow(p) {
-      return '<article class="lead clickable" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">replied <b>' + esc(p.replied) + '</b></span>' + meta(p) + '<p class="lead-note">' + esc(p.status) + '</p>' + actions(p) + '</article>';
+      return '<article class="lead clickable" data-lead="' + p.id + '" tabindex="0" aria-label="Open ' + esc(p.name) + '"><span class="lead-name">' + esc(p.name) + '</span><span class="lead-when">replied <b>' + esc(p.replied) + '</b>' + '</span>' + meta(p) + '<p class="lead-note">' + esc(p.status) + '</p>' + actions(p) + '</article>';
     }
     document.getElementById('list-new').innerHTML =
       '<div class="group-label">Not contacted yet \u00b7 ' + fresh.length + '</div>' + (fresh.map(freshRow).join('') || '<div class="empty">Everyone has had a reply.</div>') +
@@ -1000,13 +1001,16 @@ textarea.input { resize: vertical; min-height: 72px; }
   });
 
   // ---------- Add a lead: walk-ins, calls, WhatsApps and emails ----------
-  var adlg = document.getElementById('add-dlg'), GYM_KEY = 'bo7-dash-add-gym', nextId = 0;
+  var adlg = document.getElementById('add-dlg'), GYM_KEY = 'bo7-dash-add-gym', BY_KEY = 'bo7-dash-add-by', nextId = 0;
+  var STAFF = ['Ryan', 'Coach B', 'Coach C'];
   var HOW = [['walk-in', 'Walked in'], ['phone', 'Phoned'], ['whatsapp', 'WhatsApp'], ['email', 'Email'], ['other', 'Other']];
   var HOW_PREF = { 'walk-in': 'whatsapp', phone: 'phone', whatsapp: 'whatsapp', email: 'email', other: 'whatsapp' };
   var MATCH = ['meta-ads', 'google-ads', 'google-profile', 'instagram', 'killiney-window', 'blackrock-window', 'stand', 'referral', 'corporate'];
   var add = {};
+  function lastBy() { try { return localStorage.getItem(BY_KEY) || null; } catch (e) { return null; } }
   function lastGym() { try { return localStorage.getItem(GYM_KEY) || 'Killiney'; } catch (e) { return 'Killiney'; } }
   function drawAdd() {
+    document.getElementById('add-by').innerHTML = segHtml(STAFF.map(function (c) { return [c, c]; }), add.by, 'aby');
     document.getElementById('add-how').innerHTML = segHtml(HOW, add.how, 'ahow');
     document.getElementById('add-gym').innerHTML = segHtml([['Killiney', 'Killiney'], ['Blackrock', 'Blackrock']], add.gym, 'agym');
     document.getElementById('add-pref').innerHTML = segHtml([['whatsapp', 'WhatsApp'], ['phone', 'Call'], ['email', 'Email']], add.pref, 'apref');
@@ -1027,9 +1031,9 @@ textarea.input { resize: vertical; min-height: 72px; }
       (d.p.id && findLead(d.p.id) ? '<button type="button" class="btn" data-aopen="' + d.p.id + '">Open their lead</button>' : '') + '</div>' : '';
   }
   function openAdd() {
-    add = { how: 'walk-in', gym: lastGym(), pref: 'whatsapp', prefSet: false };
+    add = { by: lastBy(), how: 'walk-in', gym: lastGym(), pref: 'whatsapp', prefSet: false };
     ['add-name', 'add-phone', 'add-email', 'add-int'].forEach(function (id) { var el = document.getElementById(id); el.value = ''; el.removeAttribute('aria-invalid'); });
-    document.getElementById('add-name-err').hidden = document.getElementById('add-phone-err').hidden = true;
+    document.getElementById('add-name-err').hidden = document.getElementById('add-phone-err').hidden = document.getElementById('add-by-err').hidden = true;
     document.getElementById('add-consent').checked = false;
     document.getElementById('add-match').innerHTML = '<option value="">No, a direct message</option>' + MATCH.map(function (k) { return '<option value="' + k + '">' + esc(SOURCES[k]) + '</option>'; }).join('');
     document.getElementById('add-dupe').innerHTML = '';
@@ -1042,6 +1046,7 @@ textarea.input { resize: vertical; min-height: 72px; }
     if (e.target === adlg) { adlg.close(); return; }
     var b;
     if ((b = e.target.closest('[data-ahow]'))) { add.how = b.dataset.ahow; if (!add.prefSet) add.pref = HOW_PREF[add.how]; drawAdd(); }
+    else if ((b = e.target.closest('[data-aby]'))) { add.by = b.dataset.aby; document.getElementById('add-by-err').hidden = true; drawAdd(); }
     else if ((b = e.target.closest('[data-agym]'))) { add.gym = b.dataset.agym; drawAdd(); }
     else if ((b = e.target.closest('[data-apref]'))) { add.pref = b.dataset.apref; add.prefSet = true; drawAdd(); }
     else if ((b = e.target.closest('[data-aopen]'))) { adlg.close(); openLead(b.dataset.aopen); }
@@ -1056,22 +1061,23 @@ textarea.input { resize: vertical; min-height: 72px; }
       var bad = !x[0].value.trim(); document.getElementById(x[1]).hidden = !bad;
       if (bad) { x[0].setAttribute('aria-invalid', 'true'); if (ok) x[0].focus(); ok = false; } else x[0].removeAttribute('aria-invalid');
     });
+    if (!add.by) { document.getElementById('add-by-err').hidden = false; if (ok) document.getElementById('add-by').scrollIntoView({ block: 'nearest' }); ok = false; }
     if (!ok) return;
     var match = document.getElementById('add-match').value;
     var source = add.how === 'whatsapp' && match ? match : add.how;
     var interested = document.getElementById('add-int').value.trim();
     var consent = document.getElementById('add-consent').checked;
-    var p = { id: 'A' + (nextId++), name: name.value.trim(), source: source, gym: add.gym, prefers: add.pref, hours: 0, note: interested, consent: consent, notes: [] };
-    p.notes.push({ by: 'You', at: 'Just now', text: 'Added by you: ' + HOW.filter(function (h) { return h[0] === add.how; })[0][1].toLowerCase() + (source !== add.how ? ', from ' + SOURCES[source] : '') + '. ' + (consent ? 'Happy to be contacted (9 Oct 2026).' : 'Did not agree to be contacted yet.') + (interested ? ' Interested in: ' + interested : '') });
+    var p = { id: 'A' + (nextId++), name: name.value.trim(), source: source, gym: add.gym, prefers: add.pref, hours: 0, note: interested, consent: consent, loggedBy: add.by, notes: [] };
+    p.notes.push({ by: add.by, at: 'Just now', text: 'Logged by ' + add.by + ': ' + HOW.filter(function (h) { return h[0] === add.how; })[0][1].toLowerCase() + (source !== add.how ? ', from ' + SOURCES[source] : '') + '. ' + (consent ? 'Happy to be contacted (9 Oct 2026).' : 'Did not agree to be contacted yet.') + (interested ? ' Interested in: ' + interested : '') });
     NEW.push(p);
     var row = COUNTS.filter(function (r) { return r[0] === source && r[1] === add.gym; })[0];
     if (row) row[2]++; else COUNTS.push([source, add.gym, 1, 0, 0, 0]);
-    try { localStorage.setItem(GYM_KEY, add.gym); } catch (err) {}
+    try { localStorage.setItem(GYM_KEY, add.gym); localStorage.setItem(BY_KEY, add.by); } catch (err) {}
     if (state.gym !== 'all' && state.gym !== add.gym) document.querySelector('[data-gym="all"]').click();
     adlg.close(); render();
     var card = document.querySelector('[data-lead="' + p.id + '"]');
     if (card) card.scrollIntoView({ block: 'nearest', behavior: 'instant' });
-    showToast('Saved ' + p.name + ' as a new lead, ' + SOURCES[source] + ', ' + add.gym + '. In the live version this goes into the Bo7 database and onto the board for everyone.');
+    showToast('Saved ' + p.name + ' as a new lead, logged by ' + add.by + ' (' + SOURCES[source] + ', ' + add.gym + '). In the live version this goes into the Bo7 database, with who logged it, and onto the board for everyone.');
   });
 
   // ---------- Consult tab ----------

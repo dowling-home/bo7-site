@@ -5,13 +5,16 @@ Build an add-a-lead page at team.bo7.ie/add (with team.bo7.ie/walkin as a second
 Rules: never put a password, key or token in the code. Save through the team area's API (see README.md), never straight to the database from the page.
 
 1. The page. Mobile-first and quick to fill in at the front desk. Match the "Add a lead" form in the dashboard mockup (the Add lead button on the Leads tab of site/dash/index.html in the bo7-site project, live at bo7.thedowlings.co/dash): the same fields, order and layout. Also put the same Add lead button on the live leads board (prompt 3.1) so it opens this form.
+   - Logged by (required, first on the form): who took the lead. Staff get credit for leads they log that go on to join, so this matters. Fill it in from the logged-in @bo7.ie user; on a shared front-desk phone, let them pick from the staff list and remember the last choice on that device.
    - Name (required) and phone (required), email (optional)
    - Best way to reach them: WhatsApp (default), Call or Email
    - Gym: Killiney or Blackrock (remember the last choice on this device)
    - How they got in touch: Walked in (default), Phoned, WhatsApp, Email, Other. For WhatsApp, also pick the source from their opening message (from the tagged links in prompt 4.1), if it matches one.
    - Interested in (short text)
    - A tick box: "Happy for Bo7 to contact you about training". Record yes or no, with the date.
-   On submit: save the lead with status "new" and the logged-in coach as "logged by", show a clear "Saved" message, and clear the form for the next person. If it fails or the device is offline, keep the entry on the device, say so, and retry later.
+   On submit: save the lead with status "new" and "logged by" as chosen, show a clear "Saved" message, and clear the form for the next person. If it fails or the device is offline, keep the entry on the device, say so, and retry later.
+
+   Save "logged by" in the leads table (the logged by column from prompt 2.2b) with the time it was logged. It does not need to show on the leads board. Add leads logged per person, and how many of them joined, to the Monday report (prompt 2.9), so the credit is counted.
 
 2. Duplicates. Before saving, check for a lead or member with the same phone number or email. If there is one, show it and ask whether to add a note to that record instead.
 
